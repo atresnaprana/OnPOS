@@ -1,0 +1,53 @@
+
+# From .NET Core 3.0 you can use the command: `dotnet new gitignore` to generate a customizable .gitignore file
+
+*.swp
+*.*~
+project.lock.json
+.DS_Store
+*.pyc
+
+# Visual Studio Code
+.vscode
+
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+_ReSharper.*
+bin
+obj
+packages
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+build/
+bld/
+[Bb]in/
+[Oo]bj/
+msbuild.log
+msbuild.err
+msbuild.wrn
+
+# Visual Studio 2015
+.vs/
+/BataAppHR/wwwroot/ErrorLog
+/BataAppHR/wwwroot/CreatePO/RM_72_4_030620221132.dat
+/BataAppHR/wwwroot/CreatePO/RM_72_5_070620221409.dat
+/BataAppHR/wwwroot/CreateStore/RM_07_71022_030620221104.dat
+/BataAppHR/wwwroot/CreateStore/RM_07_71023_070620221350.dat
+/BataAppHR/wwwroot/images
+/BataAppHR/wwwroot/Invoice
+/BataAppHR/wwwroot/CreatePO
+/BataAppHR/wwwroot/CreateStore
+/BataAppHR/wwwroot/OrderConfirm
+/BataAppHR/wwwroot/LedgerData/archive
+/BataAppHR/wwwroot/SalesData
+/BataAppHR/wwwroot/UploadsXls
+/BataAppHR
+/CallApi/Properties/PublishProfiles/FolderProfile.pubxml
