@@ -1,0 +1,140 @@
+﻿@model BataAppHR.Models.SalesFront
+@{
+    ViewData["Title"] = "Order To Pay";
+
+    var isAdmin = User.IsInRole("Admin").ToString();
+    var typecode = ViewData["TypeCode"];
+    var errors = Model.error;
+}
+
+<style>
+    #myPopup {
+        display: none;
+        position: absolute;
+        top: 50px;
+        right: 50%;
+        background-color: blue;
+        height: 100px;
+        width: 100px;
+    }
+
+    #myExit {
+        position: absolute;
+        right: 0px;
+        text-align: right;
+        color: white;
+        background-color: red;
+    }
+
+    .btn-primary2 {
+        color: #ffffff;
+        background-color: #000000;
+        border-color: #000000 !important
+    }
+
+        .btn-primary2:hover {
+            color: #fff;
+            background-color: #be0000;
+            border-color: #be0000 !important
+        }
+</style>
+<p>
+</p>
+
+
+
+<table class="table table-striped" id="IndexTbl">
+    <thead>
+        <tr>
+            <th>
+                Order Date
+            </th>
+            <th>
+                Order Id
+            </th>
+            <th>
+                Sales
+            </th>
+            <th>
+                Total Order
+            </th>
+            <th>
+                Total Qty
+            </th>
+            <th>
+                <label>Actions</label>
+            </th>
+        </tr>
+    </thead>
+    <tbody id="tbodyid">
+
+        @foreach (var dt in Model.salesOrdeData)
+        {
+            <tr>
+                @if (dt.ORDER_DATE != null)
+                {
+                    <td data-order="@dt.ORDER_DATE.Value.ToString("MMddyyyyHHmmss")">
+                        @Html.DisplayFor(modelItem => dt.ORDER_DATE)
+
+                    </td>
+                }
+                else
+                {
+
+                    <td>
+                        @Html.DisplayFor(modelItem => dt.ORDER_DATE)
+
+                    </td>
+                }
+                <td>
+                    @Html.DisplayFor(modelItem => dt.id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => dt.EMP_CODE)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => dt.TOTAL_ORDER)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => dt.TOTAL_QTY)
+                </td>
+                <td>
+                    <div>
+                        <a asp-action="PaymentForm" asp-route-id="@dt.id" class="btn btn-sm btn-dark">Proceed Payment</a>
+                        &nbsp;
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+@section Scripts{
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+    <script>
+    var tableDtl;
+    var IndexTbl;
+    $(document).ready(function () {
+        var msg = '@errors';
+        if (msg != '' && msg != 'null') {
+            alert(msg);
+        }
+
+
+
+            IndexTbl = $('#IndexTbl').DataTable({
+                stateSave: true,
+                "order": [[0, "desc"]],
+                "bPaginate": true,
+                "sPaginationType": "full_numbers",
+                "iDisplayLength": 10
+            });
+
+
+        });
+
+  
+    </script>
+}
+

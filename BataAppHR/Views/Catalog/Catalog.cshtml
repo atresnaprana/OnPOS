@@ -1,0 +1,11 @@
+﻿<div id="Display">
+
+</div>
+<script type="text/javascript">
+$(document).ready(function () {
+  $.get('@Url.Action("CatalogView", "Catalog")?Category=1&Brand=2', {}, function (response) {
+       $("#Display").html(response);
+   });
+});
+
+</script>

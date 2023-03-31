@@ -1,0 +1,42 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Http;
+
+namespace BataAppHR.Models
+{
+    public class dbSalesOrderDtlCredit
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int id { get; set; }
+        public int id_order { get; set; }
+        public string article { get; set; }
+        public string size { get; set; }
+        public int qty { get; set; }
+        public decimal? price { get; set; }
+        public decimal? disc { get; set; }
+        public string is_disc_perc { get; set; }
+        public decimal? disc_amt { get; set; }
+        public decimal? final_price { get; set; }
+        public string picking_no { get; set; }
+        public int Size_1 { get; set; }
+        public int Size_2 { get; set; }
+        public int Size_3 { get; set; }
+        public int Size_4 { get; set; }
+        public int Size_5 { get; set; }
+        public int Size_6 { get; set; }
+        public int Size_7 { get; set; }
+        public int Size_8 { get; set; }
+        public int Size_9 { get; set; }
+        public int Size_10 { get; set; }
+        public int Size_11 { get; set; }
+        public int Size_12 { get; set; }
+        public int Size_13 { get; set; }
+        [NotMapped]
+        public decimal? creditval { get; set; }
+    }
+}

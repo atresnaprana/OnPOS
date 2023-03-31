@@ -1,0 +1,145 @@
+﻿@model IEnumerable<BataAppHR.Models.dbPaymentList>
+@{
+    ViewData["Title"] = "Form Data Payment";
+
+    var isAdmin = User.IsInRole("Admin").ToString();
+}
+
+<style>
+    #myPopup {
+        display: none;
+        position: absolute;
+        top: 50px;
+        right: 50%;
+        background-color: blue;
+        height: 100px;
+        width: 100px;
+    }
+
+    #myExit {
+        position: absolute;
+        right: 0px;
+        text-align: right;
+        color: white;
+        background-color: red;
+    }
+
+    .btn-primary2 {
+        color: #ffffff;
+        background-color: #000000;
+        border-color: #000000 !important
+    }
+
+        .btn-primary2:hover {
+            color: #fff;
+            background-color: #be0000;
+            border-color: #be0000 !important
+        }
+</style>
+<p>
+</p>
+<div class="container" id="bootstrap-overrides">
+    <div class="row">
+        <div class="col-sm align-self-end">
+            <a asp-action="Create" class="btn btn-dark">Input Data Baru</a>
+        </div>
+
+    </div>
+</div>
+<br />
+<table class="table table-striped" id="IndexTbl">
+    <thead>
+        <tr>
+            <th>Num.</th>
+            <th>
+                Tanggal Pembayaran
+            </th>
+            <th>
+                Customer 
+            </th>
+            <th>
+                order
+            </th>
+            <th>
+                Bank
+            </th>
+            <th>
+                REF
+            </th>
+            <th>
+                Total pembayaran
+            </th>
+            <th>
+                <label>Actions</label>
+            </th>
+        </tr>
+    </thead>
+    <tbody id="tbodyid">
+        @{
+            var i = 1;
+        }
+        @foreach (var dt in Model)
+        {
+        <tr>
+            <td>
+                @i
+            </td>
+            @if (dt.PAYMENT_DATE != null)
+            {
+                <td data-order="@dt.PAYMENT_DATE.Value.ToString("MMddyyyyHHmmss")">
+                    @Html.DisplayFor(modelItem => dt.PAYMENT_DATE)
+
+                </td>
+            }
+            else
+            {
+
+                <td>
+                    @Html.DisplayFor(modelItem => dt.PAYMENT_DATE)
+
+                </td>
+            }
+
+            <td>
+                @Html.DisplayFor(modelItem => dt.id_customer)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => dt.id_order)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => dt.BANK)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => dt.REF_ID)
+
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => dt.TOTAL_PAY)
+
+            </td>
+            <td>
+                <div>
+                    <a asp-action="Edit" asp-route-id="@dt.id" class="btn btn-sm btn-dark">Edit</a>
+                    &nbsp;
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <a asp-action="Delete" asp-route-id="@dt.id" class="btn btn-sm btn-dark">Delete</a>
+
+                    }
+                </div>
+            </td>
+        </tr>
+            i++;
+        }
+    </tbody>
+</table>
+
+@section Scripts{
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+    <script>
+    $(document).ready(function () {
+        $('#IndexTbl').DataTable();
+    });
+    </script>
+}
+

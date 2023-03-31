@@ -1,0 +1,65 @@
+﻿@model BataAppHR.Models.dbOrderConfig
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+<h3>Config Entry</h3>
+<hr />
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create" id="formcreate">
+            <div class="form-group">
+                <label asp-for="pairsarticle" class="control-label"></label>
+                <input asp-for="pairsarticle" class="form-control" onkeypress="return allowOnlyNumber(event);" />
+                <span asp-validation-for="pairsarticle" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="pairsorder" class="control-label"></label>
+                <input asp-for="pairsorder" class="form-control" onkeypress="return allowOnlyNumber(event);"/>
+                <span asp-validation-for="pairsorder" class="text-danger"></span>
+            </div>
+          
+            <div class="form-group">
+                <input type="button" value="Simpan data baru" onclick="alertfirst()" class="btn btn-red" />
+
+            </div>
+        </form>
+
+        @*<form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger">
+                    <div class="form-group">
+                        <label asp-for="BOOK_NAME" class="control-label"></label>
+                        <input asp-for="BOOK_NAME" class="form-control" />
+                        <span asp-validation-for="BOOK_NAME" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Create" class="btn btn-success" />
+                    </div>
+                </div>
+            </form>*@
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index" class="btn btn-dark">Kembali ke List</a>
+</div>
+@section Scripts{
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+    <script>
+    function allowOnlyNumber(evt) {
+        var charCode = (evt.which) ? evt.which : event.keyCode
+        if (charCode > 31 && (charCode < 48 || charCode > 57))
+            return false;
+        return true;
+    }
+    function alertfirst() {
+        if (confirm("Are you sure saving data?")) {
+            $('#formcreate').submit();
+        } else {
+            return false;
+        }
+    }
+    </script>
+}

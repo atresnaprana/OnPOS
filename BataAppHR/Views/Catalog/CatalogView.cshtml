@@ -1,0 +1,1699 @@
+﻿@model BataAppHR.Models.dbSalesOrder
+@{
+    var isfirstopen = ViewBag.isfirstopen;
+    var ismany = ViewBag.ismany;
+    var id = "my-own-id";
+
+    var random = new Random();
+
+    var length = Model.articleListTrans.Where(y => y.Article.Substring(0, 1) != "9").ToList().Count();
+    var items = Model.articleListTrans.Where(y => y.Article.Substring(0, 1) != "9").ToList();
+
+    for (int i = 0; i < length; i++)
+    {
+        items[i].FILE_IMG_NAME = $"/images/No_Image_Available.jpg";
+
+    }
+
+    var itmIndex = 0;
+    var pages = items.Count() / 6;
+
+    if (items.Count() % 6 > 0)
+    {
+        pages++;
+    }
+    int idxinner = 0;
+
+
+
+    var id2 = "my-own-id2";
+
+    var random2 = new Random();
+
+    var length2 = Model.articleListTrans.Where(y => y.Article.Substring(0, 1) == "9").ToList().Count();
+    var items2 = Model.articleListTrans.Where(y => y.Article.Substring(0, 1) == "9").ToList();
+
+    for (int i = 0; i < length2; i++)
+    {
+        items2[i].FILE_IMG_NAME = $"/images/No_Image_Available.jpg";
+
+    }
+
+    var itmIndex2 = 0;
+    var pages2 = items2.Count() / 6;
+
+    if (items2.Count() % 6 > 0)
+    {
+        pages2++;
+    }
+    int idxinner2 = 0;
+}
+<style>
+    url('https://fonts.googleapis.com/css2?family=Allerta+Stencil&display=swap');
+    .carousel-indicators li {
+        display: inline-block;
+        width: 48px;
+        height: 48px;
+        margin: 10px;
+        text-indent: 0;
+        cursor: pointer;
+        border: none;
+        border-radius: 50%;
+        background-color: black;
+        box-shadow: inset 1px 1px 1px 1px rgba(0,0,0,0.5);
+        border-radius: 100%;
+    }
+    .active {
+         background-color:white;
+    }
+    .card-img-top {
+        width: 100%;
+        height: 20vw;
+        object-fit: cover;
+    }
+
+    .carousel-indicators {
+        bottom: -130px;
+    }
+
+    .carousel-item {
+        height: 100%;
+        width: 100%;
+    }
+
+    .carousel-indicators .active {
+        width: 48px;
+        height: 48px;
+        margin: 10px;
+    }
+
+    /*.carousel .carousel-indicators li {
+        background-color: red;
+    }*/
+
+        /*.carousel .carousel-indicators li.active {
+            background-color: black;
+        }*/
+
+    body {
+        background-color: #eee;
+    }
+
+    .nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active {
+        color: #495057;
+        background-color: transparent;
+        border-color: transparent;
+        border-bottom: 3px solid #000;
+    }
+
+    .nav-tabs > li > a {
+        text-transform: uppercase;
+        color: #000;
+        font-weight: 500;
+    }
+
+    .nav-tabs .nav-link:hover {
+        border-color: transparent;
+        border-bottom: 3px solid #000
+    }
+
+
+
+    .navbar-brand {
+        font-size: 24px;
+        text-transform: uppercase;
+        font-family: 'Allerta Stencil', sans-serif;
+        font-weight: 500;
+    }
+
+    .nav-tabs {
+        border-bottom: none;
+    }
+
+    .card {
+        border: none;
+    }
+
+    .card-body {
+        flex: 1 1 auto;
+        padding: 10px;
+    }
+
+    .card-text {
+        font-size: 13px;
+    }
+
+    .guarantee {
+        color: #05882c;
+        margin-left: 4px;
+        font-weight: 700
+    }
+
+    hr {
+        margin: 0.2rem 0;
+        color: #bfbebe;
+    }
+
+    .buttons button {
+        text-transform: uppercase;
+        font-size: 12px;
+        border-radius: 2px;
+    }
+</style>
+<div class="container-fluid px-0">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light navbar-fixed">
+        <div class="container-fluid d-flex">
+            <a class="navbar-brand" href="#">Products</a>
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item" role="presentation"> <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Footwear</a> </li>
+                <li class="nav-item" role="presentation"> <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Accessories</a> </li>
+            </ul>
+        </div>
+    </nav>
+</div>
+<div class="container-fluid mt-2 mb-5">
+    <div class="products">
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                <div class="d-flex justify-content-between p-3 bg-white mb-3 align-items-center">
+                    <span class="font-weight-bold text-uppercase">Footwear List</span>
+                    <div> <img src="https://img.icons8.com/windows/100/000000/list.png" width="30" /> <img src="https://img.icons8.com/ios-filled/100/000000/squared-menu.png" width="25" /> </div>
+                </div>
+                <div class="row g-3">
+                    <div id="@id" class="carousel slide carousel-multi-item" data-interval="false" data-ride="carousel">
+
+                        <!--Controls-->
+                        <div class="controls-top">
+                            <a class="btn btn-primary rounded-circle" href="#@id" data-slide="prev"><</a>
+                            <a class="btn btn-primary rounded-circle" href="#@id" data-slide="next">></a>
+                        </div>
+                        <br />
+                        <!--/.Controls-->
+                        <!--Indicators-->
+                        <ol class="carousel-indicators">
+                            @for (int i = 0; i < pages; i++)
+                            {
+                                if (i == 0)
+                                {
+                                    <li data-target="#@id" data-slide-to="@i" class="active"></li>
+                                }
+                                else
+                                {
+                                    <li data-target="#@id" data-slide-to="@i"></li>
+                                }
+                            }
+                        </ol>
+                        <!--/.Indicators-->
+                        <!--Slides-->
+                        <div class="carousel-inner" role="listbox">
+
+                            <!--
+                                This part should be placed in your partial view:
+                                With some jQuery you can invoke a specific action that returns partial view and load its content hier.
+                                See for more info: https://api.jquery.com/load/ how it works.
+                            -->
+                            @for (int slide = 0; slide < pages; slide++)
+                            {
+                                <div class="carousel-item @(slide == 0 ? "active" : string.Empty)">
+                                    <div class="row">
+                                        @{ 
+                                            int looplength = 1;
+                                            var clsmain = "col-md";
+                                            if(length > 6)
+                                            {
+                                                looplength = 6;
+                                                clsmain = "col-md-4";
+                                            }
+                                        }
+                                        @for (int item = 0; item < looplength; item++)
+                                        {
+                                            var itm = items[itmIndex++ % pages];
+                                            var colCls = string.Empty;
+
+                                            if (looplength > 0)
+                                            {
+                                                colCls = "clearfix d-none d-md-block";
+                                            }
+                                            <div class="@clsmain @colCls" style="border:1px solid black;">
+                                                <div class="card">
+                                                    @if (itm.FILE_IMG != null)
+                                                    {
+                                                        string imageBase64Data = Convert.ToBase64String(itm.FILE_IMG);
+                                                        string imageDataURL = string.Format("data:image/png;base64,{0}", imageBase64Data);
+                                                        <img src="@imageDataURL" class="card-img-top">
+
+                                                    }
+                                                    else
+                                                    {
+                                                        <img src="@itm.FILE_IMG_NAME" class="card-img-top">
+                                                    }
+                                                    <div class="card-body">
+                                                        <div class="d-flex justify-content-between"> <span class="font-weight-bold">@itm.Article</span> <span class="font-weight-bold">Rp @itm.pricestring</span> </div>
+                                                        <p class="card-text mb-1 mt-1">@itm.projectname (available: 
+                                                         @{
+                                                           int zero = 0;
+                                                       } 
+                                                        @if (itm.isAvail == "1")
+                                                        {
+                                                            @itm.qty
+                                                        }
+                                                        else
+                                                        {
+                                                            @zero
+                                                        }
+                                                        )</p>
+                                                        <div class="d-flex align-items-center flex-row"> <img src="https://i.imgur.com/e9VnSng.png" width="20"> <span class="guarantee">(fill text here)</span> </div>
+                                                    </div>
+                                                    <hr>
+                                                    <div class="card-body">
+                                                        @if (itm.isAvail == "1")
+                                                        {
+                                                            <div class="text-right buttons"> <button onclick="openpopup(this, '@itm.Article')" class="btn btn-dark" id="AddCart">Add to cart</button> </div>
+
+                                                        }
+                                                        else
+                                                        {
+                                                            <div class="text-right buttons"> <button class="btn btn-dark" id="NA">Not Available</button> </div>
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            if (idxinner == 3)
+                                            {
+                                                <br />
+                                            }
+                                            idxinner++;
+                                        }
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        <!--/.Slides-->
+
+                    </div>
+
+
+                </div>
+            </div>
+            <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                <!--Chairs-->
+                <div class="d-flex justify-content-between p-3 bg-white mb-3 align-items-center">
+                    <span class="font-weight-bold text-uppercase">Accessories</span>
+                    <div> <img src="https://img.icons8.com/windows/100/000000/list.png" width="30" /> <img src="https://img.icons8.com/ios-filled/100/000000/squared-menu.png" width="25" /> </div>
+                </div>
+                <div class="row g-3">
+                    <div id="@id2" class="carousel slide carousel-multi-item" data-interval="false" data-ride="carousel">
+
+                        <!--Controls-->
+                        <div class="controls-top">
+                            <a class="btn btn-primary rounded-circle" href="#@id2" data-slide="prev"><</a>
+                            <a class="btn btn-primary rounded-circle" href="#@id2" data-slide="next">></a>
+                        </div>
+                        <br />
+                        <!--/.Controls-->
+                        <!--Indicators-->
+                        <ol class="carousel-indicators">
+                            @for (int i = 0; i < pages2; i++)
+                            {
+                                if (i == 0)
+                                {
+                                    <li data-target="#@id2" data-slide-to="@i" class="active"></li>
+                                }
+                                else
+                                {
+                                    <li data-target="#@id2" data-slide-to="@i"></li>
+                                }
+                            }
+                        </ol>
+                        <!--/.Indicators-->
+                        <!--Slides-->
+                        <div class="carousel-inner" role="listbox">
+
+                            <!--
+            This part should be placed in your partial view:
+            With some jQuery you can invoke a specific action that returns partial view and load its content hier.
+            See for more info: https://api.jquery.com/load/ how it works.
+        -->
+                            @for (int slide = 0; slide < pages2; slide++)
+                            {
+                                <div class="carousel-item @(slide == 0 ? "active" : string.Empty)">
+                                    <div class="row">
+                                        @{
+                                            var clsmain2 = "col-md";
+                                           
+                                            int looplength2 = 1;
+                                            if (length2 > 6)
+                                            {
+                                                looplength2 = 6;
+                                                clsmain2 = "col-md-4";
+
+                                            }
+                                        }
+                                        @for (int item = 0; item < looplength2; item++)
+                                        {
+                                            var itm = items2[itmIndex2++ % pages2];
+                                            var colCls = string.Empty;
+
+                                            if (looplength2 > 0)
+                                            {
+                                                colCls = "clearfix d-none d-md-block";
+                                            }
+                                            <div class="@clsmain2 @colCls" style="border:1px solid black;">
+                                                <div class="card">
+                                                    @if (itm.FILE_IMG != null)
+                                                    {
+                                                        string imageBase64Data = Convert.ToBase64String(itm.FILE_IMG);
+                                                        string imageDataURL = string.Format("data:image/png;base64,{0}", imageBase64Data);
+                                                        <img src="@imageDataURL" class="card-img-top">
+
+                                                    }
+                                                    else
+                                                    {
+                                                        <img src="@itm.FILE_IMG_NAME" class="card-img-top">
+                                                    }
+                                                    <div class="card-body">
+                                                        <div class="d-flex justify-content-between"> <span class="font-weight-bold">@itm.Article</span> <span class="font-weight-bold">Rp @itm.pricestring</span> </div>
+                                                        <p class="card-text mb-1 mt-1">@itm.projectname (available: 
+                                                       @{
+                                                           int zero = 0;
+                                                       } 
+                                                        @if (itm.isAvail == "1")
+                                                        {
+                                                            @itm.qty
+                                                        }
+                                                        else
+                                                        {
+                                                            @zero
+                                                        }
+                                                        )</p>
+                                                        <div class="d-flex align-items-center flex-row"> <img src="https://i.imgur.com/e9VnSng.png" width="20"> <span class="guarantee">(fill text here)</span> </div>
+                                                    </div>
+                                                    <hr>
+                                                    <div class="card-body">
+                                                        @if (itm.isAvail == "1")
+                                                        {
+                                                            <div class="text-right buttons"> <button onclick="openpopup(this, '@itm.Article')" class="btn btn-dark" id="AddCart">Add to cart</button> </div>
+                                                        }
+                                                        else
+                                                        {
+                                                            <div class="text-right buttons"> <button class="btn btn-dark" id="NA">Not Available</button> </div>
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            if (idxinner2 == 3)
+                                            {
+                                                <br />
+                                            }
+                                            idxinner2++;
+                                        }
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        <!--/.Slides-->
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div id="dialogEdit" title="Update Detail">
+    <form asp-action="AddToCart" id="formdtlEdit" enctype="multipart/form-data">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm">
+                    <div class="row">
+                        <div class="col">
+                            <label class="control-label label">Article: </label>
+                        </div>
+                        <div class="col">
+                            <input asp-for="articleEdit" class="form-control" readonly />
+
+                            @*<input asp-for="TOTAL_ORDERTempEdit" type="hidden" class="form-control" />
+        <input asp-for="TOTAL_QTYTempEdit" type="hidden" class="form-control" />
+        <input asp-for="STATUSTempEdit" type="hidden" class="form-control" />
+        <input asp-for="APPROVAL_1TempEdit" type="hidden" class="form-control" />
+        <input asp-for="APPROVAL_2TempEdit" class="form-control" type="hidden" />
+        <input asp-for="ORDER_DATETempEdit" class="form-control" type="hidden" />
+        <input asp-for="EMP_CODETempEdit" class="form-control" style="display:none;" />
+        <input asp-for="id_customerTempEdit" type="hidden" class="form-control" />
+        <input asp-for="datamode" type="hidden" class="form-control" />
+        <input asp-for="INV_DISCTempEdit" type="hidden" class="form-control" />
+        <input asp-for="INV_DISC_AMTTempEdit" type="hidden" class="form-control" />
+        <input asp-for="IS_DISC_PERCTempEdit" type="hidden" class="form-control" />
+        <input asp-for="custdiscTempEdit" type="hidden" class="form-control" />
+        <input asp-for="SHIPPING_ADDRESSTempEdit" type="hidden" class="form-control" />*@
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label class="control-label label">qty: </label>
+
+                        </div>
+                        <div class="col">
+                            <input asp-for="qtyEdit" class="form-control" onkeypress="return allowOnlyNumber(event);" min="1" readonly />
+                            <span asp-validation-for="qtyEdit" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label class="control-label label">Price: </label>
+
+                        </div>
+                        <div class="col">
+                            <input asp-for="priceEdit" class="form-control" onkeypress="return allowOnlyNumber(event);" min="1" readonly />
+                            <span asp-validation-for="priceEdit" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row" style="display:none;">
+                        <div class="col">
+                            <label class="control-label label">is Discount Percentage: </label>
+
+                        </div>
+                        <div class="col">
+                            <input asp-for="is_disc_percBoolEdit" class="largerCheckbox" />
+                            <span asp-validation-for="is_disc_percBoolEdit" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row" id="discpercvalEdit" style="display:none;">
+                        <div class="col">
+                            <label class="control-label label">Disc Percentage: </label>
+
+                        </div>
+                        <div class="col">
+                            <input asp-for="discEdit" class="form-control" onkeypress="return allowOnlyNumber(event);" min="1" />
+                            <span asp-validation-for="discEdit" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row" id="discamtvalEdit" style="display:none;">
+                        <div class="col">
+                            <label class="control-label label">Disc Amount: </label>
+
+                        </div>
+                        <div class="col">
+                            <input asp-for="disc_amtEdit" class="form-control" onkeypress="return allowOnlyNumber(event);" />
+                            <span asp-validation-for="disc_amtEdit" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col">
+                            <label class="control-label label">Final: </label>
+
+                        </div>
+                        <div class="col">
+                            <input asp-for="final_priceEdit" class="form-control" onkeypress="return allowOnlyNumber(event);" readonly />
+                            <span asp-validation-for="final_priceEdit" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <input type="button" value="" id="btnPopupMod" onclick="alertfirst2(this)" class="btn btn-red" />
+
+                        </div>
+                        <div class="col">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm">
+                    <div class="row">
+                        <div class="col">
+                            <label class="control-label label">Size Code: </label>
+
+                        </div>
+                        <div class="col">
+                            <input id="sizeCodeTxtEdit" class="form-control" readonly="readonly" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label class="control-label label" id="Size1lblEdit">1</label>
+
+                        </div>
+                        <div class="col">
+                            <input asp-for="Size_1_Edit" class="form-control" onkeypress="return allowOnlyNumber(event);" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label class="control-label label" id="Size2lblEdit">2</label>
+
+                        </div>
+                        <div class="col">
+                            <input asp-for="Size_2_Edit" class="form-control" onkeypress="return allowOnlyNumber(event);" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label class="control-label label" id="Size3lblEdit">3</label>
+
+                        </div>
+                        <div class="col">
+                            <input asp-for="Size_3_Edit" class="form-control" onkeypress="return allowOnlyNumber(event);" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label class="control-label label" id="Size4lblEdit">4</label>
+
+                        </div>
+                        <div class="col">
+                            <input asp-for="Size_4_Edit" class="form-control" onkeypress="return allowOnlyNumber(event);" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label class="control-label label" id="Size5lblEdit">5</label>
+
+                        </div>
+                        <div class="col">
+                            <input asp-for="Size_5_Edit" class="form-control" onkeypress="return allowOnlyNumber(event);" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label class="control-label label" id="Size6lblEdit">6</label>
+
+                        </div>
+                        <div class="col">
+                            <input asp-for="Size_6_Edit" class="form-control" onkeypress="return allowOnlyNumber(event);" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label class="control-label label" id="Size7lblEdit">7</label>
+
+                        </div>
+                        <div class="col">
+                            <input asp-for="Size_7_Edit" class="form-control" onkeypress="return allowOnlyNumber(event);" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label class="control-label label" id="Size8lblEdit">8</label>
+
+                        </div>
+                        <div class="col">
+                            <input asp-for="Size_8_Edit" class="form-control" onkeypress="return allowOnlyNumber(event);" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label class="control-label label" id="Size9lblEdit">9</label>
+
+                        </div>
+                        <div class="col">
+                            <input asp-for="Size_9_Edit" class="form-control" onkeypress="return allowOnlyNumber(event);" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label class="control-label label" id="Size10lblEdit">10</label>
+
+                        </div>
+                        <div class="col">
+                            <input asp-for="Size_10_Edit" class="form-control" onkeypress="return allowOnlyNumber(event);" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label class="control-label label" id="Size11lblEdit">11</label>
+
+                        </div>
+                        <div class="col">
+                            <input asp-for="Size_11_Edit" class="form-control" onkeypress="return allowOnlyNumber(event);" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label class="control-label label" id="Size12lblEdit">12</label>
+
+                        </div>
+                        <div class="col">
+                            <input asp-for="Size_12_Edit" class="form-control" onkeypress="return allowOnlyNumber(event);" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label class="control-label label" id="Size13lblEdit">13</label>
+
+                        </div>
+                        <div class="col">
+                            <input asp-for="Size_13_Edit" class="form-control" onkeypress="return allowOnlyNumber(event);" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+    $(document).ready(function () {
+        debugger;
+        var ismany = '@ismany'
+        $("#dialogEdit").dialog({
+            width: 800,
+            height: 520,
+            modal: false,
+            resizable: false,
+            close: function () {
+                //var audio = $("#player");
+                //audio[0].pause();
+            }
+        });
+        $("#dialogEdit").dialog("close");
+        var inputs = document.querySelectorAll("div");
+        console.log(inputs.length);
+        for (var i = 0; i < inputs.length; i++) {
+            var name = inputs[i].getAttribute("aria-describedby");
+            if (name == "dialogEdit") {
+                var attrdata = inputs[i].getAttribute("aria-labelledby");
+                var lastChar = attrdata.substr(attrdata.length - 1); // => "1"
+                if (lastChar != "1") {
+                    inputs[i].parentNode.removeChild(inputs[i]);
+                } 
+            }
+        }
+});
+    function allowOnlyNumber(evt) {
+        var charCode = (evt.which) ? evt.which : event.keyCode
+        if (charCode > 31 && (charCode < 48 || charCode > 57))
+            return false;
+        return true;
+    }
+$("#Size_1_Edit").change(function () {
+        if (!$('#Size_1_Edit').val()) {
+            $("#Size_1_Edit").val(0);
+        }
+        var value1 = parseInt($("#Size_1_Edit").val());
+        var value2 = parseInt($("#Size_2_Edit").val());
+        var value3 = parseInt($("#Size_3_Edit").val());
+        var value4 = parseInt($("#Size_4_Edit").val());
+        var value5 = parseInt($("#Size_5_Edit").val());
+        var value6 = parseInt($("#Size_6_Edit").val());
+        var value7 = parseInt($("#Size_7_Edit").val());
+        var value8 = parseInt($("#Size_8_Edit").val());
+        var value9 = parseInt($("#Size_9_Edit").val());
+        var value10 = parseInt($("#Size_10_Edit").val());
+        var value11 = parseInt($("#Size_11_Edit").val());
+        var value12 = parseInt($("#Size_12_Edit").val());
+        var value13 = parseInt($("#Size_13_Edit").val());
+
+        var totalqty = value1 + value2 + value3 + value4 + value5 + value6 + value7 + value8 + value9 + value10 + value11 + value12 + value13;
+        $("#qtyEdit").val(totalqty);
+
+        var price = $("#priceEdit").val();
+        var totalprice = totalqty * price;
+        var discount = $("#discEdit").val();
+        var discamtval = $("#disc_amtEdit").val();
+        var disctype = $("#is_disc_percBoolEdit").is(":checked");
+        if (disctype == true) {
+            var totaldisc = 0;
+            if (discount != 0) {
+                totaldisc = (totalprice * discount) / 100;
+            }
+            var finalprice = totalprice - totaldisc
+            $("#final_priceEdit").val(finalprice.toFixed(2));
+        } else {
+            var totaldisc = 0;
+            if (discamtval != 0) {
+                totaldisc = discamtval;
+            }
+            var finalprice = totalprice - totaldisc
+            $("#final_priceEdit").val(finalprice.toFixed(2));
+        }
+
+    });
+$("#Size_2_Edit").change(function () {
+        if (!$('#Size_2_Edit').val()) {
+            $("#Size_2_Edit").val(0);
+        }
+        var value1 = parseInt($("#Size_1_Edit").val());
+        var value2 = parseInt($("#Size_2_Edit").val());
+        var value3 = parseInt($("#Size_3_Edit").val());
+        var value4 = parseInt($("#Size_4_Edit").val());
+        var value5 = parseInt($("#Size_5_Edit").val());
+        var value6 = parseInt($("#Size_6_Edit").val());
+        var value7 = parseInt($("#Size_7_Edit").val());
+        var value8 = parseInt($("#Size_8_Edit").val());
+        var value9 = parseInt($("#Size_9_Edit").val());
+        var value10 = parseInt($("#Size_10_Edit").val());
+        var value11 = parseInt($("#Size_11_Edit").val());
+        var value12 = parseInt($("#Size_12_Edit").val());
+        var value13 = parseInt($("#Size_13_Edit").val());
+
+        var totalqty = value1 + value2 + value3 + value4 + value5 + value6 + value7 + value8 + value9 + value10 + value11 + value12 + value13;
+        $("#qtyEdit").val(totalqty);
+
+        var price = $("#priceEdit").val();
+        var totalprice = totalqty * price;
+        var discount = $("#discEdit").val();
+        var discamtval = $("#disc_amtEdit").val();
+        var disctype = $("#is_disc_percBoolEdit").is(":checked");
+        if (disctype == true) {
+            var totaldisc = 0;
+            if (discount != 0) {
+                totaldisc = (totalprice * discount) / 100;
+            }
+            var finalprice = totalprice - totaldisc
+            $("#final_priceEdit").val(finalprice.toFixed(2));
+        } else {
+            var totaldisc = 0;
+            if (discamtval != 0) {
+                totaldisc = discamtval;
+            }
+            var finalprice = totalprice - totaldisc
+            $("#final_priceEdit").val(finalprice.toFixed(2));
+        }
+
+    });
+$("#Size_3_Edit").change(function () {
+        if (!$('#Size_3_Edit').val()) {
+            $("#Size_3_Edit").val(0);
+        }
+        var value1 = parseInt($("#Size_1_Edit").val());
+        var value2 = parseInt($("#Size_2_Edit").val());
+        var value3 = parseInt($("#Size_3_Edit").val());
+        var value4 = parseInt($("#Size_4_Edit").val());
+        var value5 = parseInt($("#Size_5_Edit").val());
+        var value6 = parseInt($("#Size_6_Edit").val());
+        var value7 = parseInt($("#Size_7_Edit").val());
+        var value8 = parseInt($("#Size_8_Edit").val());
+        var value9 = parseInt($("#Size_9_Edit").val());
+        var value10 = parseInt($("#Size_10_Edit").val());
+        var value11 = parseInt($("#Size_11_Edit").val());
+        var value12 = parseInt($("#Size_12_Edit").val());
+        var value13 = parseInt($("#Size_13_Edit").val());
+
+        var totalqty = value1 + value2 + value3 + value4 + value5 + value6 + value7 + value8 + value9 + value10 + value11 + value12 + value13;
+        $("#qtyEdit").val(totalqty);
+
+        var price = $("#priceEdit").val();
+        var totalprice = totalqty * price;
+        var discount = $("#discEdit").val();
+        var discamtval = $("#disc_amtEdit").val();
+        var disctype = $("#is_disc_percBoolEdit").is(":checked");
+        if (disctype == true) {
+            var totaldisc = 0;
+            if (discount != 0) {
+                totaldisc = (totalprice * discount) / 100;
+            }
+            var finalprice = totalprice - totaldisc
+            $("#final_priceEdit").val(finalprice.toFixed(2));
+        } else {
+            var totaldisc = 0;
+            if (discamtval != 0) {
+                totaldisc = discamtval;
+            }
+            var finalprice = totalprice - totaldisc
+            $("#final_priceEdit").val(finalprice.toFixed(2));
+        }
+
+    });
+$("#Size_4_Edit").change(function () {
+        if (!$('#Size_4_Edit').val()) {
+            $("#Size_4_Edit").val(0);
+        }
+        var value1 = parseInt($("#Size_1_Edit").val());
+        var value2 = parseInt($("#Size_2_Edit").val());
+        var value3 = parseInt($("#Size_3_Edit").val());
+        var value4 = parseInt($("#Size_4_Edit").val());
+        var value5 = parseInt($("#Size_5_Edit").val());
+        var value6 = parseInt($("#Size_6_Edit").val());
+        var value7 = parseInt($("#Size_7_Edit").val());
+        var value8 = parseInt($("#Size_8_Edit").val());
+        var value9 = parseInt($("#Size_9_Edit").val());
+        var value10 = parseInt($("#Size_10_Edit").val());
+        var value11 = parseInt($("#Size_11_Edit").val());
+        var value12 = parseInt($("#Size_12_Edit").val());
+        var value13 = parseInt($("#Size_13_Edit").val());
+
+        var totalqty = value1 + value2 + value3 + value4 + value5 + value6 + value7 + value8 + value9 + value10 + value11 + value12 + value13;
+        $("#qtyEdit").val(totalqty);
+
+        var price = $("#priceEdit").val();
+        var totalprice = totalqty * price;
+        var discount = $("#discEdit").val();
+        var discamtval = $("#disc_amtEdit").val();
+        var disctype = $("#is_disc_percBoolEdit").is(":checked");
+        if (disctype == true) {
+            var totaldisc = 0;
+            if (discount != 0) {
+                totaldisc = (totalprice * discount) / 100;
+            }
+            var finalprice = totalprice - totaldisc
+            $("#final_priceEdit").val(finalprice.toFixed(2));
+        } else {
+            var totaldisc = 0;
+            if (discamtval != 0) {
+                totaldisc = discamtval;
+            }
+            var finalprice = totalprice - totaldisc
+            $("#final_priceEdit").val(finalprice.toFixed(2));
+        }
+
+    });
+$("#Size_5_Edit").change(function () {
+        if (!$('#Size_5_Edit').val()) {
+            $("#Size_5_Edit").val(0);
+        }
+        var value1 = parseInt($("#Size_1_Edit").val());
+        var value2 = parseInt($("#Size_2_Edit").val());
+        var value3 = parseInt($("#Size_3_Edit").val());
+        var value4 = parseInt($("#Size_4_Edit").val());
+        var value5 = parseInt($("#Size_5_Edit").val());
+        var value6 = parseInt($("#Size_6_Edit").val());
+        var value7 = parseInt($("#Size_7_Edit").val());
+        var value8 = parseInt($("#Size_8_Edit").val());
+        var value9 = parseInt($("#Size_9_Edit").val());
+        var value10 = parseInt($("#Size_10_Edit").val());
+        var value11 = parseInt($("#Size_11_Edit").val());
+        var value12 = parseInt($("#Size_12_Edit").val());
+        var value13 = parseInt($("#Size_13_Edit").val());
+
+        var totalqty = value1 + value2 + value3 + value4 + value5 + value6 + value7 + value8 + value9 + value10 + value11 + value12 + value13;
+        $("#qtyEdit").val(totalqty);
+
+        var price = $("#priceEdit").val();
+        var totalprice = totalqty * price;
+        var discount = $("#discEdit").val();
+        var discamtval = $("#disc_amtEdit").val();
+        var disctype = $("#is_disc_percBoolEdit").is(":checked");
+        if (disctype == true) {
+            var totaldisc = 0;
+            if (discount != 0) {
+                totaldisc = (totalprice * discount) / 100;
+            }
+            var finalprice = totalprice - totaldisc
+            $("#final_priceEdit").val(finalprice.toFixed(2));
+        } else {
+            var totaldisc = 0;
+            if (discamtval != 0) {
+                totaldisc = discamtval;
+            }
+            var finalprice = totalprice - totaldisc
+            $("#final_priceEdit").val(finalprice.toFixed(2));
+        }
+
+    });
+$("#Size_6_Edit").change(function () {
+        if (!$('#Size_6_Edit').val()) {
+            $("#Size_6_Edit").val(0);
+        }
+        var value1 = parseInt($("#Size_1_Edit").val());
+        var value2 = parseInt($("#Size_2_Edit").val());
+        var value3 = parseInt($("#Size_3_Edit").val());
+        var value4 = parseInt($("#Size_4_Edit").val());
+        var value5 = parseInt($("#Size_5_Edit").val());
+        var value6 = parseInt($("#Size_6_Edit").val());
+        var value7 = parseInt($("#Size_7_Edit").val());
+        var value8 = parseInt($("#Size_8_Edit").val());
+        var value9 = parseInt($("#Size_9_Edit").val());
+        var value10 = parseInt($("#Size_10_Edit").val());
+        var value11 = parseInt($("#Size_11_Edit").val());
+        var value12 = parseInt($("#Size_12_Edit").val());
+        var value13 = parseInt($("#Size_13_Edit").val());
+
+        var totalqty = value1 + value2 + value3 + value4 + value5 + value6 + value7 + value8 + value9 + value10 + value11 + value12 + value13;
+        $("#qtyEdit").val(totalqty);
+
+        var price = $("#priceEdit").val();
+        var totalprice = totalqty * price;
+        var discount = $("#discEdit").val();
+        var discamtval = $("#disc_amtEdit").val();
+        var disctype = $("#is_disc_percBoolEdit").is(":checked");
+        if (disctype == true) {
+            var totaldisc = 0;
+            if (discount != 0) {
+                totaldisc = (totalprice * discount) / 100;
+            }
+            var finalprice = totalprice - totaldisc
+            $("#final_priceEdit").val(finalprice.toFixed(2));
+        } else {
+            var totaldisc = 0;
+            if (discamtval != 0) {
+                totaldisc = discamtval;
+            }
+            var finalprice = totalprice - totaldisc
+            $("#final_priceEdit").val(finalprice.toFixed(2));
+        }
+
+    });
+$("#Size_7_Edit").change(function () {
+        if (!$('#Size_7_Edit').val()) {
+            $("#Size_7_Edit").val(0);
+        }
+        var value1 = parseInt($("#Size_1_Edit").val());
+        var value2 = parseInt($("#Size_2_Edit").val());
+        var value3 = parseInt($("#Size_3_Edit").val());
+        var value4 = parseInt($("#Size_4_Edit").val());
+        var value5 = parseInt($("#Size_5_Edit").val());
+        var value6 = parseInt($("#Size_6_Edit").val());
+        var value7 = parseInt($("#Size_7_Edit").val());
+        var value8 = parseInt($("#Size_8_Edit").val());
+        var value9 = parseInt($("#Size_9_Edit").val());
+        var value10 = parseInt($("#Size_10_Edit").val());
+        var value11 = parseInt($("#Size_11_Edit").val());
+        var value12 = parseInt($("#Size_12_Edit").val());
+        var value13 = parseInt($("#Size_13_Edit").val());
+
+        var totalqty = value1 + value2 + value3 + value4 + value5 + value6 + value7 + value8 + value9 + value10 + value11 + value12 + value13;
+        $("#qtyEdit").val(totalqty);
+
+        var price = $("#priceEdit").val();
+        var totalprice = totalqty * price;
+        var discount = $("#discEdit").val();
+        var discamtval = $("#disc_amtEdit").val();
+        var disctype = $("#is_disc_percBoolEdit").is(":checked");
+        if (disctype == true) {
+            var totaldisc = 0;
+            if (discount != 0) {
+                totaldisc = (totalprice * discount) / 100;
+            }
+            var finalprice = totalprice - totaldisc
+            $("#final_priceEdit").val(finalprice.toFixed(2));
+        } else {
+            var totaldisc = 0;
+            if (discamtval != 0) {
+                totaldisc = discamtval;
+            }
+            var finalprice = totalprice - totaldisc
+            $("#final_priceEdit").val(finalprice.toFixed(2));
+        }
+
+    });
+$("#Size_8_Edit").change(function () {
+        if (!$('#Size_8_Edit').val()) {
+            $("#Size_8_Edit").val(0);
+        }
+        var value1 = parseInt($("#Size_1_Edit").val());
+        var value2 = parseInt($("#Size_2_Edit").val());
+        var value3 = parseInt($("#Size_3_Edit").val());
+        var value4 = parseInt($("#Size_4_Edit").val());
+        var value5 = parseInt($("#Size_5_Edit").val());
+        var value6 = parseInt($("#Size_6_Edit").val());
+        var value7 = parseInt($("#Size_7_Edit").val());
+        var value8 = parseInt($("#Size_8_Edit").val());
+        var value9 = parseInt($("#Size_9_Edit").val());
+        var value10 = parseInt($("#Size_10_Edit").val());
+        var value11 = parseInt($("#Size_11_Edit").val());
+        var value12 = parseInt($("#Size_12_Edit").val());
+        var value13 = parseInt($("#Size_13_Edit").val());
+
+        var totalqty = value1 + value2 + value3 + value4 + value5 + value6 + value7 + value8 + value9 + value10 + value11 + value12 + value13;
+        $("#qtyEdit").val(totalqty);
+
+        var price = $("#priceEdit").val();
+        var totalprice = totalqty * price;
+        var discount = $("#discEdit").val();
+        var discamtval = $("#disc_amtEdit").val();
+        var disctype = $("#is_disc_percBoolEdit").is(":checked");
+        if (disctype == true) {
+            var totaldisc = 0;
+            if (discount != 0) {
+                totaldisc = (totalprice * discount) / 100;
+            }
+            var finalprice = totalprice - totaldisc
+            $("#final_priceEdit").val(finalprice.toFixed(2));
+        } else {
+            var totaldisc = 0;
+            if (discamtval != 0) {
+                totaldisc = discamtval;
+            }
+            var finalprice = totalprice - totaldisc
+            $("#final_priceEdit").val(finalprice.toFixed(2));
+        }
+
+    });
+$("#Size_9_Edit").change(function () {
+        if (!$('#Size_9_Edit').val()) {
+            $("#Size_9_Edit").val(0);
+        }
+        var value1 = parseInt($("#Size_1_Edit").val());
+        var value2 = parseInt($("#Size_2_Edit").val());
+        var value3 = parseInt($("#Size_3_Edit").val());
+        var value4 = parseInt($("#Size_4_Edit").val());
+        var value5 = parseInt($("#Size_5_Edit").val());
+        var value6 = parseInt($("#Size_6_Edit").val());
+        var value7 = parseInt($("#Size_7_Edit").val());
+        var value8 = parseInt($("#Size_8_Edit").val());
+        var value9 = parseInt($("#Size_9_Edit").val());
+        var value10 = parseInt($("#Size_10_Edit").val());
+        var value11 = parseInt($("#Size_11_Edit").val());
+        var value12 = parseInt($("#Size_12_Edit").val());
+        var value13 = parseInt($("#Size_13_Edit").val());
+
+        var totalqty = value1 + value2 + value3 + value4 + value5 + value6 + value7 + value8 + value9 + value10 + value11 + value12 + value13;
+        $("#qtyEdit").val(totalqty);
+
+        var price = $("#priceEdit").val();
+        var totalprice = totalqty * price;
+        var discount = $("#discEdit").val();
+        var discamtval = $("#disc_amtEdit").val();
+        var disctype = $("#is_disc_percBoolEdit").is(":checked");
+        if (disctype == true) {
+            var totaldisc = 0;
+            if (discount != 0) {
+                totaldisc = (totalprice * discount) / 100;
+            }
+            var finalprice = totalprice - totaldisc
+            $("#final_priceEdit").val(finalprice.toFixed(2));
+        } else {
+            var totaldisc = 0;
+            if (discamtval != 0) {
+                totaldisc = discamtval;
+            }
+            var finalprice = totalprice - totaldisc
+            $("#final_priceEdit").val(finalprice.toFixed(2));
+        }
+
+    });
+$("#Size_10_Edit").change(function () {
+        if (!$('#Size_10_Edit').val()) {
+            $("#Size_10_Edit").val(0);
+        }
+        var value1 = parseInt($("#Size_1_Edit").val());
+        var value2 = parseInt($("#Size_2_Edit").val());
+        var value3 = parseInt($("#Size_3_Edit").val());
+        var value4 = parseInt($("#Size_4_Edit").val());
+        var value5 = parseInt($("#Size_5_Edit").val());
+        var value6 = parseInt($("#Size_6_Edit").val());
+        var value7 = parseInt($("#Size_7_Edit").val());
+        var value8 = parseInt($("#Size_8_Edit").val());
+        var value9 = parseInt($("#Size_9_Edit").val());
+        var value10 = parseInt($("#Size_10_Edit").val());
+        var value11 = parseInt($("#Size_11_Edit").val());
+        var value12 = parseInt($("#Size_12_Edit").val());
+        var value13 = parseInt($("#Size_13_Edit").val());
+
+        var totalqty = value1 + value2 + value3 + value4 + value5 + value6 + value7 + value8 + value9 + value10 + value11 + value12 + value13;
+        $("#qtyEdit").val(totalqty);
+
+        var price = $("#priceEdit").val();
+        var totalprice = totalqty * price;
+        var discount = $("#discEdit").val();
+        var discamtval = $("#disc_amtEdit").val();
+        var disctype = $("#is_disc_percBoolEdit").is(":checked");
+        if (disctype == true) {
+            var totaldisc = 0;
+            if (discount != 0) {
+                totaldisc = (totalprice * discount) / 100;
+            }
+            var finalprice = totalprice - totaldisc
+            $("#final_priceEdit").val(finalprice.toFixed(2));
+        } else {
+            var totaldisc = 0;
+            if (discamtval != 0) {
+                totaldisc = discamtval;
+            }
+            var finalprice = totalprice - totaldisc
+            $("#final_priceEdit").val(finalprice.toFixed(2));
+        }
+
+    });
+$("#Size_11_Edit").change(function () {
+        if (!$('#Size_11_Edit').val()) {
+            $("#Size_11_Edit").val(0);
+        }
+        var value1 = parseInt($("#Size_1_Edit").val());
+        var value2 = parseInt($("#Size_2_Edit").val());
+        var value3 = parseInt($("#Size_3_Edit").val());
+        var value4 = parseInt($("#Size_4_Edit").val());
+        var value5 = parseInt($("#Size_5_Edit").val());
+        var value6 = parseInt($("#Size_6_Edit").val());
+        var value7 = parseInt($("#Size_7_Edit").val());
+        var value8 = parseInt($("#Size_8_Edit").val());
+        var value9 = parseInt($("#Size_9_Edit").val());
+        var value10 = parseInt($("#Size_10_Edit").val());
+        var value11 = parseInt($("#Size_11_Edit").val());
+        var value12 = parseInt($("#Size_12_Edit").val());
+        var value13 = parseInt($("#Size_13_Edit").val());
+
+        var totalqty = value1 + value2 + value3 + value4 + value5 + value6 + value7 + value8 + value9 + value10 + value11 + value12 + value13;
+        $("#qtyEdit").val(totalqty);
+
+        var price = $("#priceEdit").val();
+        var totalprice = totalqty * price;
+        var discount = $("#discEdit").val();
+        var discamtval = $("#disc_amtEdit").val();
+        var disctype = $("#is_disc_percBoolEdit").is(":checked");
+        if (disctype == true) {
+            var totaldisc = 0;
+            if (discount != 0) {
+                totaldisc = (totalprice * discount) / 100;
+            }
+            var finalprice = totalprice - totaldisc
+            $("#final_priceEdit").val(finalprice.toFixed(2));
+        } else {
+            var totaldisc = 0;
+            if (discamtval != 0) {
+                totaldisc = discamtval;
+            }
+            var finalprice = totalprice - totaldisc
+            $("#final_priceEdit").val(finalprice.toFixed(2));
+        }
+
+    });
+$("#Size_12_Edit").change(function () {
+        if (!$('#Size_12_Edit').val()) {
+            $("#Size_12_Edit").val(0);
+        }
+        var value1 = parseInt($("#Size_1_Edit").val());
+        var value2 = parseInt($("#Size_2_Edit").val());
+        var value3 = parseInt($("#Size_3_Edit").val());
+        var value4 = parseInt($("#Size_4_Edit").val());
+        var value5 = parseInt($("#Size_5_Edit").val());
+        var value6 = parseInt($("#Size_6_Edit").val());
+        var value7 = parseInt($("#Size_7_Edit").val());
+        var value8 = parseInt($("#Size_8_Edit").val());
+        var value9 = parseInt($("#Size_9_Edit").val());
+        var value10 = parseInt($("#Size_10_Edit").val());
+        var value11 = parseInt($("#Size_11_Edit").val());
+        var value12 = parseInt($("#Size_12_Edit").val());
+        var value13 = parseInt($("#Size_13_Edit").val());
+
+        var totalqty = value1 + value2 + value3 + value4 + value5 + value6 + value7 + value8 + value9 + value10 + value11 + value12 + value13;
+        $("#qtyEdit").val(totalqty);
+
+        var price = $("#priceEdit").val();
+        var totalprice = totalqty * price;
+        var discount = $("#discEdit").val();
+        var discamtval = $("#disc_amtEdit").val();
+        var disctype = $("#is_disc_percBoolEdit").is(":checked");
+        if (disctype == true) {
+            var totaldisc = 0;
+            if (discount != 0) {
+                totaldisc = (totalprice * discount) / 100;
+            }
+            var finalprice = totalprice - totaldisc
+            $("#final_priceEdit").val(finalprice.toFixed(2));
+        } else {
+            var totaldisc = 0;
+            if (discamtval != 0) {
+                totaldisc = discamtval;
+            }
+            var finalprice = totalprice - totaldisc
+            $("#final_priceEdit").val(finalprice.toFixed(2));
+        }
+
+    });
+$("#Size_13_Edit").change(function () {
+        if (!$('#Size_13_Edit').val()) {
+            $("#Size_13_Edit").val(0);
+        }
+        var value1 = parseInt($("#Size_1_Edit").val());
+        var value2 = parseInt($("#Size_2_Edit").val());
+        var value3 = parseInt($("#Size_3_Edit").val());
+        var value4 = parseInt($("#Size_4_Edit").val());
+        var value5 = parseInt($("#Size_5_Edit").val());
+        var value6 = parseInt($("#Size_6_Edit").val());
+        var value7 = parseInt($("#Size_7_Edit").val());
+        var value8 = parseInt($("#Size_8_Edit").val());
+        var value9 = parseInt($("#Size_9_Edit").val());
+        var value10 = parseInt($("#Size_10_Edit").val());
+        var value11 = parseInt($("#Size_11_Edit").val());
+        var value12 = parseInt($("#Size_12_Edit").val());
+        var value13 = parseInt($("#Size_13_Edit").val());
+
+        var totalqty = value1 + value2 + value3 + value4 + value5 + value6 + value7 + value8 + value9 + value10 + value11 + value12 + value13;
+        $("#qtyEdit").val(totalqty);
+
+        var price = $("#priceEdit").val();
+        var totalprice = totalqty * price;
+        var discount = $("#discEdit").val();
+        var discamtval = $("#disc_amtEdit").val();
+        var disctype = $("#is_disc_percBoolEdit").is(":checked");
+        if (disctype == true) {
+            var totaldisc = 0;
+            if (discount != 0) {
+                totaldisc = (totalprice * discount) / 100;
+            }
+            var finalprice = totalprice - totaldisc
+            $("#final_priceEdit").val(finalprice.toFixed(2));
+        } else {
+            var totaldisc = 0;
+            if (discamtval != 0) {
+                totaldisc = discamtval;
+            }
+            var finalprice = totalprice - totaldisc
+            $("#final_priceEdit").val(finalprice.toFixed(2));
+        }
+
+    });
+function openpopup(sender, article) {
+    debugger;
+    $("#datamode").val(sender.id);
+    window.lastclicked = sender.id;
+    $("#articleEdit").val(article);
+    //$.ajax({
+    //    type: "GET",
+    //    url: "/SalesOrder/getdataprice",
+    //    data: { article: article },
+    //    success: function (data) {
+    //        debugger;
+    //        console.log(data);
+    //        $("#priceEdit").val(data.articleprice)
+
+    //    }
+    //})
+    //$.ajax({
+    //    type: "GET",
+    //    url: "/SalesOrder/getsizecode",
+    //    data: { article: article },
+    //    success: function (data) {
+    //        debugger;
+    //        console.log(data);
+    //        $("#sizeCodeTxtEdit").val(data.sizecode)
+    //        if (data.size1 != null && data.dize1 != "") {
+    //            $("#Size1lblEdit").text(data.size1);
+    //        }
+    //        if (data.size2 != null && data.size2 != "") {
+    //            $("#Size2lblEdit").text(data.size2);
+    //        }
+    //        if (data.size3 != null && data.size3 != "") {
+    //            $("#Size3lblEdit").text(data.size3);
+    //        }
+    //        if (data.size4 != null && data.size4 != "") {
+    //            $("#Size4lblEdit").text(data.size4);
+    //        }
+    //        if (data.size5 != null && data.size5 != "") {
+    //            $("#Size5lblEdit").text(data.size5);
+    //        }
+    //        if (data.size6 != null && data.size6 != "") {
+    //            $("#Size6lblEdit").text(data.size6);
+    //        }
+    //        if (data.size7 != null && data.size7 != "") {
+    //            $("#Size7lblEdit").text(data.size7);
+    //        }
+    //        if (data.size8 != null && data.size8 != "") {
+    //            $("#Size8lblEdit").text(data.size8);
+    //        }
+    //        if (data.size9 != null && data.size9 != "") {
+    //            $("#Size9lblEdit").text(data.size9);
+    //        }
+    //        if (data.size10 != null && data.size10 != "") {
+    //            $("#Size10lblEdit").text(data.size10);
+    //        }
+    //        if (data.size11 != null && data.size11 != "") {
+    //            $("#Size11lblEdit").text(data.size11);
+    //        }
+    //        if (data.size12 != null && data.size12 != "") {
+    //            $("#Size12lblEdit").text(data.size12);
+    //        }
+    //        if (data.size13 != null && data.size13 != "") {
+    //            $("#Size13lblEdit").text(data.size13);
+    //        }
+    //    }
+    //})
+     $.ajax({
+            url: '@Url.Action("getOrderDataEdit", "Catalog")',
+                type: "GET",
+         data: { article: article },
+                //startDate: mFromDate, endDate: mToDate1
+                dataType: 'json',
+                success: function (data) {
+                    console.log("test: " + data);
+                    debugger;
+                    if (data != null) {
+
+                        $("#qtyEdit").val(data.qty);
+                        $("#priceEdit").val(data.price);
+
+                        $("#Size_1_Edit").val(data.size_1);
+                        $("#Size_2_Edit").val(data.size_2);
+                        $("#Size_3_Edit").val(data.size_3);
+                        $("#Size_4_Edit").val(data.size_4);
+                        $("#Size_5_Edit").val(data.size_5);
+                        $("#Size_6_Edit").val(data.size_6);
+                        $("#Size_7_Edit").val(data.size_7);
+                        $("#Size_8_Edit").val(data.size_8);
+                        $("#Size_9_Edit").val(data.size_9);
+                        $("#Size_10_Edit").val(data.size_10);
+                        $("#Size_11_Edit").val(data.size_11);
+                        $("#Size_12_Edit").val(data.size_12);
+                        $("#Size_13_Edit").val(data.size_13);
+                        var disctype = data.is_disc_perc;
+                        if (disctype == "1") {
+                            $("#is_disc_percBoolEdit").prop("checked", true);
+                            $("#discEdit").val(data.disc);
+                            $("#disc_amtEdit").val(0);
+                            //$("#discamtvalEdit").hide();
+                            //$("#discpercvalEdit").show();
+
+                        } else {
+                            $("#is_disc_percBoolEdit").prop("checked", false);
+                            $("#discEdit").val(0);
+                            $("#disc_amtEdit").val(data.disc_amt);
+                            //    $("#discpercvalEdit").hide();
+                            //    $("#discamtvalEdit").show();
+                        }
+                        $.ajax({
+                            type: "GET",
+                            url: "/Catalog/getdataprice",
+                            data: { article: article },
+                            success: function (data) {
+                                debugger;
+                                console.log(data);
+                                $("#priceEdit").val(data)
+
+                                var priceval = $("#priceEdit").val();
+                                var qtyval = $("#qtyEdit").val();
+                                var discval = $("#discEdit").val();
+                                var discamtval = $("#disc_amtEdit").val();
+                                if (disctype == "1") {
+                                    if (qtyval != 0) {
+                                        priceval = priceval * qtyval;
+                                        if (priceval != null && discval != null) {
+                                            var discvalue = (priceval * discval) / 100;
+                                            var total = (priceval - discvalue).toFixed(2);
+                                            $("#final_priceEdit").val(total);
+                                        } else {
+                                            $("#final_priceEdit").val(0);
+                                        }
+                                    } else {
+                                        $("#final_priceEdit").val(0);
+                                    }
+
+                                } else {
+                                    if (qtyval != 0) {
+                                        priceval = priceval * qtyval;
+                                        if (priceval != null && discamtval != null) {
+                                            var discvalue = discamtval;
+                                            var total = (priceval - discvalue).toFixed(2);
+                                            $("#final_priceEdit").val(total);
+                                        } else {
+                                            $("#final_priceEdit").val(0);
+                                        }
+                                    } else {
+                                        $("#final_priceEdit").val(0);
+                                    }
+                                }
+
+
+                                //$('#SS_CODE_EDIT').html(s);
+                                ////$("#SSList").select2({ placeholder: "Select SS" });
+                                //$("#SS_CODE_EDIT").val(null);
+                                //$("#SS_CODE_EDIT").trigger('change');
+
+                            }
+                        })
+                        $.ajax({
+                            type: "GET",
+                            url: "/SalesOrder/getsizecode",
+                            data: { article: article },
+                            success: function (data) {
+                                debugger;
+                                var getstockdatastr = function () {
+                                    var tmp = null;
+                                    $.ajax({
+                                        'async': false,
+                                        'type': "POST",
+                                        'global': false,
+                                        'dataType': 'html',
+                                        'url': "/Catalog/getstockpersize",
+                                        'data': { 'request': "", 'target': 'arrange_url', 'method': 'method_target', 'article': article },
+                                        'success': function (data) {
+                                            tmp = data;
+                                        }
+                                    });
+                                    return tmp;
+                                }();
+                                var getstockdata = JSON.parse(getstockdatastr);
+                                console.log(getstockdata);
+                                $("#sizeCodeTxtEdit").val(data.sizecode)
+                                if (data.size1 != null && data.size1 != "") {
+                                    $("#Size1lblEdit").text(data.size1 + " Available: " + getstockdata.size1);
+                                    var size1 = data.size1.substr(1);
+                                    if (data.size1.length > 2) {
+                                        size1 = data.size1.substr(2);
+                                    }
+                                    if (size1 == "5") {
+                                        $("#Size_1_Edit").val(0);
+                                        $("#Size_1_Edit").attr("readonly", "readonly");
+
+                                    } else {
+                                        $("#Size_1_Edit").removeAttr('readonly');
+
+                                    }
+                                }
+                                if (data.size2 != null && data.size2 != "") {
+                                    $("#Size2lblEdit").text(data.size2 + " Available: " + getstockdata.size2);
+                                    var size2 = data.size2.substr(1);
+                                    if (data.size2.length > 2) {
+                                        size2 = data.size2.substr(2);
+                                    }
+                                    if (size2 == "5") {
+                                        $("#Size_2_Edit").val(0);
+
+                                        $("#Size_2_Edit").attr("readonly", "readonly");
+
+                                    } else {
+                                        $("#Size_2_Edit").removeAttr('readonly');
+
+                                    }
+                                }
+                                if (data.size3 != null && data.size3 != "") {
+                                    $("#Size3lblEdit").text(data.size3 + " Available: " + getstockdata.size3);
+                                    var size3 = data.size3.substr(1);
+                                    if (data.size3.length > 2) {
+                                        size3 = data.size3.substr(2);
+                                    }
+                                    if (size3 == "5") {
+                                        $("#Size_3_Edit").val(0);
+
+                                        $("#Size_3_Edit").attr("readonly", "readonly");
+
+                                    } else {
+                                        $("#Size_3_Edit").removeAttr('readonly');
+
+                                    }
+                                }
+                                if (data.size4 != null && data.size4 != "") {
+                                    $("#Size4lblEdit").text(data.size4 + " Available: " + getstockdata.size4);
+                                    var size4 = data.size4.substr(1);
+                                    if (data.size4.length > 2) {
+                                        size4 = data.size4.substr(2);
+                                    }
+                                    if (size4 == "5") {
+                                        $("#Size_4_Edit").val(0);
+
+                                        $("#Size_4_Edit").attr("readonly", "readonly");
+
+                                    } else {
+                                        $("#Size_4_Edit").removeAttr('readonly');
+
+                                    }
+                                }
+                                if (data.size5 != null && data.size5 != "") {
+                                    $("#Size5lblEdit").text(data.size5 + " Available: " + getstockdata.size5);
+                                    var size5 = data.size5.substr(1);
+                                    if (data.size5.length > 2) {
+                                        size5 = data.size5.substr(2);
+                                    }
+                                    if (size5 == "5") {
+                                        $("#Size_5_Edit").val(0);
+
+                                        $("#Size_5_Edit").attr("readonly", "readonly");
+
+                                    } else {
+                                        $("#Size_5_Edit").removeAttr('readonly');
+
+                                    }
+                                }
+                                if (data.size6 != null && data.size6 != "") {
+                                    $("#Size6lblEdit").text(data.size6 + " Available: " + getstockdata.size6);
+                                    var size6 = data.size6.substr(1);
+                                    if (data.size6.length > 2) {
+                                        size6 = data.size6.substr(2);
+                                    }
+                                    if (size6 == "5") {
+                                        $("#Size_6_Edit").val(0);
+
+                                        $("#Size_6_Edit").attr("readonly", "readonly");
+
+                                    } else {
+                                        $("#Size_6_Edit").removeAttr('readonly');
+
+                                    }
+                                }
+                                if (data.size7 != null && data.size7 != "") {
+                                    $("#Size7lblEdit").text(data.size7 + " Available: " + getstockdata.size7);
+                                    var size7 = data.size7.substr(1);
+                                    if (data.size7.length > 2) {
+                                        size7 = data.size7.substr(2);
+                                    }
+                                    if (size7 == "5") {
+                                        $("#Size_7_Edit").val(0);
+
+                                        $("#Size_7_Edit").attr("readonly", "readonly");
+
+                                    } else {
+                                        $("#Size_7_Edit").removeAttr('readonly');
+
+                                    }
+                                }
+                                if (data.size8 != null && data.size8 != "") {
+                                    $("#Size8lblEdit").text(data.size8 + " Available: " + getstockdata.size8);
+                                    var size8 = data.size8.substr(1);
+                                    if (data.size8.length > 2) {
+                                        size8 = data.size8.substr(2);
+                                    }
+                                    if (size8 == "5") {
+                                        $("#Size_8_Edit").val(0);
+
+                                        $("#Size_8_Edit").attr("readonly", "readonly");
+
+                                    } else {
+                                        $("#Size_8_Edit").removeAttr('readonly');
+
+                                    }
+                                }
+                                if (data.size9 != null && data.size9 != "") {
+                                    $("#Size9lblEdit").text(data.size9 + " Available: " + getstockdata.size9);
+                                    var size9 = data.size9.substr(1);
+                                    if (data.size9.length > 2) {
+                                        size9 = data.size9.substr(2);
+                                    }
+                                    if (size9 == "5") {
+                                        $("#Size_9_Edit").val(0);
+
+                                        $("#Size_9_Edit").attr("readonly", "readonly");
+
+                                    } else {
+                                        $("#Size_9_Edit").removeAttr('readonly');
+
+                                    }
+                                }
+                                if (data.size10 != null && data.size10 != "") {
+                                    $("#Size10lblEdit").text(data.size10 + " Available: " + getstockdata.size10);
+                                    var size10 = data.size10.substr(1);
+                                    if (data.size10.length > 2) {
+                                        size10 = data.size10.substr(2);
+                                    }
+                                    if (size10 == "5") {
+                                        $("#Size_10_Edit").val(0);
+
+                                        $("#Size_10_Edit").attr("readonly", "readonly");
+
+                                    } else {
+                                        $("#Size_10_Edit").removeAttr('readonly');
+
+                                    }
+                                }
+                                if (data.size11 != null && data.size11 != "") {
+                                    $("#Size11lblEdit").text(data.size11 + " Available: " + getstockdata.size11);
+                                    var size11 = data.size11.substr(1);
+                                    if (data.size11.length > 2) {
+                                        size11 = data.size11.substr(2);
+                                    }
+                                    if (size11 == "5") {
+                                        $("#Size_11_Edit").val(0);
+
+                                        $("#Size_11_Edit").attr("readonly", "readonly");
+
+                                    } else {
+                                        $("#Size_11_Edit").removeAttr('readonly');
+
+                                    }
+                                }
+                                if (data.size12 != null && data.size12 != "") {
+                                    $("#Size12lblEdit").text(data.size12 + " Available: " + getstockdata.size12);
+                                    var size12 = data.size12.substr(1);
+                                    if (data.size12.length > 2) {
+                                        size12 = data.size12.substr(2);
+                                    }
+                                    if (size12 == "5") {
+                                        $("#Size_12_Edit").val(0);
+
+                                        $("#Size_12_Edit").attr("readonly", "readonly");
+
+                                    } else {
+                                        $("#Size_12_Edit").removeAttr('readonly');
+
+                                    }
+                                }
+                                if (data.size13 != null && data.size13 != "") {
+                                    $("#Size13lblEdit").text(data.size13 + " Available: " + getstockdata.size13);
+                                    var size13 = data.size13.substr(1);
+                                    if (data.size13.length > 2) {
+                                        size13 = data.size13.substr(2);
+                                    }
+                                    if (size13 == "5") {
+                                        $("#Size_13_Edit").val(0);
+
+                                        $("#Size_13_Edit").attr("readonly", "readonly");
+
+                                    } else {
+                                        $("#Size_13_Edit").removeAttr('readonly');
+
+                                    }
+                                }
+                            }
+                        })
+
+                    }
+
+                    if (data.article != null) {
+                        $("#btnPopupMod").attr('value', 'Update to Cart');
+
+                    } else {
+                        $("#btnPopupMod").attr('value', 'Add to Cart');
+
+                    }
+
+                },
+                error: function () {
+
+                }
+
+        });
+    $("#dialogEdit").dialog("open");
+}
+    function alertfirst2(sender) {
+        console.log(sender);
+        debugger;
+        // $("#" + sender.id).val()
+        debugger;
+        var qtyval = $('#qtyEdit').val();
+        var getValidate = function () {
+            var tmp = null;
+            $.ajax({
+                'async': false,
+                'type': "POST",
+                'global': false,
+                'dataType': 'html',
+                'url': "/SalesOrder/validateqty",
+                'data': { 'request': "", 'target': 'arrange_url', 'method': 'method_target', 'qty': qtyval },
+                'success': function (data) {
+                    tmp = data;
+                }
+            });
+            return tmp;
+        }();
+
+        debugger;
+        if (getValidate == '"pass"') {
+            if (confirm("Are you sure saving data?")) {
+                $('#formdtlEdit').submit();
+
+                //SaveForm();
+            } else {
+                return false;
+            }
+        } else {
+            var errmsg = "";
+            errmsg += "minimum quantity has not been met \n"
+
+            alert(errmsg);
+
+        }
+
+    }
+
+</script>

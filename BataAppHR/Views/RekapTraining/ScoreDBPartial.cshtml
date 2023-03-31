@@ -1,0 +1,62 @@
+﻿@model BataAppHR.Models.dbRekapTraining
+@inject IJsonHelper Json;
+
+<a class="btn" style="margin-bottom:10px;background-color:forestgreen;color:white;" onclick="AddFormTrans(@Model.nilaiSSFixedList.Count-1)"><i class="fa fa-plus"></i>&nbsp;&nbsp;Add Staff</a>
+@{ 
+    var formCount = Model.nilaiSSFixedList.Count();
+}
+@for (int i = 0; i < Model.nilaiSSFixedList.Count; i++)
+{
+    <div class="row">
+        @Html.Hidden("dtlid" + i, new { htmlAttributes = new { @class = "form-control" } })
+        <div class="col-xs-3 form-group" style="padding-left:2%">
+            <label for="exampleInputEmail1">KaryawanDD @(i+1)</label>
+            <br />
+            @Html.DropDownList("SSID" + i, new SelectList(Model.SSDD, "SS_CODE", "NAMA_SS"), "Select", new { htmlAttributes = new { @class = "ddssid" } })
+        </div>
+        <div class="col-xs-3 form-group" style="padding-left:1%">
+            <label for="exampleInputEmail1">Score</label>
+            <br />
+            @Html.Editor("ScoreTxt" + i, new { htmlAttributes = new { @class = "form-control", @type = "number" } })
+        </div>
+        
+        <div class="col-xs-2 form-group" style="padding-left:1%">
+            <br />
+            <a class="btn" style="margin-bottom:10px;background-color:#da251c;color:white;padding-top:10px;" onclick="OnButtonClickForm(@i)"><i class="bi bi-arrow-up-square-fill"></i>&nbsp;&nbsp;Remove</a>
+
+        </div>
+    </div>
+    @*<div class="form-group">
+
+        </div>
+        <div class="form-group">
+
+        </div>
+        <div class="form-group">
+
+        </div>
+        <div class="form-group">
+
+        </div>
+        <div class="form-group">
+        </div>*@
+}
+<script>
+    $(document).ready(function () {
+        var count = @formCount;
+        for (var i = 0; i < count; i++) {
+            $("#SSID" + i).select2({
+                placeholder: "Select SS Code",
+                initSelection: function (element, callback) {
+                },
+                dropdownAutoWidth: true,
+                width: 'auto'
+            });
+        }
+       
+
+    });
+   
+</script>
+
+

@@ -1,0 +1,4010 @@
+﻿@model BataAppHR.Models.dbSalesOrder
+@using Microsoft.AspNetCore.Http;
+@using System.Text.Json;
+@{
+    ViewData["Title"] = "Edit";
+    var empcode = Model.EMP_CODE;
+    var customer = Model.id_customer;
+    var approve1 = Model.APPROVAL_1;
+    var approve2 = Model.APPROVAL_2;
+    var orderdate = Model.passingDate;
+    var dischdrtype = Model.IS_DISC_PERC;
+    var invdiscamt = Model.INV_DISC_AMT;
+    var custdisc = Model.custdisc;
+    var shipping = Model.SHIPPING_ADDRESS;
+    //var program = Model.Program;
+    //var participantListData = JsonSerializer.Serialize(participantDt);
+    //var trainerdt = Model.TrainerList;
+    //var TrainerListData = JsonSerializer.Serialize(trainerdt);
+
+    //var noparticipant = Model.NoParticipant;
+    //var trainer = Model.idTrainer;
+    var invdisc = Model.INV_DISC;
+    var isFinanceRole = User.IsInRole("FinanceIndustrial");
+    var isSalesRole = User.IsInRole("SalesIndustrial");
+
+    var errmsg = Model.error;
+    if (!string.IsNullOrEmpty(errmsg))
+    {
+        errmsg = errmsg.Replace("&#xA;", "\r\n");
+    }
+
+}
+<style>
+    .label {
+        float: left;
+    }
+
+    .disabled-select {
+        background-color: #d5d5d5;
+        opacity: 0.5;
+        border-radius: 3px;
+        cursor: not-allowed;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        left: 0;
+    }
+
+    select[readonly].select2-hidden-accessible + .select2-container {
+        pointer-events: none;
+        touch-action: none;
+    }
+
+        select[readonly].select2-hidden-accessible + .select2-container .select2-selection {
+            background: #eee;
+            box-shadow: none;
+        }
+
+        select[readonly].select2-hidden-accessible + .select2-container .select2-selection__arrow,
+        select[readonly].select2-hidden-accessible + .select2-container .select2-selection__clear {
+            display: none;
+        }
+
+    input.largerCheckbox {
+        width: 20px;
+        height: 20px;
+    }
+
+    .table-borderless > tbody > tr > td {
+        border: 0;
+    }
+
+    .col-sm-pad {
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+</style>
+<h1>Update</h1>
+<h3>Sales Order Update</h3>
+<hr />
+<form asp-action="Edits" id="formcreate" method="post">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm">
+                <div class="form-group">
+                    <label class="control-label">Sales Personnel</label>
+                    @Html.DropDownListFor(m => m.EMP_CODE, new SelectList(Model.EmpDD, "EMP_CODE", "NM_EMP"), new { @class = "form-control" })
+                    <input asp-for="id" type="hidden" class="form-control" />
+                    <input asp-for="APPROVAL_1" type="hidden" class="form-control" />
+                    <input asp-for="APPROVAL_2" type="hidden" class="form-control" />
+                    <input asp-for="IS_DISC_PERC" type="hidden" class="form-control" />
+
+                    <span asp-validation-for="EMP_CODE" class="text-danger"></span>
+                </div>
+                <div class="row">
+                    <div class="col-sm">
+                        <div class="form-group">
+                            <label class="control-label"> Customer</label>
+                            @Html.DropDownListFor(m => m.id_customer, new SelectList(Model.custDD, "id", "CUST_NAME"), new { @class = "form-control" })
+
+                            <span asp-validation-for="id_customer" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-sm">
+                        <div class="form-group">
+                            <label class="control-label">Customer Discount: </label>
+                            <input asp-for="custdisc" class="form-control" readonly="readonly" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Shipping Address:</label>
+                    <textarea asp-for="SHIPPING_ADDRESS" class="form-control"></textarea>
+                    <span asp-validation-for="SHIPPING_ADDRESS" class="text-danger"></span>
+                </div>
+                <div class="form-group" style="display:none;">
+                    <label class="control-label">Status</label>
+                    <input asp-for="STATUS" class="form-control" />
+                    <span asp-validation-for="STATUS" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Order Date</label>
+                    <input asp-for="ORDER_DATE" class="form-control" />
+                    <span asp-validation-for="ORDER_DATE" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm">
+                                <table>
+                                    <tr>
+                                        <td>
+                                            <label class="control-label">Sales Sign</label>
+                                        </td>
+                                        <td style="padding-left:10%">
+                                            <input asp-for="isApprove1" class="largerCheckbox" />
+                                            <span asp-validation-for="isApprove1" class="text-danger"></span>
+                                        </td>
+                                    </tr>
+                                </table>
+
+                            </div>
+                            <div class="col-sm">
+                                <table>
+                                    <tr>
+                                        <td>
+                                            <label class="control-label">Finance Sign</label>
+                                        </td>
+                                        <td style="padding-left:10%">
+                                            <input asp-for="isApprove2" class="largerCheckbox" />
+                                            <span asp-validation-for="isApprove2" class="text-danger"></span>
+                                        </td>
+                                    </tr>
+                                </table>
+
+                            </div>
+                            
+                            <div class="col-sm">
+                                <table>
+                                    <tr>
+                                        <td>
+                                            <label class="control-label">View Payments</label>
+                                        </td>
+                                        <td style="padding-left:10%">
+                                            <a href="#/" onclick="openpopup(this,'')" id="ViewPayments" class="btn btn-sm btn-dark">Payments List</a>
+
+                                        </td>
+                                    </tr>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-sm">
+                <div class="form-group style=" display:none;"">
+                    <label class="control-label">Paid Amount</label>
+                    <input asp-for="PaidAmt" class="form-control" readonly="readonly" />
+                    <span asp-validation-for="PaidAmt" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Total Final</label>
+                    <input id="FinalVal" class="form-control" readonly="readonly" />
+                </div>
+                <div class="row">
+                    <div class="col-sm">
+                        <div class="form-group">
+                            <label class="control-label">Total Qty</label>
+                            <input asp-for="TOTAL_QTY" class="form-control" readonly="readonly" />
+                            <span asp-validation-for="TOTAL_QTY" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-sm">
+                        <div class="form-group">
+                            <label class="control-label">Total Order</label>
+                            <input asp-for="TOTAL_ORDER" class="form-control" readonly="readonly" />
+                            <span asp-validation-for="TOTAL_ORDER" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm">
+                        <div class="form-group">
+                            <label class="control-label">Is Percentage Disc</label>
+                            <br />
+                            <input asp-for="IS_DISC_PERCBoolHdr" class="largerCheckbox" />
+                            <span asp-validation-for="IS_DISC_PERCBoolHdr" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-sm">
+                        <div class="form-group" id="divdiscperc">
+                            <label class="control-label">Invoice Discount Percentage</label>
+                            <input asp-for="INV_DISC" class="form-control" onkeypress="return allowOnlyNumber(event);" />
+                            <span asp-validation-for="INV_DISC" class="text-danger"></span>
+                        </div>
+                        <div class="form-group" id="divdiscamt">
+                            <label class="control-label">Invoice Discount Amount</label>
+                            <input asp-for="INV_DISC_AMT" class="form-control" onkeypress="return allowOnlyNumber(event);" />
+                            <span asp-validation-for="INV_DISC_AMT" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="form-group">
+                    <table>
+                        <tr>
+                            <td>
+                                <a href="#/" onclick="openpopup(this,'')" id="addArticle" class="btn btn-sm btn-dark">Tambah Artikel</a>
+                            </td>
+                            <td>
+                                <a href="#/" onclick="openpopup(this,'')" id="UploadArticle" class="btn btn-sm btn-dark">Upload Artikel</a>
+                            </td>
+                        </tr>
+
+                    </table>
+                    <br />
+                    <table class="table table-striped" id="DtlTbl">
+                        <thead>
+                            <tr>
+                                <th>Num.</th>
+                                <th>
+                                    Article
+                                </th>
+                                <th>
+                                    Qty
+                                </th>
+
+                                <th>
+                                    Total purchase
+                                </th>
+
+                                <th>
+                                    <label>Actions</label>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbodyiddtl">
+                        </tbody>
+                    </table>
+                </div>
+                <div class="form-group">
+
+                    <table>
+                        <tr>
+                            <td>
+                                <input type="button" value="Update Data" onclick="alertfirst()" class="btn btn-red" />
+                            </td>
+                            <td>
+                                <a asp-action="Index" class="btn btn-dark">Kembali ke List</a>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</form>
+<div id="dialog" title="Detail order">
+    <form asp-action="AddDetailEdit" id="formdtl" enctype="multipart/form-data" style="align-content:">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm">
+                    <div class="row">
+                        <div class="col">
+                            <label class="control-label label">Article: </label>
+                        </div>
+                        <div class="col">
+                            @Html.DropDownListFor(m => m.article, new SelectList(Model.articleList, "articlecode", "articlename"), new { @class = "form-control" })
+
+                            <input asp-for="TOTAL_ORDERTemp" type="hidden" class="form-control" />
+                            <input asp-for="TOTAL_QTYTemp" type="hidden" class="form-control" />
+                            <input asp-for="STATUSTemp" type="hidden" class="form-control" />
+                            <input asp-for="APPROVAL_1Temp" type="hidden" class="form-control" />
+                            <input asp-for="APPROVAL_2Temp" class="form-control" type="hidden" />
+                            <input asp-for="ORDER_DATETemp" class="form-control" type="hidden" />
+                            <input asp-for="EMP_CODETemp" class="form-control" style="display:none;" />
+                            <input asp-for="INV_DISCTemp" type="hidden" class="form-control" />
+                            <input asp-for="id_customerTemp" type="hidden" class="form-control" />
+                            <input asp-for="idTemp" type="hidden" class="form-control" />
+                            <input asp-for="INV_DISC_AMTTemp" type="hidden" class="form-control" />
+                            <input asp-for="IS_DISC_PERCTemp" type="hidden" class="form-control" />
+                            <input asp-for="custdiscTemp" type="hidden" class="form-control" />
+                            <input asp-for="SHIPPING_ADDRESSTemp" type="hidden" class="form-control" />
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label class="control-label label">qty: </label>
+
+                        </div>
+                        <div class="col">
+                            <input asp-for="qty" class="form-control" onkeypress="return allowOnlyNumber(event);" readonly />
+                            <span asp-validation-for="qty" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label class="control-label label">Price: </label>
+
+                        </div>
+                        <div class="col">
+                            <input asp-for="price" class="form-control" onkeypress="return allowOnlyNumber(event);" min="1" readonly />
+                            <span asp-validation-for="price" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row" style="display:none;">
+                        <div class="col">
+                            <label class="control-label label">is Discount Percentage: </label>
+
+                        </div>
+                        <div class="col">
+                            <input asp-for="is_disc_percBool" class="largerCheckbox" />
+                            <span asp-validation-for="is_disc_percBool" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row" id="discpercval" style="display:none;">
+                        <div class="col">
+                            <label class="control-label label">Disc Percentage: </label>
+
+                        </div>
+                        <div class="col">
+                            <input asp-for="disc" class="form-control" onkeypress="return allowOnlyNumber(event);" max="100" />
+                            <span asp-validation-for="disc" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row" id="discamtval" style="display:none;">
+                        <div class="col">
+                            <label class="control-label label">Disc Amount: </label>
+
+                        </div>
+                        <div class="col">
+                            <input asp-for="disc_amt" class="form-control" onkeypress="return allowOnlyNumber(event);" />
+                            <span asp-validation-for="disc_amt" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label class="control-label label">Final: </label>
+
+                        </div>
+                        <div class="col">
+                            <input asp-for="final_price" class="form-control" onkeypress="return allowOnlyNumber(event);" readonly />
+                            <span asp-validation-for="final_price" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <input type="button" value="Tambah produk" id="btnAdd" onclick="alertfirst2(this)" class="btn btn-red" />
+
+                        </div>
+                        <div class="col">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm">
+                    <div class="row">
+                        <div class="col">
+                            <label class="control-label label">Size Code: </label>
+
+                        </div>
+                        <div class="col">
+                            <input id="sizeCodeTxt" class="form-control" readonly="readonly" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label class="control-label label" id="Size1lbl">1</label>
+                        </div>
+                        <div class="col">
+                            <input asp-for="Size_1" class="form-control" onkeypress="return allowOnlyNumber(event);" />
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label class="control-label label" id="Size2lbl">2</label>
+                        </div>
+                        <div class="col">
+                            <input asp-for="Size_2" class="form-control" onkeypress="return allowOnlyNumber(event);" />
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label class="control-label label" id="Size3lbl">3</label>
+                        </div>
+                        <div class="col">
+                            <input asp-for="Size_3" class="form-control" onkeypress="return allowOnlyNumber(event);" />
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label class="control-label label" id="Size4lbl">4</label>
+                        </div>
+                        <div class="col">
+                            <input asp-for="Size_4" class="form-control" onkeypress="return allowOnlyNumber(event);" />
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label class="control-label label" id="Size5lbl">5</label>
+                        </div>
+                        <div class="col">
+                            <input asp-for="Size_5" class="form-control" onkeypress="return allowOnlyNumber(event);" />
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label class="control-label label" id="Size6lbl">6</label>
+                        </div>
+                        <div class="col">
+                            <input asp-for="Size_6" class="form-control" onkeypress="return allowOnlyNumber(event);" />
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label class="control-label label" id="Size7lbl">7</label>
+                        </div>
+                        <div class="col">
+                            <input asp-for="Size_7" class="form-control" onkeypress="return allowOnlyNumber(event);" />
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label class="control-label label" id="Size8lbl">8</label>
+                        </div>
+                        <div class="col">
+                            <input asp-for="Size_8" class="form-control" onkeypress="return allowOnlyNumber(event);" />
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label class="control-label label" id="Size9lbl">9</label>
+                        </div>
+                        <div class="col">
+                            <input asp-for="Size_9" class="form-control" onkeypress="return allowOnlyNumber(event);" />
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label class="control-label label" id="Size10lbl">10</label>
+                        </div>
+                        <div class="col">
+                            <input asp-for="Size_10" class="form-control" onkeypress="return allowOnlyNumber(event);" />
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label class="control-label label" id="Size11lbl">11</label>
+                        </div>
+                        <div class="col">
+                            <input asp-for="Size_11" class="form-control" onkeypress="return allowOnlyNumber(event);" />
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label class="control-label label" id="Size12lbl">12</label>
+                        </div>
+                        <div class="col">
+                            <input asp-for="Size_12" class="form-control" onkeypress="return allowOnlyNumber(event);" />
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label class="control-label label" id="Size13lbl">13</label>
+                        </div>
+                        <div class="col">
+                            <input asp-for="Size_13" class="form-control" onkeypress="return allowOnlyNumber(event);" />
+
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </form>
+
+</div>
+<div id="dialogPayment" title="Payment List">
+    <center>
+        <table class="table table-striped" id="PaymentTbl">
+            <thead>
+                <tr>
+                    <th>Bank.</th>
+                    <th>
+                        Ref
+                    </th>
+                    <th>
+                        Total Payment
+                    </th>
+
+                    <th>
+                        File
+                    </th>
+
+                    
+                </tr>
+            </thead>
+            <tbody id="tbodyiddtl">
+            </tbody>
+        </table>
+    </center>
+</div>
+<div id="dialogUpload" title="Upload Article">
+    <center>
+        <form asp-action="UploadArticleEdit" id="formdtlupload" enctype="multipart/form-data">
+            <div class="container" style="width:100%;height:100%;">
+                <div class="row">
+                    <div class="form-group">
+                        <table>
+                            <tr>
+                                <td>
+                                    <label class="control-label">Upload: </label>
+                                </td>
+                                <td style="padding-left:50%">
+                                    <input type="file" asp-for="fileuploadArticle" />
+                                    <input asp-for="TOTAL_ORDERTempUpl" type="hidden" class="form-control" />
+                                    <input asp-for="TOTAL_QTYTempUpl" type="hidden" class="form-control" />
+                                    <input asp-for="STATUSTempUpl" type="hidden" class="form-control" />
+                                    <input asp-for="APPROVAL_1TempUpl" type="hidden" class="form-control" />
+                                    <input asp-for="APPROVAL_2TempUpl" class="form-control" type="hidden" />
+                                    <input asp-for="ORDER_DATETempUpl" class="form-control" type="hidden" />
+                                    <input asp-for="EMP_CODETempUpl" class="form-control" style="display:none;" />
+                                    <input asp-for="id_customerTempUpl" type="hidden" class="form-control" />
+                                    <input asp-for="idTempUpl" class="form-control" type="hidden" />
+                                    <input asp-for="INV_DISCTempUpl" type="hidden" class="form-control" />
+                                    <input asp-for="INV_DISC_AMTTempUpl" type="hidden" class="form-control" />
+                                    <input asp-for="IS_DISC_PERCTempUpl" type="hidden" class="form-control" />
+                                    <input asp-for="custdiscTempUpl" type="hidden" class="form-control" />
+                                    <input asp-for="SHIPPING_ADDRESSTempUpl" type="hidden" class="form-control" />
+
+                                    <br />
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group">
+                        <input type="button" value="Upload Article" onclick="alertfirstupl(this)" class="btn btn-red" />
+
+                    </div>
+                </div>
+            </div>
+        </form>
+    </center>
+</div>
+<div id="dialogEdit" title="Update Detail">
+    <form asp-action="EditDetailEdit" id="formdtlEdit" enctype="multipart/form-data">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm">
+                    <div class="row">
+                        <div class="col">
+                            <label class="control-label label">Article: </label>
+                        </div>
+                        <div class="col">
+                            @Html.DropDownListFor(m => m.articleEdit, new SelectList(Model.articleList, "articlecode", "articlename"), new { @class = "form-control" })
+
+                            <input asp-for="TOTAL_ORDERTempEdit" type="hidden" class="form-control" />
+                            <input asp-for="TOTAL_QTYTempEdit" type="hidden" class="form-control" />
+                            <input asp-for="STATUSTempEdit" type="hidden" class="form-control" />
+                            <input asp-for="APPROVAL_1TempEdit" type="hidden" class="form-control" />
+                            <input asp-for="APPROVAL_2TempEdit" class="form-control" type="hidden" />
+                            <input asp-for="ORDER_DATETempEdit" class="form-control" type="hidden" />
+                            <input asp-for="EMP_CODETempEdit" class="form-control" style="display:none;" />
+                            <input asp-for="id_customerTempEdit" type="hidden" class="form-control" />
+                            <input asp-for="idTempEdit" type="hidden" class="form-control" />
+                            <input asp-for="datamode" type="hidden" class="form-control" />
+                            <input asp-for="INV_DISCTempEdit" type="hidden" class="form-control" />
+                            <input asp-for="INV_DISC_AMTTempEdit" type="hidden" class="form-control" />
+                            <input asp-for="IS_DISC_PERCTempEdit" type="hidden" class="form-control" />
+                            <input asp-for="custdiscTempEdit" type="hidden" class="form-control" />
+                            <input asp-for="SHIPPING_ADDRESSTempEdit" type="hidden" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label class="control-label label">qty: </label>
+
+                        </div>
+                        <div class="col">
+                            <input asp-for="qtyEdit" class="form-control" onkeypress="return allowOnlyNumber(event);" min="1" readonly />
+                            <span asp-validation-for="qtyEdit" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label class="control-label label">Price: </label>
+
+                        </div>
+                        <div class="col">
+                            <input asp-for="priceEdit" class="form-control" onkeypress="return allowOnlyNumber(event);" min="1" />
+                            <span asp-validation-for="priceEdit" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row" style="display:none;">
+                        <div class="col">
+                            <label class="control-label label">is Discount Percentage: </label>
+
+                        </div>
+                        <div class="col">
+                            <input asp-for="is_disc_percBoolEdit" class="largerCheckbox" />
+                            <span asp-validation-for="is_disc_percBoolEdit" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row" id="discpercvalEdit" style="display:none;">
+                        <div class="col">
+                            <label class="control-label label">Disc Percentage: </label>
+
+                        </div>
+                        <div class="col">
+                            <input asp-for="discEdit" class="form-control" onkeypress="return allowOnlyNumber(event);" min="1" />
+                            <span asp-validation-for="discEdit" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row" id="discamtvalEdit" style="display:none;">
+                        <div class="col">
+                            <label class="control-label label">Disc Amount: </label>
+
+                        </div>
+                        <div class="col">
+                            <input asp-for="disc_amtEdit" class="form-control" onkeypress="return allowOnlyNumber(event);" />
+                            <span asp-validation-for="disc_amtEdit" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label class="control-label label">Final: </label>
+
+                        </div>
+                        <div class="col">
+                            <input asp-for="final_priceEdit" class="form-control" onkeypress="return allowOnlyNumber(event);" readonly />
+                            <span asp-validation-for="final_priceEdit" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <input type="button" value="" id="btnPopupMod" onclick="alertfirst2(this)" class="btn btn-red" />
+
+                        </div>
+                        <div class="col">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm">
+                    <div class="row">
+                        <div class="col">
+                            <label class="control-label label">Size Code: </label>
+
+                        </div>
+                        <div class="col">
+                            <input id="sizeCodeTxtEdit" class="form-control" readonly="readonly" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label class="control-label label" id="Size1lblEdit">1</label>
+
+                        </div>
+                        <div class="col">
+                            <input asp-for="Size_1_Edit" class="form-control" onkeypress="return allowOnlyNumber(event);" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label class="control-label label" id="Size2lblEdit">2</label>
+
+                        </div>
+                        <div class="col">
+                            <input asp-for="Size_2_Edit" class="form-control" onkeypress="return allowOnlyNumber(event);" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label class="control-label label" id="Size3lblEdit">3</label>
+
+                        </div>
+                        <div class="col">
+                            <input asp-for="Size_3_Edit" class="form-control" onkeypress="return allowOnlyNumber(event);" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label class="control-label label" id="Size4lblEdit">4</label>
+
+                        </div>
+                        <div class="col">
+                            <input asp-for="Size_4_Edit" class="form-control" onkeypress="return allowOnlyNumber(event);" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label class="control-label label" id="Size5lblEdit">5</label>
+
+                        </div>
+                        <div class="col">
+                            <input asp-for="Size_5_Edit" class="form-control" onkeypress="return allowOnlyNumber(event);" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label class="control-label label" id="Size6lblEdit">6</label>
+
+                        </div>
+                        <div class="col">
+                            <input asp-for="Size_6_Edit" class="form-control" onkeypress="return allowOnlyNumber(event);" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label class="control-label label" id="Size7lblEdit">7</label>
+
+                        </div>
+                        <div class="col">
+                            <input asp-for="Size_7_Edit" class="form-control" onkeypress="return allowOnlyNumber(event);" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label class="control-label label" id="Size8lblEdit">8</label>
+
+                        </div>
+                        <div class="col">
+                            <input asp-for="Size_8_Edit" class="form-control" onkeypress="return allowOnlyNumber(event);" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label class="control-label label" id="Size9lblEdit">9</label>
+
+                        </div>
+                        <div class="col">
+                            <input asp-for="Size_9_Edit" class="form-control" onkeypress="return allowOnlyNumber(event);" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label class="control-label label" id="Size10lblEdit">10</label>
+
+                        </div>
+                        <div class="col">
+                            <input asp-for="Size_10_Edit" class="form-control" onkeypress="return allowOnlyNumber(event);" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label class="control-label label" id="Size11lblEdit">11</label>
+
+                        </div>
+                        <div class="col">
+                            <input asp-for="Size_11_Edit" class="form-control" onkeypress="return allowOnlyNumber(event);" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label class="control-label label" id="Size12lblEdit">12</label>
+
+                        </div>
+                        <div class="col">
+                            <input asp-for="Size_12_Edit" class="form-control" onkeypress="return allowOnlyNumber(event);" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label class="control-label label" id="Size13lblEdit">13</label>
+
+                        </div>
+                        <div class="col">
+                            <input asp-for="Size_13_Edit" class="form-control" onkeypress="return allowOnlyNumber(event);" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </form>
+</div>
+
+
+
+@section Scripts{
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+    window.lastclicked = "";
+    window.lengthForm = 0;
+
+       var dtltbls;
+        var dtltbls2;
+    $(document).ready(function () {
+        var errmsg = '@errmsg';
+        if (errmsg != null && errmsg != '') {
+            errmsg = errmsg.replace("&#xA;", "\n");
+            errmsg = errmsg.replace(" &#xA;", "\n");
+
+            alert(errmsg);
+        }
+        var isfinance = '@isFinanceRole';
+        debugger;
+        if (isfinance == "False") {
+            $("#INV_DISC_AMT").attr("readonly", "readonly");
+            $("#INV_DISC").attr("readonly", "readonly");
+        } else {
+            $("#INV_DISC").removeAttr('readonly');
+            $("#INV_DISC_AMT").removeAttr('readonly');
+        }
+        dtltbls = $('#DtlTbl').DataTable({
+            "iDisplayLength": 25,
+            'columnDefs': [
+                {
+                    "targets": 0, // your case first column
+                    "className": "text-center",
+                },
+                {
+                    "targets": 1,
+                    "className": "text-center",
+                },
+                {
+                    "targets": 2,
+                    "className": "text-center",
+                },
+                {
+                    "targets": 3,
+                    "className": "text-center",
+                },
+                {
+                    "targets": 4,
+                    "className": "text-center",
+                }
+            ]
+        });
+        var idval = $("#id").val();
+        $("#idTemp").val(idval);
+        $("#idTempEdit").val(idval);
+        $("#idTempUpl").val(idval);
+        dtltbls2 = $('#PaymentTbl').DataTable({
+            "iDisplayLength": 25,
+            'columnDefs': [
+                {
+                    "targets": 0, // your case first column
+                    "className": "text-center",
+                },
+                {
+                    "targets": 1,
+                    "className": "text-center",
+                },
+                {
+                    "targets": 2,
+                    "className": "text-center",
+                }
+                ,
+                {
+                    "targets": 3,
+                    "className": "text-center",
+                }
+            ]
+        });
+         var isPerc = '@dischdrtype';
+        if (isPerc == "1") {
+            $("#IS_DISC_PERCBoolHdr").prop("checked", true);
+            $("#divdiscperc").show();
+            $("#divdiscamt").hide();
+            $("#IS_DISC_PERCTemp").val("1");
+            $("#IS_DISC_PERCTempUpl").val("1");
+            $("#IS_DISC_PERCTempEdit").val("1");
+
+        } else {
+            $("#IS_DISC_PERCBoolHdr").prop("checked", false);
+            $("#divdiscperc").hide();
+            $("#divdiscamt").show();
+            $("#IS_DISC_PERCTemp").val("0");
+            $("#IS_DISC_PERCTempUpl").val("0");
+            $("#IS_DISC_PERCTempEdit").val("0");
+        }
+        //$("#Periode").select2({
+        //    placeholder: "Select Date to show periode",
+        //    initSelection: function (element, callback) {
+        //    },
+        //    dropdownAutoWidth: true,
+        //    width: 'auto',
+        //        disabled: 'readonly'
+        //});
+        //var valueType = $("#Type").val();
+        //if (valueType == "Instore") {
+        //    $("#edpDiv").show();
+        //} else {
+        //    $("#edpDiv").hide();
+        //    Clear();
+        //}
+
+        //$("#NILAI").prop("disabled", true);
+        //$("#isCertified").prop("disabled", true);
+        //$("#fileSertifikat").prop("disabled", true);
+        //$("#NoSertifikat").prop("disabled", true);
+        $.ajax({
+            url: '@Url.Action("getdatatotalpaid", "SalesOrder")',
+                type: "GET",
+            data: { orderID: idval },
+                //startDate: mFromDate, endDate: mToDate1
+                dataType: 'json',
+                success: function (data) {
+                    debugger;
+                    if (data.length != 0) {
+                        $("#PaidAmt").val(data);
+                    }
+
+                },
+                error: function () {
+
+                }
+        });
+        $("#dialogPayment").dialog({
+            width: 450,
+            height: 410,
+            modal: true,
+            resizable: false,
+            close: function () {
+                //var audio = $("#player");
+                //audio[0].pause();
+            }
+        });
+        $("#dialogPayment").dialog("close");
+        $("#dialogUpload").dialog({
+            width: 450,
+            height: 410,
+            modal: true,
+            resizable: false,
+            close: function () {
+                //var audio = $("#player");
+                //audio[0].pause();
+            }
+        });
+        $("#dialogUpload").dialog("close");
+        $("#dialog").dialog({
+            width: 800,
+            height: 520,
+            modal: true,
+            resizable: false,
+            close: function () {
+                //var audio = $("#player");
+                //audio[0].pause();
+            }
+        });
+        $("#dialog").dialog("close");
+        $("#dialogEdit").dialog({
+            width: 800,
+            height: 520,
+            modal: true,
+            resizable: false,
+            close: function () {
+                //var audio = $("#player");
+                //audio[0].pause();
+            }
+        });
+        $("#dialogEdit").dialog("close");
+
+        //$("#Periode").select2("readonly", true);
+
+        @*var periodecode = '@periode';
+        if (periodecode != '') {
+            $("#Periode").val(periodecode);
+            $("#Periode").trigger('change');
+        } else {
+            $("#Periode").val(null);
+            $("#Periode").trigger('change');
+        }*@
+        //$("#discpercval").hide();
+        $("#EMP_CODE").select2({
+            placeholder: "Select Sales personnel",
+            initSelection: function (element, callback) {
+            },
+            dropdownAutoWidth: true,
+            width: 'element'
+        });
+        var discvals = '@invdisc';
+        if (discvals == "") {
+            discvals = 0;
+        }
+        discvals = parseFloat(discvals).toFixed(0)
+
+        $("#INV_DISC").rules("remove", "number");
+        if (discvals != "" && discvals != null) {
+            debugger;
+            //discvals = discvals.replace(",", ".");
+            $("#INV_DISC").val(discvals);
+            $("#INV_DISCTemp").val(discvals);
+            $("#INV_DISCTempUpl").val(discvals);
+            $("#INV_DISCTempEdit").val(discvals);
+        }
+        var discvalsamt = '@invdiscamt';
+        if (discvalsamt == "") {
+            discvalsamt = 0;
+        }
+        $("#INV_DISC_AMT").rules("remove", "number");
+
+        if (discvalsamt != "" && discvalsamt != null) {
+            $("#INV_DISC_AMT").val(discvalsamt);
+            $("#INV_DISC_AMTTemp").val(discvalsamt);
+            $("#INV_DISC_AMTTempUpl").val(discvalsamt);
+            $("#INV_DISC_AMTTempEdit").val(discvalsamt);
+        }
+        var ADDR = '@shipping';
+        if (ADDR != "" && ADDR != null) {
+            $("#SHIPPING_ADDRESSTemp").val(ADDR);
+            $("#SHIPPING_ADDRESSTempUpl").val(ADDR);
+            $("#SHIPPING_ADDRESSTempEdit").val(ADDR);
+        }
+
+        var empcode = '@empcode';
+        if (empcode != "" && empcode != null) {
+            $("#EMP_CODE").val(empcode);
+            $("#EMP_CODETemp").val(empcode);
+            $("#EMP_CODETempUpl").val(empcode);
+            $("#EMP_CODETempEdit").val(empcode);
+        } else {
+            $("#EMP_CODE").val(null);
+
+        }
+        $("#EMP_CODE").trigger('change');
+          $("#id_customer").select2({
+              placeholder: "Select Customer",
+              initSelection: function (element, callback) {
+              },
+              dropdownAutoWidth: true,
+              width: 'element'
+          });
+        var custcode = '@customer';
+        if (custcode != "" && custcode != null) {
+            $("#id_customer").val(custcode);
+            $("#id_customerTemp").val(custcode);
+            $("#id_customerTempUpl").val(custcode);
+            $("#id_customerTempEdit").val(custcode);
+
+        } else {
+            $("#id_customer").val(null);
+        }
+        $("#id_customer").trigger('change');
+        var custdisc = '@custdisc';
+        if (custdisc != "" && custdisc != null) {
+            $("#custdisc").val(custdisc);
+            $("#custdiscTemp").val(custdisc);
+            $("#custdiscTempUpl").val(custcode);
+            $("#custdiscTempEdit").val(custdisc);
+
+        } else {
+            $("#custdisc").val(0);
+            $("#custdiscTemp").val(0);
+            $("#custdiscTempUpl").val(0);
+            $("#custdiscTempEdit").val(0);
+        }
+        var isapprove1 = '@approve1';
+        var isapprove2 = '@approve2';
+        debugger;
+        if (isapprove1 == "1") {
+            $("#isApprove1").prop('checked', true);
+            $("#APPROVAL_1Temp").val("1");
+            $("#APPROVAL_1TempUpl").val("1");
+            $("#APPROVAL_1TempEdit").val("1");
+
+            $("#ORDER_DATE").attr("readonly", "readonly");
+            $("#id_customer").attr("readonly", "readonly");
+            $("#addArticle").hide();
+            $("#UploadArticle").hide();
+            $("#INV_DISC").attr("readonly", "readonly");
+            $("#INV_DISC_AMT").attr("readonly", "readonly");
+
+        } else {
+            $("#isApprove1").prop('checked', false);
+            $("#APPROVAL_1Temp").val("0");
+            $("#APPROVAL_1TempUpl").val("0");
+            $("#APPROVAL_1TempEdit").val("0");
+            $("#ORDER_DATE").removeAttr('readonly');
+            $("#id_customer").removeAttr('readonly');
+            $("#addArticle").show();
+            $("#UploadArticle").show();
+            var isfinance = '@isFinanceRole';
+            if (isfinance == "False") {
+                $("#INV_DISC_AMT").attr("readonly", "readonly");
+                $("#INV_DISC").attr("readonly", "readonly");
+            } else {
+                $("#INV_DISC").removeAttr('readonly');
+                $("#INV_DISC_AMT").removeAttr('readonly');
+            }
+            //$("#INV_DISC").removeAttr('readonly');
+            //$("#INV_DISC_AMT").removeAttr('readonly');
+        }
+        if (isapprove2 == "1") {
+            $("#isApprove2").prop('checked', true);
+            $("#EMP_CODE").attr("readonly", "readonly");
+            $("#SHIPPING_ADDRESS").attr("readonly", "readonly");
+            $("#APPROVAL_2Temp").val("1");
+            $("#APPROVAL_2TempUpl").val("1");
+            $("#APPROVAL_2TempEdit").val("1");
+        } else {
+            $("#EMP_CODE").removeAttr('readonly');
+            $("#SHIPPING_ADDRESS").removeAttr('readonly');
+            $("#isApprove2").prop('checked', false);
+            $("#APPROVAL_2Temp").val("0");
+            $("#APPROVAL_2TempUpl").val("0");
+            $("#APPROVAL_2TempEdit").val("0");
+        }
+        $.ajax({
+            url: '@Url.Action("getTblDtlEdit", "SalesOrder")',
+                type: "GET",
+                //data: { id: value, sscode: value2 },
+                //startDate: mFromDate, endDate: mToDate1
+                dataType: 'json',
+                success: function (data) {
+
+                    if (data.length != 0) {
+                        debugger;
+                        //$("#tbodyiddtl").empty();
+                        dtltbls.clear();
+                        var totalorder = 0;
+                        var totalqty = 0;
+                        var x = 1;
+                        data.forEach(function (item) { //insert rows
+                            var btnList = "<a onclick=\"openpopup(this, \'" + item.article + "\', \'" + item.size + "\');\" id='EditArticle" + x + "' class='btn btn-sm btn-dark'>Edit</a>&nbsp;<a onclick=\"openpopup(this, \'" + item.article + "\',  \'" + item.size + "\');\" id='DeleteArticle" + x + "' class='btn btn-sm btn-dark'>Delete</a >";
+                            dtltbls.row.add([x, item.article, item.qty, item.final_price, btnList]);
+                            totalorder = totalorder + item.final_price;
+                            totalqty = totalqty + item.qty;
+                            x++
+                        })
+                        $("#TOTAL_ORDER").val(totalorder);
+                        $("#TOTAL_ORDERTemp").val(totalorder);
+                        $("#TOTAL_ORDERTempUpl").val(totalorder);
+                        $("#TOTAL_ORDERTempEdit").val(totalorder);
+
+                        $("#TOTAL_QTY").val(totalqty);
+                        $("#TOTAL_QTYTemp").val(totalqty);
+                        $("#TOTAL_QTYTempUpl").val(totalqty);
+                        $("#TOTAL_QTYTempEdit").val(totalqty);
+                        var custdisc = $("#custdisc").val();
+                        var isPerc2 = '@dischdrtype';
+                        var valuecredit = 0;
+                        if ($("#id_customer").val() != "" && $("#id_customer").val() != null) {
+                            var getEdp = function () {
+                                var tmp = null;
+                                $.ajax({
+                                    'async': false,
+                                    'type': "POST",
+                                    'global': false,
+                                    'dataType': 'html',
+                                    'url': "/SalesOrder/getcustedp",
+                                    'data': { 'request': "", 'target': 'arrange_url', 'method': 'method_target', 'custid': $("#id_customer").val() },
+                                    'success': function (data) {
+                                        tmp = data;
+                                    }
+                                });
+                                return tmp.replace(/['"]+/g, '');
+                            }();
+                            debugger;
+                            valuecredit = function () {
+                                var tmp = null;
+                                $.ajax({
+                                    'async': false,
+                                    'type': "POST",
+                                    'global': false,
+                                    'dataType': 'html',
+                                    'url': "/SalesOrder/getcreditnote",
+                                    'data': { 'request': "", 'target': 'arrange_url', 'method': 'method_target', 'edp': getEdp },
+                                    'success': function (data) {
+                                        tmp = data;
+                                    }
+                                });
+                                return tmp;
+                            }();
+                        }
+                        debugger;
+                        var totalordercalculate = totalorder;
+                        totalordercalculate = totalordercalculate - valuecredit;
+                        var custdiscval = (totalordercalculate * custdisc) / 100;
+                        totalordercalculate = totalordercalculate - custdiscval;
+                        if (isPerc2 == "1") {
+                            var discinv = $("#INV_DISC").val();
+                            if (discinv != null && discinv != "") {
+                                var discval = parseFloat(discinv);
+                                var orderval = parseFloat(totalordercalculate);
+                                var valuedisc = (orderval * discval) / 100;
+                                var finalval = orderval - valuedisc;
+                                $("#FinalVal").val(finalval.toFixed(2));
+                            } else {
+                                $("#FinalVal").val(totalorder);
+
+                            }
+                        } else {
+                            var discinv = $("#INV_DISC_AMT").val();
+                            if (discinv != null && discinv != "") {
+                                var discval = parseFloat(discinv);
+                                var orderval = parseFloat(totalordercalculate);
+                                var valuedisc = discval;
+                                var finalval = orderval - valuedisc;
+                                $("#FinalVal").val(finalval.toFixed(2));
+                            } else {
+                                $("#FinalVal").val(totalorder);
+
+                            }
+                        }
+
+                        dtltbls.draw();
+                        var isapprove_1 = '@approve1';
+                        if (isapprove_1 == "1") {
+                            for (var i = 0; i < dtltbls.rows().count(); i++) {
+                                var idx = i + 1;
+                                var idEdit = "EditArticle" + idx;
+                                var idDelete = "DeleteArticle" + idx;
+                                $("#" + idEdit).hide();
+                                $("#" + idDelete).hide();
+                            }
+
+                        } else {
+                            for (var i = 0; i < dtltbls.rows().count(); i++) {
+                                var idx = i + 1;
+                                var idEdit = "EditArticle" + idx;
+                                var idDelete = "DeleteArticle" + idx;
+                                $("#" + idEdit).show();
+                                $("#" + idDelete).show();
+                            }
+                        }
+
+                    } else {
+                        $("#TOTAL_ORDER").val(0);
+                        $("#TOTAL_ORDERTemp").val(0);
+                        $("#TOTAL_ORDERTempUpl").val(0);
+                        $("#TOTAL_ORDERTempEdit").val(0);
+
+                        $("#TOTAL_QTY").val(0);
+                        $("#TOTAL_QTYTemp").val(0);
+                        $("#TOTAL_QTYTempUpl").val(0);
+                        $("#TOTAL_QTYTempEdit").val(0);
+                        $("#FinalVal").val(0);
+                    }
+
+                },
+                error: function () {
+
+                }
+        });
+
+        var datevals = '@orderdate';
+        if (datevals != '' && datevals != 'null') {
+            //var convertdate = formatDate(dateval);
+            debugger;
+            $("#ORDER_DATE").val(moment(datevals).format("YYYY-MM-DDTkk:mm"))
+        }
+        $("#article").select2({
+            placeholder: "Select article",
+            initSelection: function (element, callback) {
+            },
+            dropdownAutoWidth: true,
+            width: 'element'
+        });
+        $("#article").val(null);
+        $("#article").trigger('change');
+        $("#size").select2({
+            placeholder: "Select size",
+            initSelection: function (element, callback) {
+            },
+            dropdownAutoWidth: true,
+            width: 'element'
+        });
+        $("#size").val(null);
+        $("#size").trigger('change');
+        $("#size").attr("disabled", "disabled");
+        $("#articleEdit").select2({
+            placeholder: "Select Article",
+            initSelection: function (element, callback) {
+            },
+            dropdownAutoWidth: true,
+            width: 'element'
+        });
+        $("#articleEdit").val(null);
+        $("#articleEdit").trigger('change');
+        //$("#sizeEdit").select2({
+        //    placeholder: "Select size",
+        //    initSelection: function (element, callback) {
+        //    },
+        //    dropdownAutoWidth: true,
+        //    width: 'element'
+        //});
+        //$("#sizeEdit").val(null);
+        //$("#sizeEdit").trigger('change');
+
+
+        var dateval2 = $("#ORDER_DATE").val();
+        $("#ORDER_DATETemp").val(dateval2);
+        $("#ORDER_DATETempUpl").val(dateval2);
+        $("#ORDER_DATETempEdit").val(dateval2);
+
+        $('#article').on('change', function () {
+            var value = $("#article").val();
+            $.ajax({
+                type: "GET",
+                url: "/SalesOrder/getdataprice",
+                data: { article: value },
+                success: function (data) {
+                    debugger;
+                    console.log(data);
+                    $("#price").val(data.articleprice)
+
+                    var priceval = $("#price").val();
+                    var qtyval = $("#qty").val();
+                    var discval = $("#disc").val();
+                    var discamtval = $("#disc_amt").val();
+                    var disctype = $("#is_disc_percBool").is(":checked");
+                    if (disctype == true) {
+                        if (qtyval != 0) {
+                            priceval = priceval * qtyval;
+                            if (priceval != null && discval != null) {
+                                var discvalue = (priceval * discval) / 100;
+                                var total = (priceval - discvalue).toFixed(2);
+                                $("#final_price").val(total);
+                            } else {
+                                $("#final_price").val(0);
+                            }
+                        } else {
+                            $("#final_price").val(0);
+                        }
+                    } else {
+                        if (qtyval != 0) {
+                            priceval = priceval * qtyval;
+                            if (priceval != null && discamtval != null) {
+                                var discvalue = discamtval;
+                                var total = (priceval - discvalue).toFixed(2);
+                                $("#final_price").val(total);
+                            } else {
+                                $("#final_price").val(0);
+                            }
+                        } else {
+                            $("#final_price").val(0);
+                        }
+                    }
+
+
+                    //$("#SS_CODE_EDIT").val(null);
+                    //$("#SS_CODE_EDIT").trigger('change');
+
+                }
+            })
+            var lastclickedbtn = window.lastclicked;
+            var getValidate = function () {
+                var tmp = null;
+                $.ajax({
+                    'async': false,
+                    'type': "POST",
+                    'global': false,
+                    'dataType': 'html',
+                    'url': "/SalesOrder/validatearticleEdit",
+                    'data': { 'request': "", 'target': 'arrange_url', 'method': 'method_target', 'article': value, 'btnid': lastclickedbtn },
+                    'success': function (data) {
+                        tmp = data;
+                    }
+                });
+                return tmp;
+            }();
+            debugger;
+            if (getValidate == '"nopass"') {
+                alert("article sudah di tambahkan");
+                $("#article").val(null);
+                $("#article").trigger('change');
+            } else {
+                $.ajax({
+                    type: "GET",
+                    url: "/SalesOrder/getsizecode",
+                    data: { article: value },
+                    success: function (data) {
+                        debugger;
+                        console.log(data);
+                        $("#sizeCodeTxt").val(data.sizecode)
+                        if (data.size1 != null && data.dize1 != "") {
+                            $("#Size1lbl").text(data.size1);
+                            var size1 = data.size1.substr(1);
+                            if (data.size1.length > 2) {
+                                size1 = data.size1.substr(2);
+                            }
+                            if (size1 == "5") {
+                                $("#Size_1").val(0);
+                                $("#Size_1").attr("readonly", "readonly");
+
+                            } else {
+                                $("#Size_1").removeAttr('readonly');
+
+                            }
+                        }
+                        if (data.size2 != null && data.size2 != "") {
+                            $("#Size2lbl").text(data.size2);
+                            var size2 = data.size2.substr(1);
+                            if (data.size2.length > 2) {
+                                size2 = data.size1.substr(2);
+                            }
+                            if (size2 == "5") {
+                                $("#Size_2").val(0);
+
+                                $("#Size_2").attr("readonly", "readonly");
+
+                            } else {
+                                $("#Size_2").removeAttr('readonly');
+
+                            }
+                        }
+                        if (data.size3 != null && data.size3 != "") {
+                            $("#Size3lbl").text(data.size3);
+                            var size3 = data.size3.substr(1);
+                            if (data.size3.length > 2) {
+                                size3 = data.size3.substr(2);
+                            }
+                            if (size3 == "5") {
+                                $("#Size_3").val(0);
+
+                                $("#Size_3").attr("readonly", "readonly");
+
+                            } else {
+                                $("#Size_3").removeAttr('readonly');
+
+                            }
+                        }
+                        if (data.size4 != null && data.size4 != "") {
+                            $("#Size4lbl").text(data.size4);
+                            var size4 = data.size4.substr(1);
+                            if (data.size4.length > 2) {
+                                size4 = data.size4.substr(2);
+                            }
+                            if (size4 == "5") {
+                                $("#Size_4").val(0);
+
+                                $("#Size_4").attr("readonly", "readonly");
+
+                            } else {
+                                $("#Size_4").removeAttr('readonly');
+
+                            }
+                        }
+                        if (data.size5 != null && data.size5 != "") {
+                            $("#Size5lbl").text(data.size5);
+                            var size5 = data.size5.substr(1);
+                            if (data.size5.length > 2) {
+                                size5 = data.size5.substr(2);
+                            }
+                            if (size5 == "5") {
+                                $("#Size_5").val(0);
+
+                                $("#Size_5").attr("readonly", "readonly");
+
+                            } else {
+                                $("#Size_5").removeAttr('readonly');
+
+                            }
+                        }
+                        if (data.size6 != null && data.size6 != "") {
+                            $("#Size6lbl").text(data.size6);
+                            var size6 = data.size6.substr(1);
+                            if (data.size6.length > 2) {
+                                size6 = data.size6.substr(2);
+                            }
+                            if (size6 == "5") {
+                                $("#Size_6").val(0);
+
+                                $("#Size_6").attr("readonly", "readonly");
+
+                            } else {
+                                $("#Size_6").removeAttr('readonly');
+
+                            }
+                        }
+                        if (data.size7 != null && data.size7 != "") {
+                            $("#Size7lbl").text(data.size7);
+                            var size7 = data.size7.substr(1);
+                            if (data.size7.length > 2) {
+                                size7 = data.size7.substr(2);
+                            }
+                            if (size7 == "5") {
+                                $("#Size_7").val(0);
+
+                                $("#Size_7").attr("readonly", "readonly");
+
+                            } else {
+                                $("#Size_7").removeAttr('readonly');
+
+                            }
+                        }
+                        if (data.size8 != null && data.size8 != "") {
+                            $("#Size8lbl").text(data.size8);
+                            var size8 = data.size8.substr(1);
+                            if (data.size8.length > 2) {
+                                size8 = data.size8.substr(2);
+                            }
+                            if (size8 == "5") {
+                                $("#Size_8").val(0);
+
+                                $("#Size_8").attr("readonly", "readonly");
+
+                            } else {
+                                $("#Size_8").removeAttr('readonly');
+
+                            }
+                        }
+                        if (data.size9 != null && data.size9 != "") {
+                            $("#Size9lbl").text(data.size9);
+                            var size9 = data.size9.substr(1);
+                            if (data.size9.length > 2) {
+                                size9 = data.size9.substr(2);
+                            }
+                            if (size9 == "5") {
+                                $("#Size_9").val(0);
+
+                                $("#Size_9").attr("readonly", "readonly");
+
+                            } else {
+                                $("#Size_9").removeAttr('readonly');
+
+                            }
+                        }
+                        if (data.size10 != null && data.size10 != "") {
+                            $("#Size10lbl").text(data.size10);
+                            var size10 = data.size10.substr(1);
+                            if (data.size10.length > 2) {
+                                size10 = data.size10.substr(2);
+                            }
+                            if (size10 == "5") {
+                                $("#Size_10").val(0);
+
+                                $("#Size_10").attr("readonly", "readonly");
+
+                            } else {
+                                $("#Size_10").removeAttr('readonly');
+
+                            }
+                        }
+                        if (data.size11 != null && data.size11 != "") {
+                            $("#Size11lbl").text(data.size11);
+                            var size11 = data.size11.substr(1);
+                            if (data.size11.length > 2) {
+                                size11 = data.size11.substr(2);
+                            }
+                            if (size11 == "5") {
+                                $("#Size_11").val(0);
+
+                                $("#Size_11").attr("readonly", "readonly");
+
+                            } else {
+                                $("#Size_11").removeAttr('readonly');
+
+                            }
+                        }
+                        if (data.size12 != null && data.size12 != "") {
+                            $("#Size12lbl").text(data.size12);
+                            var size12 = data.size12.substr(1);
+                            if (data.size12.length > 2) {
+                                size12 = data.size12.substr(2);
+                            }
+                            if (size12 == "5") {
+                                $("#Size_12").val(0);
+
+                                $("#Size_12").attr("readonly", "readonly");
+
+                            } else {
+                                $("#Size_12").removeAttr('readonly');
+
+                            }
+                        }
+                        if (data.size13 != null && data.size13 != "") {
+                            $("#Size13lbl").text(data.size13);
+                            var size13 = data.size13.substr(1);
+                            if (data.size13.length > 2) {
+                                size13 = data.size13.substr(2);
+                            }
+                            if (size13 == "5") {
+                                $("#Size_13").val(0);
+
+                                $("#Size_13").attr("readonly", "readonly");
+
+                            } else {
+                                $("#Size_13").removeAttr('readonly');
+
+                            }
+                        }
+                    }
+                })
+            }
+        });
+
+    });
+        $("#qty").change(function () {
+            var priceval = $("#price").val();
+            var qtyval = $("#qty").val();
+            var discval = $("#disc").val();
+            if (qtyval != 0) {
+                priceval = priceval * qtyval;
+                if (priceval != null && discval != null) {
+                    var discvalue = (priceval * discval) / 100;
+                    var total = (priceval - discvalue).toFixed(2);
+                    $("#final_price").val(total);
+                } else {
+                    $("#final_price").val(0);
+                }
+            } else {
+                $("#final_price").val(0);
+
+            }
+
+        });
+        $("#INV_DISC").change(function () {
+
+            var totalorder = $("#TOTAL_ORDER").val();
+            var disc = $("#INV_DISC").val();
+            var custdisc = $("#custdisc").val();
+            var custdiscval = (totalorder * custdisc) / 100;
+            //disc = disc.replace(",", ".");
+            if (totalorder != null && totalorder != "") {
+                totalorder = totalorder - custdiscval;
+                var orderval = parseFloat(totalorder);
+                if (disc != null && disc != "") {
+                    $("#INV_DISCTemp").val(disc);
+                    $("#INV_DISCTempUpl").val(disc);
+                    $("#INV_DISCTempEdit").val(disc);
+                    var discval = parseFloat(disc);
+                    var valuedisc = (orderval * discval) / 100;
+                    var finalval = orderval - valuedisc;
+                    $("#FinalVal").val(finalval.toFixed(2));
+                }
+            }
+            $("#INV_DISC").val(disc);
+            $("#INV_DISCTemp").val(disc);
+            $("#INV_DISCTempUpl").val(disc);
+            $("#INV_DISCTempEdit").val(disc);
+        });
+        $("#INV_DISC_AMT").change(function () {
+
+            var totalorder = $("#TOTAL_ORDER").val();
+            var disc = $("#INV_DISC_AMT").val();
+            var custdisc = $("#custdisc").val();
+            var custdiscval = (totalorder * custdisc) / 100;
+            if (totalorder != null && totalorder != "") {
+                totalorder = totalorder - custdiscval;
+                var orderval = parseFloat(totalorder);
+                if (disc != null && disc != "") {
+                    $("#INV_DISC_AMTTemp").val(disc);
+                    $("#INV_DISC_AMTTempUpl").val(disc);
+                    $("#INV_DISC_AMTTempEdit").val(disc);
+                    var discval = parseFloat(disc);
+                    var valuedisc = discval;
+                    var finalval = orderval - valuedisc;
+                    $("#FinalVal").val(finalval.toFixed(2));
+                }
+            }
+            $("#INV_DISC_AMTTemp").val(disc);
+            $("#INV_DISC_AMTTempUpl").val(disc);
+            $("#INV_DISC_AMTTempEdit").val(disc);
+        });
+        $('#SHIPPING_ADDRESS').on('change', function () {
+            var value = $("#SHIPPING_ADDRESS").val();
+            $("#SHIPPING_ADDRESSTemp").val(value);
+            $("#SHIPPING_ADDRESSTempUpl").val(value);
+            $("#SHIPPING_ADDRESSTempEdit").val(value);
+        });
+        $("#Size_1").change(function () {
+            if (!$('#Size_1').val()) {
+                $("#Size_1").val(0);
+            }
+            var value1 = parseInt($("#Size_1").val());
+            var value2 = parseInt($("#Size_2").val());
+            var value3 = parseInt($("#Size_3").val());
+            var value4 = parseInt($("#Size_4").val());
+            var value5 = parseInt($("#Size_5").val());
+            var value6 = parseInt($("#Size_6").val());
+            var value7 = parseInt($("#Size_7").val());
+            var value8 = parseInt($("#Size_8").val());
+            var value9 = parseInt($("#Size_9").val());
+            var value10 = parseInt($("#Size_10").val());
+            var value11 = parseInt($("#Size_11").val());
+            var value12 = parseInt($("#Size_12").val());
+            var value13 = parseInt($("#Size_13").val());
+
+            var totalqty = value1 + value2 + value3 + value4 + value5 + value6 + value7 + value8 + value9 + value10 + value11 + value12 + value13;
+            $("#qty").val(totalqty);
+
+            var price = $("#price").val();
+            var totalprice = totalqty * price;
+            var discount = $("#disc").val();
+            var discamtval = $("#disc_amt").val();
+            var disctype = $("#is_disc_percBool").is(":checked");
+            if (disctype == true) {
+                var totaldisc = 0;
+                if (discount != 0) {
+                    totaldisc = (totalprice * discount) / 100;
+                }
+                var finalprice = totalprice - totaldisc
+                $("#final_price").val(finalprice.toFixed(2));
+            } else {
+                var totaldisc = 0;
+                if (discamtval != 0) {
+                    totaldisc = discamtval;
+                }
+                var finalprice = totalprice - totaldisc
+                $("#final_price").val(finalprice.toFixed(2));
+            }
+
+        });
+        $("#Size_2").change(function () {
+            if (!$('#Size_2').val()) {
+                $("#Size_2").val(0);
+            }
+            var value1 = parseInt($("#Size_1").val());
+            var value2 = parseInt($("#Size_2").val());
+            var value3 = parseInt($("#Size_3").val());
+            var value4 = parseInt($("#Size_4").val());
+            var value5 = parseInt($("#Size_5").val());
+            var value6 = parseInt($("#Size_6").val());
+            var value7 = parseInt($("#Size_7").val());
+            var value8 = parseInt($("#Size_8").val());
+            var value9 = parseInt($("#Size_9").val());
+            var value10 = parseInt($("#Size_10").val());
+            var value11 = parseInt($("#Size_11").val());
+            var value12 = parseInt($("#Size_12").val());
+            var value13 = parseInt($("#Size_13").val());
+            var totalqty = value1 + value2 + value3 + value4 + value5 + value6 + value7 + value8 + value9 + value10 + value11 + value12 + value13;
+            $("#qty").val(totalqty);
+
+            var price = $("#price").val();
+            var totalprice = totalqty * price;
+            var discount = $("#disc").val();
+            var discamtval = $("#disc_amt").val();
+            var disctype = $("#is_disc_percBool").is(":checked");
+            if (disctype == true) {
+                var totaldisc = 0;
+                if (discount != 0) {
+                    totaldisc = (totalprice * discount) / 100;
+                }
+                var finalprice = totalprice - totaldisc
+                $("#final_price").val(finalprice.toFixed(2));
+            } else {
+                var totaldisc = 0;
+                if (discamtval != 0) {
+                    totaldisc = discamtval;
+                }
+                var finalprice = totalprice - totaldisc
+                $("#final_price").val(finalprice.toFixed(2));
+            }
+
+        });
+        $("#Size_3").change(function () {
+            if (!$('#Size_3').val()) {
+                $("#Size_3").val(0);
+            }
+            var value1 = parseInt($("#Size_1").val());
+            var value2 = parseInt($("#Size_2").val());
+            var value3 = parseInt($("#Size_3").val());
+            var value4 = parseInt($("#Size_4").val());
+            var value5 = parseInt($("#Size_5").val());
+            var value6 = parseInt($("#Size_6").val());
+            var value7 = parseInt($("#Size_7").val());
+            var value8 = parseInt($("#Size_8").val());
+            var value9 = parseInt($("#Size_9").val());
+            var value10 = parseInt($("#Size_10").val());
+            var value11 = parseInt($("#Size_11").val());
+            var value12 = parseInt($("#Size_12").val());
+            var value13 = parseInt($("#Size_13").val());
+            var totalqty = value1 + value2 + value3 + value4 + value5 + value6 + value7 + value8 + value9 + value10 + value11 + value12 + value13;
+            $("#qty").val(totalqty);
+
+            var price = $("#price").val();
+            var totalprice = totalqty * price;
+            var discount = $("#disc").val();
+            var discamtval = $("#disc_amt").val();
+            var disctype = $("#is_disc_percBool").is(":checked");
+            if (disctype == true) {
+                var totaldisc = 0;
+                if (discount != 0) {
+                    totaldisc = (totalprice * discount) / 100;
+                }
+                var finalprice = totalprice - totaldisc
+                $("#final_price").val(finalprice.toFixed(2));
+            } else {
+                var totaldisc = 0;
+                if (discamtval != 0) {
+                    totaldisc = discamtval;
+                }
+                var finalprice = totalprice - totaldisc
+                $("#final_price").val(finalprice.toFixed(2));
+            }
+
+        });
+        $("#Size_4").change(function () {
+            if (!$('#Size_4').val()) {
+                $("#Size_4").val(0);
+            }
+            var value1 = parseInt($("#Size_1").val());
+            var value2 = parseInt($("#Size_2").val());
+            var value3 = parseInt($("#Size_3").val());
+            var value4 = parseInt($("#Size_4").val());
+            var value5 = parseInt($("#Size_5").val());
+            var value6 = parseInt($("#Size_6").val());
+            var value7 = parseInt($("#Size_7").val());
+            var value8 = parseInt($("#Size_8").val());
+            var value9 = parseInt($("#Size_9").val());
+            var value10 = parseInt($("#Size_10").val());
+            var value11 = parseInt($("#Size_11").val());
+            var value12 = parseInt($("#Size_12").val());
+            var value13 = parseInt($("#Size_13").val());
+            var totalqty = value1 + value2 + value3 + value4 + value5 + value6 + value7 + value8 + value9 + value10 + value11 + value12 + value13;
+            $("#qty").val(totalqty);
+
+            var price = $("#price").val();
+            var totalprice = totalqty * price;
+            var discount = $("#disc").val();
+            var discamtval = $("#disc_amt").val();
+            var disctype = $("#is_disc_percBool").is(":checked");
+            if (disctype == true) {
+                var totaldisc = 0;
+                if (discount != 0) {
+                    totaldisc = (totalprice * discount) / 100;
+                }
+                var finalprice = totalprice - totaldisc
+                $("#final_price").val(finalprice.toFixed(2));
+            } else {
+                var totaldisc = 0;
+                if (discamtval != 0) {
+                    totaldisc = discamtval;
+                }
+                var finalprice = totalprice - totaldisc
+                $("#final_price").val(finalprice.toFixed(2));
+            }
+        });
+        $("#Size_5").change(function () {
+            if (!$('#Size_5').val()) {
+                $("#Size_5").val(0);
+            }
+            var value1 = parseInt($("#Size_1").val());
+            var value2 = parseInt($("#Size_2").val());
+            var value3 = parseInt($("#Size_3").val());
+            var value4 = parseInt($("#Size_4").val());
+            var value5 = parseInt($("#Size_5").val());
+            var value6 = parseInt($("#Size_6").val());
+            var value7 = parseInt($("#Size_7").val());
+            var value8 = parseInt($("#Size_8").val());
+            var value9 = parseInt($("#Size_9").val());
+            var value10 = parseInt($("#Size_10").val());
+            var value11 = parseInt($("#Size_11").val());
+            var value12 = parseInt($("#Size_12").val());
+            var value13 = parseInt($("#Size_13").val());
+            var totalqty = value1 + value2 + value3 + value4 + value5 + value6 + value7 + value8 + value9 + value10 + value11 + value12 + value13;
+            $("#qty").val(totalqty);
+
+            var price = $("#price").val();
+            var totalprice = totalqty * price;
+            var discount = $("#disc").val();
+            var discamtval = $("#disc_amt").val();
+            var disctype = $("#is_disc_percBool").is(":checked");
+            if (disctype == true) {
+                var totaldisc = 0;
+                if (discount != 0) {
+                    totaldisc = (totalprice * discount) / 100;
+                }
+                var finalprice = totalprice - totaldisc
+                $("#final_price").val(finalprice.toFixed(2));
+            } else {
+                var totaldisc = 0;
+                if (discamtval != 0) {
+                    totaldisc = discamtval;
+                }
+                var finalprice = totalprice - totaldisc
+                $("#final_price").val(finalprice.toFixed(2));
+            }
+
+        });
+        $("#Size_6").change(function () {
+            if (!$('#Size_6').val()) {
+                $("#Size_6").val(0);
+            }
+            var value1 = parseInt($("#Size_1").val());
+            var value2 = parseInt($("#Size_2").val());
+            var value3 = parseInt($("#Size_3").val());
+            var value4 = parseInt($("#Size_4").val());
+            var value5 = parseInt($("#Size_5").val());
+            var value6 = parseInt($("#Size_6").val());
+            var value7 = parseInt($("#Size_7").val());
+            var value8 = parseInt($("#Size_8").val());
+            var value9 = parseInt($("#Size_9").val());
+            var value10 = parseInt($("#Size_10").val());
+            var value11 = parseInt($("#Size_11").val());
+            var value12 = parseInt($("#Size_12").val());
+            var value13 = parseInt($("#Size_13").val());
+            var totalqty = value1 + value2 + value3 + value4 + value5 + value6 + value7 + value8 + value9 + value10 + value11 + value12 + value13;
+            $("#qty").val(totalqty);
+
+            var price = $("#price").val();
+            var totalprice = totalqty * price;
+            var discount = $("#disc").val();
+            var discamtval = $("#disc_amt").val();
+            var disctype = $("#is_disc_percBool").is(":checked");
+            if (disctype == true) {
+                var totaldisc = 0;
+                if (discount != 0) {
+                    totaldisc = (totalprice * discount) / 100;
+                }
+                var finalprice = totalprice - totaldisc
+                $("#final_price").val(finalprice.toFixed(2));
+            } else {
+                var totaldisc = 0;
+                if (discamtval != 0) {
+                    totaldisc = discamtval;
+                }
+                var finalprice = totalprice - totaldisc
+                $("#final_price").val(finalprice.toFixed(2));
+            }
+        });
+        $("#Size_7").change(function () {
+            if (!$('#Size_7').val()) {
+                $("#Size_7").val(0);
+            }
+            var value1 = parseInt($("#Size_1").val());
+            var value2 = parseInt($("#Size_2").val());
+            var value3 = parseInt($("#Size_3").val());
+            var value4 = parseInt($("#Size_4").val());
+            var value5 = parseInt($("#Size_5").val());
+            var value6 = parseInt($("#Size_6").val());
+            var value7 = parseInt($("#Size_7").val());
+            var value8 = parseInt($("#Size_8").val());
+            var value9 = parseInt($("#Size_9").val());
+            var value10 = parseInt($("#Size_10").val());
+            var value11 = parseInt($("#Size_11").val());
+            var value12 = parseInt($("#Size_12").val());
+            var value13 = parseInt($("#Size_13").val());
+            var totalqty = value1 + value2 + value3 + value4 + value5 + value6 + value7 + value8 + value9 + value10 + value11 + value12 + value13;
+            $("#qty").val(totalqty);
+
+            var price = $("#price").val();
+            var totalprice = totalqty * price;
+            var discount = $("#disc").val();
+            var discamtval = $("#disc_amt").val();
+            var disctype = $("#is_disc_percBool").is(":checked");
+            if (disctype == true) {
+                var totaldisc = 0;
+                if (discount != 0) {
+                    totaldisc = (totalprice * discount) / 100;
+                }
+                var finalprice = totalprice - totaldisc
+                $("#final_price").val(finalprice.toFixed(2));
+            } else {
+                var totaldisc = 0;
+                if (discamtval != 0) {
+                    totaldisc = discamtval;
+                }
+                var finalprice = totalprice - totaldisc
+                $("#final_price").val(finalprice.toFixed(2));
+            }
+        });
+        $("#Size_8").change(function () {
+            if (!$('#Size_8').val()) {
+                $("#Size_8").val(0);
+            }
+            var value1 = parseInt($("#Size_1").val());
+            var value2 = parseInt($("#Size_2").val());
+            var value3 = parseInt($("#Size_3").val());
+            var value4 = parseInt($("#Size_4").val());
+            var value5 = parseInt($("#Size_5").val());
+            var value6 = parseInt($("#Size_6").val());
+            var value7 = parseInt($("#Size_7").val());
+            var value8 = parseInt($("#Size_8").val());
+            var value9 = parseInt($("#Size_9").val());
+            var value10 = parseInt($("#Size_10").val());
+            var value11 = parseInt($("#Size_11").val());
+            var value12 = parseInt($("#Size_12").val());
+            var value13 = parseInt($("#Size_13").val());
+            var totalqty = value1 + value2 + value3 + value4 + value5 + value6 + value7 + value8 + value9 + value10 + value11 + value12 + value13;
+            $("#qty").val(totalqty);
+
+            var price = $("#price").val();
+            var totalprice = totalqty * price;
+            var discount = $("#disc").val();
+            var discamtval = $("#disc_amt").val();
+            var disctype = $("#is_disc_percBool").is(":checked");
+            if (disctype == true) {
+                var totaldisc = 0;
+                if (discount != 0) {
+                    totaldisc = (totalprice * discount) / 100;
+                }
+                var finalprice = totalprice - totaldisc
+                $("#final_price").val(finalprice.toFixed(2));
+            } else {
+                var totaldisc = 0;
+                if (discamtval != 0) {
+                    totaldisc = discamtval;
+                }
+                var finalprice = totalprice - totaldisc
+                $("#final_price").val(finalprice.toFixed(2));
+            }
+        });
+        $("#Size_9").change(function () {
+            if (!$('#Size_9').val()) {
+                $("#Size_9").val(0);
+            }
+            var value1 = parseInt($("#Size_1").val());
+            var value2 = parseInt($("#Size_2").val());
+            var value3 = parseInt($("#Size_3").val());
+            var value4 = parseInt($("#Size_4").val());
+            var value5 = parseInt($("#Size_5").val());
+            var value6 = parseInt($("#Size_6").val());
+            var value7 = parseInt($("#Size_7").val());
+            var value8 = parseInt($("#Size_8").val());
+            var value9 = parseInt($("#Size_9").val());
+            var value10 = parseInt($("#Size_10").val());
+            var value11 = parseInt($("#Size_11").val());
+            var value12 = parseInt($("#Size_12").val());
+            var value13 = parseInt($("#Size_13").val());
+            var totalqty = value1 + value2 + value3 + value4 + value5 + value6 + value7 + value8 + value9 + value10 + value11 + value12 + value13;
+            $("#qty").val(totalqty);
+
+            var price = $("#price").val();
+            var totalprice = totalqty * price;
+            var discount = $("#disc").val();
+            var discamtval = $("#disc_amt").val();
+            var disctype = $("#is_disc_percBool").is(":checked");
+            if (disctype == true) {
+                var totaldisc = 0;
+                if (discount != 0) {
+                    totaldisc = (totalprice * discount) / 100;
+                }
+                var finalprice = totalprice - totaldisc
+                $("#final_price").val(finalprice.toFixed(2));
+            } else {
+                var totaldisc = 0;
+                if (discamtval != 0) {
+                    totaldisc = discamtval;
+                }
+                var finalprice = totalprice - totaldisc
+                $("#final_price").val(finalprice.toFixed(2));
+            }
+        });
+        $("#Size_10").change(function () {
+            if (!$('#Size_10').val()) {
+                $("#Size_10").val(0);
+            }
+            var value1 = parseInt($("#Size_1").val());
+            var value2 = parseInt($("#Size_2").val());
+            var value3 = parseInt($("#Size_3").val());
+            var value4 = parseInt($("#Size_4").val());
+            var value5 = parseInt($("#Size_5").val());
+            var value6 = parseInt($("#Size_6").val());
+            var value7 = parseInt($("#Size_7").val());
+            var value8 = parseInt($("#Size_8").val());
+            var value9 = parseInt($("#Size_9").val());
+            var value10 = parseInt($("#Size_10").val());
+            var value11 = parseInt($("#Size_11").val());
+            var value12 = parseInt($("#Size_12").val());
+            var value13 = parseInt($("#Size_13").val());
+            var totalqty = value1 + value2 + value3 + value4 + value5 + value6 + value7 + value8 + value9 + value10 + value11 + value12 + value13;
+            $("#qty").val(totalqty);
+
+            var price = $("#price").val();
+            var totalprice = totalqty * price;
+            var discount = $("#disc").val();
+            var discamtval = $("#disc_amt").val();
+            var disctype = $("#is_disc_percBool").is(":checked");
+            if (disctype == true) {
+                var totaldisc = 0;
+                if (discount != 0) {
+                    totaldisc = (totalprice * discount) / 100;
+                }
+                var finalprice = totalprice - totaldisc
+                $("#final_price").val(finalprice.toFixed(2));
+            } else {
+                var totaldisc = 0;
+                if (discamtval != 0) {
+                    totaldisc = discamtval;
+                }
+                var finalprice = totalprice - totaldisc
+                $("#final_price").val(finalprice.toFixed(2));
+            }
+        });
+        $("#Size_11").change(function () {
+            if (!$('#Size_11').val()) {
+                $("#Size_11").val(0);
+            }
+            var value1 = parseInt($("#Size_1").val());
+            var value2 = parseInt($("#Size_2").val());
+            var value3 = parseInt($("#Size_3").val());
+            var value4 = parseInt($("#Size_4").val());
+            var value5 = parseInt($("#Size_5").val());
+            var value6 = parseInt($("#Size_6").val());
+            var value7 = parseInt($("#Size_7").val());
+            var value8 = parseInt($("#Size_8").val());
+            var value9 = parseInt($("#Size_9").val());
+            var value10 = parseInt($("#Size_10").val());
+            var value11 = parseInt($("#Size_11").val());
+            var value12 = parseInt($("#Size_12").val());
+            var value13 = parseInt($("#Size_13").val());
+            var totalqty = value1 + value2 + value3 + value4 + value5 + value6 + value7 + value8 + value9 + value10 + value11 + value12 + value13;
+            $("#qty").val(totalqty);
+            var price = $("#price").val();
+            var totalprice = totalqty * price;
+            var discount = $("#disc").val();
+            var discamtval = $("#disc_amt").val();
+            var disctype = $("#is_disc_percBool").is(":checked");
+            if (disctype == true) {
+                var totaldisc = 0;
+                if (discount != 0) {
+                    totaldisc = (totalprice * discount) / 100;
+                }
+                var finalprice = totalprice - totaldisc
+                $("#final_price").val(finalprice.toFixed(2));
+            } else {
+                var totaldisc = 0;
+                if (discamtval != 0) {
+                    totaldisc = discamtval;
+                }
+                var finalprice = totalprice - totaldisc
+                $("#final_price").val(finalprice.toFixed(2));
+            }
+        });
+        $("#Size_12").change(function () {
+            if (!$('#Size_12').val()) {
+                $("#Size_12").val(0);
+            }
+            var value1 = parseInt($("#Size_1").val());
+            var value2 = parseInt($("#Size_2").val());
+            var value3 = parseInt($("#Size_3").val());
+            var value4 = parseInt($("#Size_4").val());
+            var value5 = parseInt($("#Size_5").val());
+            var value6 = parseInt($("#Size_6").val());
+            var value7 = parseInt($("#Size_7").val());
+            var value8 = parseInt($("#Size_8").val());
+            var value9 = parseInt($("#Size_9").val());
+            var value10 = parseInt($("#Size_10").val());
+            var value11 = parseInt($("#Size_11").val());
+            var value12 = parseInt($("#Size_12").val());
+            var value13 = parseInt($("#Size_13").val());
+            var totalqty = value1 + value2 + value3 + value4 + value5 + value6 + value7 + value8 + value9 + value10 + value11 + value12 + value13;
+            $("#qty").val(totalqty);
+            var price = $("#price").val();
+            var totalprice = totalqty * price;
+            var discount = $("#disc").val();
+            var discamtval = $("#disc_amt").val();
+            var disctype = $("#is_disc_percBool").is(":checked");
+            if (disctype == true) {
+                var totaldisc = 0;
+                if (discount != 0) {
+                    totaldisc = (totalprice * discount) / 100;
+                }
+                var finalprice = totalprice - totaldisc
+                $("#final_price").val(finalprice.toFixed(2));
+            } else {
+                var totaldisc = 0;
+                if (discamtval != 0) {
+                    totaldisc = discamtval;
+                }
+                var finalprice = totalprice - totaldisc
+                $("#final_price").val(finalprice.toFixed(2));
+            }
+
+        });
+        $("#Size_13").change(function () {
+            if (!$('#Size_13').val()) {
+                $("#Size_13").val(0);
+            }
+            var value1 = parseInt($("#Size_1").val());
+            var value2 = parseInt($("#Size_2").val());
+            var value3 = parseInt($("#Size_3").val());
+            var value4 = parseInt($("#Size_4").val());
+            var value5 = parseInt($("#Size_5").val());
+            var value6 = parseInt($("#Size_6").val());
+            var value7 = parseInt($("#Size_7").val());
+            var value8 = parseInt($("#Size_8").val());
+            var value9 = parseInt($("#Size_9").val());
+            var value10 = parseInt($("#Size_10").val());
+            var value11 = parseInt($("#Size_11").val());
+            var value12 = parseInt($("#Size_12").val());
+            var value13 = parseInt($("#Size_13").val());
+            var totalqty = value1 + value2 + value3 + value4 + value5 + value6 + value7 + value8 + value9 + value10 + value11 + value12 + value13;
+            $("#qty").val(totalqty);
+            var price = $("#price").val();
+            var totalprice = totalqty * price;
+            var discount = $("#disc").val();
+            var discamtval = $("#disc_amt").val();
+            var disctype = $("#is_disc_percBool").is(":checked");
+            if (disctype == true) {
+                var totaldisc = 0;
+                if (discount != 0) {
+                    totaldisc = (totalprice * discount) / 100;
+                }
+                var finalprice = totalprice - totaldisc
+                $("#final_price").val(finalprice.toFixed(2));
+            } else {
+                var totaldisc = 0;
+                if (discamtval != 0) {
+                    totaldisc = discamtval;
+                }
+                var finalprice = totalprice - totaldisc
+                $("#final_price").val(finalprice.toFixed(2));
+            }
+        });
+        $("#Size_1_Edit").change(function () {
+            if (!$('#Size_1_Edit').val()) {
+                $("#Size_1_Edit").val(0);
+            }
+            var value1 = parseInt($("#Size_1_Edit").val());
+            var value2 = parseInt($("#Size_2_Edit").val());
+            var value3 = parseInt($("#Size_3_Edit").val());
+            var value4 = parseInt($("#Size_4_Edit").val());
+            var value5 = parseInt($("#Size_5_Edit").val());
+            var value6 = parseInt($("#Size_6_Edit").val());
+            var value7 = parseInt($("#Size_7_Edit").val());
+            var value8 = parseInt($("#Size_8_Edit").val());
+            var value9 = parseInt($("#Size_9_Edit").val());
+            var value10 = parseInt($("#Size_10_Edit").val());
+            var value11 = parseInt($("#Size_11_Edit").val());
+            var value12 = parseInt($("#Size_12_Edit").val());
+            var value13 = parseInt($("#Size_13_Edit").val());
+
+            var totalqty = value1 + value2 + value3 + value4 + value5 + value6 + value7 + value8 + value9 + value10 + value11 + value12 + value13;
+            $("#qtyEdit").val(totalqty);
+
+            var price = $("#priceEdit").val();
+            var totalprice = totalqty * price;
+            var discount = $("#discEdit").val();
+            var discamtval = $("#disc_amtEdit").val();
+            var disctype = $("#is_disc_percBoolEdit").is(":checked");
+            if (disctype == true) {
+                var totaldisc = 0;
+                if (discount != 0) {
+                    totaldisc = (totalprice * discount) / 100;
+                }
+                var finalprice = totalprice - totaldisc
+                $("#final_priceEdit").val(finalprice.toFixed(2));
+            } else {
+                var totaldisc = 0;
+                if (discamtval != 0) {
+                    totaldisc = discamtval;
+                }
+                var finalprice = totalprice - totaldisc
+                $("#final_priceEdit").val(finalprice.toFixed(2));
+            }
+
+        });
+        $("#Size_2_Edit").change(function () {
+            if (!$('#Size_2_Edit').val()) {
+                $("#Size_2_Edit").val(0);
+            }
+            var value1 = parseInt($("#Size_1_Edit").val());
+            var value2 = parseInt($("#Size_2_Edit").val());
+            var value3 = parseInt($("#Size_3_Edit").val());
+            var value4 = parseInt($("#Size_4_Edit").val());
+            var value5 = parseInt($("#Size_5_Edit").val());
+            var value6 = parseInt($("#Size_6_Edit").val());
+            var value7 = parseInt($("#Size_7_Edit").val());
+            var value8 = parseInt($("#Size_8_Edit").val());
+            var value9 = parseInt($("#Size_9_Edit").val());
+            var value10 = parseInt($("#Size_10_Edit").val());
+            var value11 = parseInt($("#Size_11_Edit").val());
+            var value12 = parseInt($("#Size_12_Edit").val());
+            var value13 = parseInt($("#Size_13_Edit").val());
+
+            var totalqty = value1 + value2 + value3 + value4 + value5 + value6 + value7 + value8 + value9 + value10 + value11 + value12 + value13;
+            $("#qtyEdit").val(totalqty);
+
+            var price = $("#priceEdit").val();
+            var totalprice = totalqty * price;
+            var discount = $("#discEdit").val();
+            var discamtval = $("#disc_amtEdit").val();
+            var disctype = $("#is_disc_percBoolEdit").is(":checked");
+            if (disctype == true) {
+                var totaldisc = 0;
+                if (discount != 0) {
+                    totaldisc = (totalprice * discount) / 100;
+                }
+                var finalprice = totalprice - totaldisc
+                $("#final_priceEdit").val(finalprice.toFixed(2));
+            } else {
+                var totaldisc = 0;
+                if (discamtval != 0) {
+                    totaldisc = discamtval;
+                }
+                var finalprice = totalprice - totaldisc
+                $("#final_priceEdit").val(finalprice.toFixed(2));
+            }
+
+        });
+        $("#Size_3_Edit").change(function () {
+            if (!$('#Size_3_Edit').val()) {
+                $("#Size_3_Edit").val(0);
+            }
+            var value1 = parseInt($("#Size_1_Edit").val());
+            var value2 = parseInt($("#Size_2_Edit").val());
+            var value3 = parseInt($("#Size_3_Edit").val());
+            var value4 = parseInt($("#Size_4_Edit").val());
+            var value5 = parseInt($("#Size_5_Edit").val());
+            var value6 = parseInt($("#Size_6_Edit").val());
+            var value7 = parseInt($("#Size_7_Edit").val());
+            var value8 = parseInt($("#Size_8_Edit").val());
+            var value9 = parseInt($("#Size_9_Edit").val());
+            var value10 = parseInt($("#Size_10_Edit").val());
+            var value11 = parseInt($("#Size_11_Edit").val());
+            var value12 = parseInt($("#Size_12_Edit").val());
+            var value13 = parseInt($("#Size_13_Edit").val());
+
+            var totalqty = value1 + value2 + value3 + value4 + value5 + value6 + value7 + value8 + value9 + value10 + value11 + value12 + value13;
+            $("#qtyEdit").val(totalqty);
+
+            var price = $("#priceEdit").val();
+            var totalprice = totalqty * price;
+            var discount = $("#discEdit").val();
+            var discamtval = $("#disc_amtEdit").val();
+            var disctype = $("#is_disc_percBoolEdit").is(":checked");
+            if (disctype == true) {
+                var totaldisc = 0;
+                if (discount != 0) {
+                    totaldisc = (totalprice * discount) / 100;
+                }
+                var finalprice = totalprice - totaldisc
+                $("#final_priceEdit").val(finalprice.toFixed(2));
+            } else {
+                var totaldisc = 0;
+                if (discamtval != 0) {
+                    totaldisc = discamtval;
+                }
+                var finalprice = totalprice - totaldisc
+                $("#final_priceEdit").val(finalprice.toFixed(2));
+            }
+
+        });
+        $("#Size_4_Edit").change(function () {
+            if (!$('#Size_4_Edit').val()) {
+                $("#Size_4_Edit").val(0);
+            }
+            var value1 = parseInt($("#Size_1_Edit").val());
+            var value2 = parseInt($("#Size_2_Edit").val());
+            var value3 = parseInt($("#Size_3_Edit").val());
+            var value4 = parseInt($("#Size_4_Edit").val());
+            var value5 = parseInt($("#Size_5_Edit").val());
+            var value6 = parseInt($("#Size_6_Edit").val());
+            var value7 = parseInt($("#Size_7_Edit").val());
+            var value8 = parseInt($("#Size_8_Edit").val());
+            var value9 = parseInt($("#Size_9_Edit").val());
+            var value10 = parseInt($("#Size_10_Edit").val());
+            var value11 = parseInt($("#Size_11_Edit").val());
+            var value12 = parseInt($("#Size_12_Edit").val());
+            var value13 = parseInt($("#Size_13_Edit").val());
+
+            var totalqty = value1 + value2 + value3 + value4 + value5 + value6 + value7 + value8 + value9 + value10 + value11 + value12 + value13;
+            $("#qtyEdit").val(totalqty);
+
+            var price = $("#priceEdit").val();
+            var totalprice = totalqty * price;
+            var discount = $("#discEdit").val();
+            var discamtval = $("#disc_amtEdit").val();
+            var disctype = $("#is_disc_percBoolEdit").is(":checked");
+            if (disctype == true) {
+                var totaldisc = 0;
+                if (discount != 0) {
+                    totaldisc = (totalprice * discount) / 100;
+                }
+                var finalprice = totalprice - totaldisc
+                $("#final_priceEdit").val(finalprice.toFixed(2));
+            } else {
+                var totaldisc = 0;
+                if (discamtval != 0) {
+                    totaldisc = discamtval;
+                }
+                var finalprice = totalprice - totaldisc
+                $("#final_priceEdit").val(finalprice.toFixed(2));
+            }
+
+        });
+        $("#Size_5_Edit").change(function () {
+            if (!$('#Size_5_Edit').val()) {
+                $("#Size_5_Edit").val(0);
+            }
+            var value1 = parseInt($("#Size_1_Edit").val());
+            var value2 = parseInt($("#Size_2_Edit").val());
+            var value3 = parseInt($("#Size_3_Edit").val());
+            var value4 = parseInt($("#Size_4_Edit").val());
+            var value5 = parseInt($("#Size_5_Edit").val());
+            var value6 = parseInt($("#Size_6_Edit").val());
+            var value7 = parseInt($("#Size_7_Edit").val());
+            var value8 = parseInt($("#Size_8_Edit").val());
+            var value9 = parseInt($("#Size_9_Edit").val());
+            var value10 = parseInt($("#Size_10_Edit").val());
+            var value11 = parseInt($("#Size_11_Edit").val());
+            var value12 = parseInt($("#Size_12_Edit").val());
+            var value13 = parseInt($("#Size_13_Edit").val());
+
+            var totalqty = value1 + value2 + value3 + value4 + value5 + value6 + value7 + value8 + value9 + value10 + value11 + value12 + value13;
+            $("#qtyEdit").val(totalqty);
+
+            var price = $("#priceEdit").val();
+            var totalprice = totalqty * price;
+            var discount = $("#discEdit").val();
+            var discamtval = $("#disc_amtEdit").val();
+            var disctype = $("#is_disc_percBoolEdit").is(":checked");
+            if (disctype == true) {
+                var totaldisc = 0;
+                if (discount != 0) {
+                    totaldisc = (totalprice * discount) / 100;
+                }
+                var finalprice = totalprice - totaldisc
+                $("#final_priceEdit").val(finalprice.toFixed(2));
+            } else {
+                var totaldisc = 0;
+                if (discamtval != 0) {
+                    totaldisc = discamtval;
+                }
+                var finalprice = totalprice - totaldisc
+                $("#final_priceEdit").val(finalprice.toFixed(2));
+            }
+
+        });
+        $("#Size_6_Edit").change(function () {
+            if (!$('#Size_6_Edit').val()) {
+                $("#Size_6_Edit").val(0);
+            }
+            var value1 = parseInt($("#Size_1_Edit").val());
+            var value2 = parseInt($("#Size_2_Edit").val());
+            var value3 = parseInt($("#Size_3_Edit").val());
+            var value4 = parseInt($("#Size_4_Edit").val());
+            var value5 = parseInt($("#Size_5_Edit").val());
+            var value6 = parseInt($("#Size_6_Edit").val());
+            var value7 = parseInt($("#Size_7_Edit").val());
+            var value8 = parseInt($("#Size_8_Edit").val());
+            var value9 = parseInt($("#Size_9_Edit").val());
+            var value10 = parseInt($("#Size_10_Edit").val());
+            var value11 = parseInt($("#Size_11_Edit").val());
+            var value12 = parseInt($("#Size_12_Edit").val());
+            var value13 = parseInt($("#Size_13_Edit").val());
+
+            var totalqty = value1 + value2 + value3 + value4 + value5 + value6 + value7 + value8 + value9 + value10 + value11 + value12 + value13;
+            $("#qtyEdit").val(totalqty);
+
+            var price = $("#priceEdit").val();
+            var totalprice = totalqty * price;
+            var discount = $("#discEdit").val();
+            var discamtval = $("#disc_amtEdit").val();
+            var disctype = $("#is_disc_percBoolEdit").is(":checked");
+            if (disctype == true) {
+                var totaldisc = 0;
+                if (discount != 0) {
+                    totaldisc = (totalprice * discount) / 100;
+                }
+                var finalprice = totalprice - totaldisc
+                $("#final_priceEdit").val(finalprice.toFixed(2));
+            } else {
+                var totaldisc = 0;
+                if (discamtval != 0) {
+                    totaldisc = discamtval;
+                }
+                var finalprice = totalprice - totaldisc
+                $("#final_priceEdit").val(finalprice.toFixed(2));
+            }
+
+        });
+        $("#Size_7_Edit").change(function () {
+            if (!$('#Size_7_Edit').val()) {
+                $("#Size_7_Edit").val(0);
+            }
+            var value1 = parseInt($("#Size_1_Edit").val());
+            var value2 = parseInt($("#Size_2_Edit").val());
+            var value3 = parseInt($("#Size_3_Edit").val());
+            var value4 = parseInt($("#Size_4_Edit").val());
+            var value5 = parseInt($("#Size_5_Edit").val());
+            var value6 = parseInt($("#Size_6_Edit").val());
+            var value7 = parseInt($("#Size_7_Edit").val());
+            var value8 = parseInt($("#Size_8_Edit").val());
+            var value9 = parseInt($("#Size_9_Edit").val());
+            var value10 = parseInt($("#Size_10_Edit").val());
+            var value11 = parseInt($("#Size_11_Edit").val());
+            var value12 = parseInt($("#Size_12_Edit").val());
+            var value13 = parseInt($("#Size_13_Edit").val());
+
+            var totalqty = value1 + value2 + value3 + value4 + value5 + value6 + value7 + value8 + value9 + value10 + value11 + value12 + value13;
+            $("#qtyEdit").val(totalqty);
+
+            var price = $("#priceEdit").val();
+            var totalprice = totalqty * price;
+            var discount = $("#discEdit").val();
+            var discamtval = $("#disc_amtEdit").val();
+            var disctype = $("#is_disc_percBoolEdit").is(":checked");
+            if (disctype == true) {
+                var totaldisc = 0;
+                if (discount != 0) {
+                    totaldisc = (totalprice * discount) / 100;
+                }
+                var finalprice = totalprice - totaldisc
+                $("#final_priceEdit").val(finalprice.toFixed(2));
+            } else {
+                var totaldisc = 0;
+                if (discamtval != 0) {
+                    totaldisc = discamtval;
+                }
+                var finalprice = totalprice - totaldisc
+                $("#final_priceEdit").val(finalprice.toFixed(2));
+            }
+
+        });
+        $("#Size_8_Edit").change(function () {
+            if (!$('#Size_8_Edit').val()) {
+                $("#Size_8_Edit").val(0);
+            }
+            var value1 = parseInt($("#Size_1_Edit").val());
+            var value2 = parseInt($("#Size_2_Edit").val());
+            var value3 = parseInt($("#Size_3_Edit").val());
+            var value4 = parseInt($("#Size_4_Edit").val());
+            var value5 = parseInt($("#Size_5_Edit").val());
+            var value6 = parseInt($("#Size_6_Edit").val());
+            var value7 = parseInt($("#Size_7_Edit").val());
+            var value8 = parseInt($("#Size_8_Edit").val());
+            var value9 = parseInt($("#Size_9_Edit").val());
+            var value10 = parseInt($("#Size_10_Edit").val());
+            var value11 = parseInt($("#Size_11_Edit").val());
+            var value12 = parseInt($("#Size_12_Edit").val());
+            var value13 = parseInt($("#Size_13_Edit").val());
+
+            var totalqty = value1 + value2 + value3 + value4 + value5 + value6 + value7 + value8 + value9 + value10 + value11 + value12 + value13;
+            $("#qtyEdit").val(totalqty);
+
+            var price = $("#priceEdit").val();
+            var totalprice = totalqty * price;
+            var discount = $("#discEdit").val();
+            var discamtval = $("#disc_amtEdit").val();
+            var disctype = $("#is_disc_percBoolEdit").is(":checked");
+            if (disctype == true) {
+                var totaldisc = 0;
+                if (discount != 0) {
+                    totaldisc = (totalprice * discount) / 100;
+                }
+                var finalprice = totalprice - totaldisc
+                $("#final_priceEdit").val(finalprice.toFixed(2));
+            } else {
+                var totaldisc = 0;
+                if (discamtval != 0) {
+                    totaldisc = discamtval;
+                }
+                var finalprice = totalprice - totaldisc
+                $("#final_priceEdit").val(finalprice.toFixed(2));
+            }
+
+        });
+        $("#Size_9_Edit").change(function () {
+            if (!$('#Size_9_Edit').val()) {
+                $("#Size_9_Edit").val(0);
+            }
+            var value1 = parseInt($("#Size_1_Edit").val());
+            var value2 = parseInt($("#Size_2_Edit").val());
+            var value3 = parseInt($("#Size_3_Edit").val());
+            var value4 = parseInt($("#Size_4_Edit").val());
+            var value5 = parseInt($("#Size_5_Edit").val());
+            var value6 = parseInt($("#Size_6_Edit").val());
+            var value7 = parseInt($("#Size_7_Edit").val());
+            var value8 = parseInt($("#Size_8_Edit").val());
+            var value9 = parseInt($("#Size_9_Edit").val());
+            var value10 = parseInt($("#Size_10_Edit").val());
+            var value11 = parseInt($("#Size_11_Edit").val());
+            var value12 = parseInt($("#Size_12_Edit").val());
+            var value13 = parseInt($("#Size_13_Edit").val());
+
+            var totalqty = value1 + value2 + value3 + value4 + value5 + value6 + value7 + value8 + value9 + value10 + value11 + value12 + value13;
+            $("#qtyEdit").val(totalqty);
+
+            var price = $("#priceEdit").val();
+            var totalprice = totalqty * price;
+            var discount = $("#discEdit").val();
+            var discamtval = $("#disc_amtEdit").val();
+            var disctype = $("#is_disc_percBoolEdit").is(":checked");
+            if (disctype == true) {
+                var totaldisc = 0;
+                if (discount != 0) {
+                    totaldisc = (totalprice * discount) / 100;
+                }
+                var finalprice = totalprice - totaldisc
+                $("#final_priceEdit").val(finalprice.toFixed(2));
+            } else {
+                var totaldisc = 0;
+                if (discamtval != 0) {
+                    totaldisc = discamtval;
+                }
+                var finalprice = totalprice - totaldisc
+                $("#final_priceEdit").val(finalprice.toFixed(2));
+            }
+
+        });
+        $("#Size_10_Edit").change(function () {
+            if (!$('#Size_10_Edit').val()) {
+                $("#Size_10_Edit").val(0);
+            }
+            var value1 = parseInt($("#Size_1_Edit").val());
+            var value2 = parseInt($("#Size_2_Edit").val());
+            var value3 = parseInt($("#Size_3_Edit").val());
+            var value4 = parseInt($("#Size_4_Edit").val());
+            var value5 = parseInt($("#Size_5_Edit").val());
+            var value6 = parseInt($("#Size_6_Edit").val());
+            var value7 = parseInt($("#Size_7_Edit").val());
+            var value8 = parseInt($("#Size_8_Edit").val());
+            var value9 = parseInt($("#Size_9_Edit").val());
+            var value10 = parseInt($("#Size_10_Edit").val());
+            var value11 = parseInt($("#Size_11_Edit").val());
+            var value12 = parseInt($("#Size_12_Edit").val());
+            var value13 = parseInt($("#Size_13_Edit").val());
+
+            var totalqty = value1 + value2 + value3 + value4 + value5 + value6 + value7 + value8 + value9 + value10 + value11 + value12 + value13;
+            $("#qtyEdit").val(totalqty);
+
+            var price = $("#priceEdit").val();
+            var totalprice = totalqty * price;
+            var discount = $("#discEdit").val();
+            var discamtval = $("#disc_amtEdit").val();
+            var disctype = $("#is_disc_percBoolEdit").is(":checked");
+            if (disctype == true) {
+                var totaldisc = 0;
+                if (discount != 0) {
+                    totaldisc = (totalprice * discount) / 100;
+                }
+                var finalprice = totalprice - totaldisc
+                $("#final_priceEdit").val(finalprice.toFixed(2));
+            } else {
+                var totaldisc = 0;
+                if (discamtval != 0) {
+                    totaldisc = discamtval;
+                }
+                var finalprice = totalprice - totaldisc
+                $("#final_priceEdit").val(finalprice.toFixed(2));
+            }
+
+        });
+        $("#Size_11_Edit").change(function () {
+            if (!$('#Size_11_Edit').val()) {
+                $("#Size_11_Edit").val(0);
+            }
+            var value1 = parseInt($("#Size_1_Edit").val());
+            var value2 = parseInt($("#Size_2_Edit").val());
+            var value3 = parseInt($("#Size_3_Edit").val());
+            var value4 = parseInt($("#Size_4_Edit").val());
+            var value5 = parseInt($("#Size_5_Edit").val());
+            var value6 = parseInt($("#Size_6_Edit").val());
+            var value7 = parseInt($("#Size_7_Edit").val());
+            var value8 = parseInt($("#Size_8_Edit").val());
+            var value9 = parseInt($("#Size_9_Edit").val());
+            var value10 = parseInt($("#Size_10_Edit").val());
+            var value11 = parseInt($("#Size_11_Edit").val());
+            var value12 = parseInt($("#Size_12_Edit").val());
+            var value13 = parseInt($("#Size_13_Edit").val());
+
+            var totalqty = value1 + value2 + value3 + value4 + value5 + value6 + value7 + value8 + value9 + value10 + value11 + value12 + value13;
+            $("#qtyEdit").val(totalqty);
+
+            var price = $("#priceEdit").val();
+            var totalprice = totalqty * price;
+            var discount = $("#discEdit").val();
+            var discamtval = $("#disc_amtEdit").val();
+            var disctype = $("#is_disc_percBoolEdit").is(":checked");
+            if (disctype == true) {
+                var totaldisc = 0;
+                if (discount != 0) {
+                    totaldisc = (totalprice * discount) / 100;
+                }
+                var finalprice = totalprice - totaldisc
+                $("#final_priceEdit").val(finalprice.toFixed(2));
+            } else {
+                var totaldisc = 0;
+                if (discamtval != 0) {
+                    totaldisc = discamtval;
+                }
+                var finalprice = totalprice - totaldisc
+                $("#final_priceEdit").val(finalprice.toFixed(2));
+            }
+
+        });
+        $("#Size_12_Edit").change(function () {
+            if (!$('#Size_12_Edit').val()) {
+                $("#Size_12_Edit").val(0);
+            }
+            var value1 = parseInt($("#Size_1_Edit").val());
+            var value2 = parseInt($("#Size_2_Edit").val());
+            var value3 = parseInt($("#Size_3_Edit").val());
+            var value4 = parseInt($("#Size_4_Edit").val());
+            var value5 = parseInt($("#Size_5_Edit").val());
+            var value6 = parseInt($("#Size_6_Edit").val());
+            var value7 = parseInt($("#Size_7_Edit").val());
+            var value8 = parseInt($("#Size_8_Edit").val());
+            var value9 = parseInt($("#Size_9_Edit").val());
+            var value10 = parseInt($("#Size_10_Edit").val());
+            var value11 = parseInt($("#Size_11_Edit").val());
+            var value12 = parseInt($("#Size_12_Edit").val());
+            var value13 = parseInt($("#Size_13_Edit").val());
+
+            var totalqty = value1 + value2 + value3 + value4 + value5 + value6 + value7 + value8 + value9 + value10 + value11 + value12 + value13;
+            $("#qtyEdit").val(totalqty);
+
+            var price = $("#priceEdit").val();
+            var totalprice = totalqty * price;
+            var discount = $("#discEdit").val();
+            var discamtval = $("#disc_amtEdit").val();
+            var disctype = $("#is_disc_percBoolEdit").is(":checked");
+            if (disctype == true) {
+                var totaldisc = 0;
+                if (discount != 0) {
+                    totaldisc = (totalprice * discount) / 100;
+                }
+                var finalprice = totalprice - totaldisc
+                $("#final_priceEdit").val(finalprice.toFixed(2));
+            } else {
+                var totaldisc = 0;
+                if (discamtval != 0) {
+                    totaldisc = discamtval;
+                }
+                var finalprice = totalprice - totaldisc
+                $("#final_priceEdit").val(finalprice.toFixed(2));
+            }
+
+        });
+        $("#Size_13_Edit").change(function () {
+            if (!$('#Size_13_Edit').val()) {
+                $("#Size_13_Edit").val(0);
+            }
+            var value1 = parseInt($("#Size_1_Edit").val());
+            var value2 = parseInt($("#Size_2_Edit").val());
+            var value3 = parseInt($("#Size_3_Edit").val());
+            var value4 = parseInt($("#Size_4_Edit").val());
+            var value5 = parseInt($("#Size_5_Edit").val());
+            var value6 = parseInt($("#Size_6_Edit").val());
+            var value7 = parseInt($("#Size_7_Edit").val());
+            var value8 = parseInt($("#Size_8_Edit").val());
+            var value9 = parseInt($("#Size_9_Edit").val());
+            var value10 = parseInt($("#Size_10_Edit").val());
+            var value11 = parseInt($("#Size_11_Edit").val());
+            var value12 = parseInt($("#Size_12_Edit").val());
+            var value13 = parseInt($("#Size_13_Edit").val());
+
+            var totalqty = value1 + value2 + value3 + value4 + value5 + value6 + value7 + value8 + value9 + value10 + value11 + value12 + value13;
+            $("#qtyEdit").val(totalqty);
+
+            var price = $("#priceEdit").val();
+            var totalprice = totalqty * price;
+            var discount = $("#discEdit").val();
+            var discamtval = $("#disc_amtEdit").val();
+            var disctype = $("#is_disc_percBoolEdit").is(":checked");
+            if (disctype == true) {
+                var totaldisc = 0;
+                if (discount != 0) {
+                    totaldisc = (totalprice * discount) / 100;
+                }
+                var finalprice = totalprice - totaldisc
+                $("#final_priceEdit").val(finalprice.toFixed(2));
+            } else {
+                var totaldisc = 0;
+                if (discamtval != 0) {
+                    totaldisc = discamtval;
+                }
+                var finalprice = totalprice - totaldisc
+                $("#final_priceEdit").val(finalprice.toFixed(2));
+            }
+
+        });
+        $("#disc").change(function () {
+            var priceval = $("#price").val();
+            var qtyval = $("#qty").val();
+            var discval = $("#disc").val();
+            if (qtyval != 0) {
+                priceval = priceval * qtyval;
+                if (priceval != null && discval != null) {
+                    var discvalue = (priceval * discval) / 100;
+                    var total = (priceval - discvalue).toFixed(2);
+                    $("#final_price").val(total);
+                } else {
+                    $("#final_price").val(0);
+                }
+            } else {
+                $("#final_price").val(0);
+            }
+
+        });
+        $("#disc_amt").change(function () {
+            var priceval = $("#price").val();
+            var qtyval = $("#qty").val();
+            var discval = $("#disc_amt").val();
+            if (qtyval != 0) {
+                priceval = priceval * qtyval;
+                if (priceval != null && discval != null) {
+                    var discvalue = discval;
+                    var total = (priceval - discvalue).toFixed(2);
+                    $("#final_price").val(total);
+                } else {
+                    $("#final_price").val(0);
+                }
+            } else {
+                $("#final_price").val(0);
+            }
+
+        });
+        $("#qtyEdit").change(function () {
+            var priceval = $("#priceEdit").val();
+            var qtyval = $("#qtyEdit").val();
+            var discval = $("#discEdit").val();
+            if (qtyval != 0) {
+                priceval = priceval * qtyval;
+                if (priceval != null && discval != null) {
+                    var discvalue = (priceval * discval) / 100;
+                    var total = (priceval - discvalue).toFixed(2);
+                    $("#final_priceEdit").val(total);
+                } else {
+                    $("#final_priceEdit").val(0);
+                }
+            } else {
+                $("#final_priceEdit").val(0);
+
+            }
+
+        });
+        $("#discEdit").change(function () {
+            var priceval = $("#priceEdit").val();
+            var qtyval = $("#qtyEdit").val();
+            var discval = $("#discEdit").val();
+            if (qtyval != 0) {
+                priceval = priceval * qtyval;
+                if (priceval != null && discval != null) {
+                    var discvalue = (priceval * discval) / 100;
+                    var total = (priceval - discvalue).toFixed(2);
+                    $("#final_priceEdit").val(total);
+                } else {
+                    $("#final_priceEdit").val(0);
+                }
+            } else {
+                $("#final_priceEdit").val(0);
+            }
+
+        });
+        $("#disc_amtEdit").change(function () {
+            var priceval = $("#priceEdit").val();
+            var qtyval = $("#qtyEdit").val();
+            var discval = $("#disc_amtEdit").val();
+            if (qtyval != 0) {
+                priceval = priceval * qtyval;
+                if (priceval != null && discval != null) {
+                    var discvalue = discval;
+                    var total = (priceval - discvalue).toFixed(2);
+                    $("#final_priceEdit").val(total);
+                } else {
+                    $("#final_priceEdit").val(0);
+                }
+            } else {
+                $("#final_priceEdit").val(0);
+            }
+
+        });
+        $('#IS_DISC_PERCBoolHdr').change(function () {
+            var roleFinance = '@isFinanceRole';
+            if (roleFinance == "False") {
+                var isapprove2 = $("#IS_DISC_PERC").val();
+                if (isapprove2 == "1") {
+                    $(this).prop('checked', true);
+
+                } else {
+                    $(this).prop('checked', false);
+
+                }
+            } else {
+                var isapprovefinance = $('#isApprove1').prop('checked');
+                debugger;
+                if (!isapprovefinance) {
+                    var custdisc = $("#custdisc").val();
+                var totalorder = $("#TOTAL_ORDER").val();
+                var custdiscval = (totalorder * custdisc) / 100;
+                totalorder = totalorder - custdiscval;
+                if (this.checked) {
+                    $("#divdiscperc").show();
+                    $("#divdiscamt").hide();
+                    $("#IS_DISC_PERCTemp").val("1");
+                    $("#IS_DISC_PERCTempUpl").val("1");
+                    $("#IS_DISC_PERCTempEdit").val("1");
+
+
+                    //$("#FinalVal").val($("#TOTAL_ORDER").val());
+
+                    //var returnVal = confirm("Are you sure?");
+                    //$(this).prop("checked", returnVal);
+                    //$("#discamtval").hide();
+                    //$("#disc_amt").val(0);
+                    //$("#discpercval").show();
+                    //var priceval = $("#price").val();
+                    //var qtyval = $("#qty").val();
+                    //priceval = priceval * qtyval;
+                    //$("#final_price").val(priceval);
+
+                } else {
+                    $("#divdiscperc").hide();
+                    $("#divdiscamt").show();
+                    $("#IS_DISC_PERCTemp").val("0");
+                    $("#IS_DISC_PERCTempUpl").val("0");
+                    $("#IS_DISC_PERCTempEdit").val("0");
+                    //$("#INV_DISC").val(0);
+                    //$("#INV_DISCTemp").val(0);
+                    //$("#INV_DISCTempUpl").val(0);
+                    //$("#INV_DISCTempEdit").val(0);
+                    //$("#FinalVal").val($("#TOTAL_ORDER").val());
+
+                    //$("#discpercval").hide();
+                    //$("#disc").val(0);
+                    //$("#discamtval").show();
+                    //var priceval = $("#price").val();
+                    //var qtyval = $("#qty").val();
+                    //priceval = priceval * qtyval;
+                    //$("#final_price").val(priceval);
+                }
+                  var discamt = '@invdiscamt';
+                    var discval = '@invdisc';
+                    var disctype = '@dischdrtype';
+                    if (disctype == "1") {
+                        var discinv = discval;
+                        $("#INV_DISC").val(discinv);
+                        $("#INV_DISCTemp").val(discinv);
+                        $("#INV_DISCTempUpl").val(discinv);
+                        $("#INV_DISCTempEdit").val(discinv);
+                        $("#INV_DISC_AMT").val(0);
+                        $("#INV_DISC_AMTTemp").val(0);
+                        $("#INV_DISC_AMTTempUpl").val(0);
+                        $("#INV_DISC_AMTTempEdit").val(0);
+                        if (discinv != null && discinv != "") {
+                            var discval = parseFloat(discinv);
+                            var orderval = parseFloat(totalorder);
+                            var valuedisc = (orderval * discval) / 100;
+                            var finalval = orderval - valuedisc;
+                            $("#FinalVal").val(finalval.toFixed(2));
+                        } else {
+                            $("#FinalVal").val(totalorder);
+
+                        }
+                    } else {
+                        var discinv = discamt;
+                        $("#INV_DISC_AMT").val(discinv);
+                        $("#INV_DISC_AMTTemp").val(discinv);
+                        $("#INV_DISC_AMTTempUpl").val(discinv);
+                        $("#INV_DISC_AMTTempEdit").val(discinv);
+                        $("#INV_DISC").val(0);
+                        $("#INV_DISCTemp").val(0);
+                        $("#INV_DISCTempUpl").val(0);
+                        $("#INV_DISCTempEdit").val(0);
+                        if (discinv != null && discinv != "") {
+                            var discval = parseFloat(discinv);
+                            var orderval = parseFloat(totalorder);
+                            var valuedisc = discval;
+                            var finalval = orderval - valuedisc;
+                            $("#FinalVal").val(finalval.toFixed(2));
+                        } else {
+                            $("#FinalVal").val(totalorder);
+
+                        }
+                    }
+                } else {
+                    var isapprove2 = $("#IS_DISC_PERC").val();
+                    if (isapprove2 == "1") {
+                        $(this).prop('checked', true);
+
+                    } else {
+                        $(this).prop('checked', false);
+
+                    }
+                }
+
+            }
+        });
+        $('#is_disc_percBool').change(function () {
+            if (this.checked) {
+                //var returnVal = confirm("Are you sure?");
+                //$(this).prop("checked", returnVal);
+                //$("#discamtval").hide();
+                $("#disc_amt").val(0);
+                //$("#discpercval").show();
+                var priceval = $("#price").val();
+                var qtyval = $("#qty").val();
+                priceval = priceval * qtyval;
+                $("#final_price").val(priceval);
+
+            } else {
+                //$("#discpercval").hide();
+                $("#disc").val(0);
+                //$("#discamtval").show();
+                var priceval = $("#price").val();
+                var qtyval = $("#qty").val();
+                priceval = priceval * qtyval;
+                $("#final_price").val(priceval);
+            }
+        });
+        $('#is_disc_percBoolEdit').change(function () {
+            if (this.checked) {
+                //var returnVal = confirm("Are you sure?");
+                //$(this).prop("checked", returnVal);
+                //$("#discamtvalEdit").hide();
+                $("#disc_amtEdit").val(0);
+                //$("#discpercvalEdit").show();
+                var priceval = $("#priceEdit").val();
+                var qtyval = $("#qtyEdit").val();
+                priceval = priceval * qtyval;
+                $("#final_priceEdit").val(priceval);
+            } else {
+                //$("#discpercvalEdit").hide();
+                $("#discEdit").val(0);
+                //$("#discamtvalEdit").show();
+                var priceval = $("#priceEdit").val();
+                var qtyval = $("#qtyEdit").val();
+                priceval = priceval * qtyval;
+                $("#final_priceEdit").val(priceval);
+            }
+        });
+        $("#EMP_CODE").change(function () {
+            var empcode = $("#EMP_CODE").val();
+            $("#EMP_CODETemp").val(empcode);
+            $("#EMP_CODETempUpl").val(empcode);
+            $("#EMP_CODETempEdit").val(empcode);
+        });
+        $('#ORDER_DATE').on('change', function () {
+            var value = $("#ORDER_DATE").val();
+            $("#ORDER_DATETemp").val(value);
+            $("#ORDER_DATETempUpl").val(value);
+            $("#ORDER_DATETemp_EDIT").val(value);
+
+        });
+        $("#id_customer").change(function () {
+            var empcode = $("#id_customer").val();
+            $("#id_customerTemp").val(empcode);
+            $("#id_customerTempUpl").val(empcode);
+            $("#id_customerTempEdit").val(empcode);
+            $.ajax({
+                type: "GET",
+                url: "/SalesOrder/getcustdisc",
+                data: { custid: empcode },
+                success: function (data) {
+                    debugger;
+                    console.log(data);
+                    var custdisc = 0;
+                    var valuecredit = 0;
+                    if (data != null) {
+                        if (data.discount_customer != null && data.discount_customer != '') {
+                            $("#custdisc").val(data.discount_customer)
+                            $("#custdiscTemp").val(data.discount_customer)
+                            $("#custdiscTempEdit").val(data.discount_customer)
+                            $("#custdiscTempUpl").val(data.discount_customer)
+                            custdisc = data.discount_customer;
+                            valuecredit = function () {
+                                var tmp = null;
+                                $.ajax({
+                                    'async': false,
+                                    'type': "POST",
+                                    'global': false,
+                                    'dataType': 'html',
+                                    'url': "/SalesOrder/getcreditnote",
+                                    'data': { 'request': "", 'target': 'arrange_url', 'method': 'method_target', 'edp': data.edp },
+                                    'success': function (data) {
+                                        tmp = data;
+                                    }
+                                });
+                                return tmp;
+                            }();
+
+                        } else {
+                            $("#custdisc").val(0);
+                            $("#custdiscTemp").val(0);
+                            $("#custdiscTempEdit").val(0);
+                            $("#custdiscTempUpl").val(0);
+
+                        }
+                    } else {
+                        $("#custdisc").val(0);
+                        $("#custdiscTemp").val(0);
+                        $("#custdiscTempEdit").val(0);
+                        $("#custdiscTempUpl").val(0);
+                    }
+                    var totalorder = $("#TOTAL_ORDER").val();
+                    if (totalorder != 0) {
+                        totalorder = totalorder - parseFloat(valuecredit);
+                    }
+                    debugger;
+                    var discval = (totalorder * custdisc) / 100;
+                    totalorder = totalorder - discval;
+                    var disctype = $("#IS_DISC_PERCBoolHdr").is(":checked");
+                    if (disctype) {
+                        var invdisc = $("#INV_DISC").val();
+                        if (invdisc != null && invdisc != "") {
+                            invdisc = parseFloat(invdisc);
+                            var discval2 = (totalorder * invdisc) / 100;
+                            totalorder = totalorder - discval2;
+                        }
+                    } else {
+                        var invdisc = $("#INV_DISC_AMT").val();
+                        if (invdisc != null && invdisc != "") {
+                            invdisc = parseFloat(invdisc);
+                            totalorder = totalorder - invdisc;
+                        }
+                    }
+                    $("#FinalVal").val(totalorder);
+
+
+                }
+            });
+
+        });
+
+        $('#isApprove2').change(function () {
+            var roleFinance = '@isFinanceRole';
+            var idval = $("#id").val();
+            if (roleFinance == "False") {
+                var isapprove2 = $("#APPROVAL_2").val();
+                if (isapprove2 == "1") {
+                    $(this).prop('checked', true);
+
+                } else {
+                    $(this).prop('checked', false);
+
+                }
+            } else {
+                var isapprove1 = $("#APPROVAL_1").val();
+                if (isapprove1 == "1") {
+                    var getValidate = function () {
+                        var tmp = null;
+                        $.ajax({
+                            'async': false,
+                            'type': "POST",
+                            'global': false,
+                            'dataType': 'html',
+                            'url': "/SalesOrder/validateorder",
+                            'data': { 'request': "", 'target': 'arrange_url', 'method': 'method_target', 'orderid': idval, 'btnid': null },
+                            'success': function (data) {
+                                tmp = data;
+                            }
+                        });
+                        return tmp;
+                    }();
+                    debugger;
+                    if (getValidate == '"nopass"') {
+                        $(this).prop('checked', false);
+                    } else {
+                        if (this.checked) {
+                            var returnVal = confirm("Harap perhatikan detil data dan nilai yang tercantum, di karenakan data tidak bisa di rubah lagi");
+                            //var returnVal = confirm("Are you sure?");
+                            $(this).prop("checked", returnVal);
+                            if (returnVal) {
+                                $("#APPROVAL_2Temp").val("1");
+                                $("#APPROVAL_2TempUpl").val("1");
+                                $("#APPROVAL_2TempEdit").val("1");
+                                $("#EMP_CODE").attr("readonly", "readonly");
+                                $("#SHIPPING_ADDRESS").attr("readonly", "readonly");
+
+                            } else {
+                                $("#APPROVAL_2Temp").val("0");
+                                $("#APPROVAL_2TempUpl").val("0");
+                                $("#APPROVAL_2TempEdit").val("0");
+                                $("#EMP_CODE").removeAttr('readonly');
+                                $("#SHIPPING_ADDRESS").removeAttr('readonly');
+                            }
+                        } else {
+                            $("#APPROVAL_2Temp").val("0");
+                            $("#APPROVAL_2TempUpl").val("0");
+                            $("#APPROVAL_2TempEdit").val("0");
+                            $("#EMP_CODE").removeAttr('readonly');
+                            $("#SHIPPING_ADDRESS").removeAttr('readonly');
+                        }
+                    }
+                } else {
+                    $(this).prop('checked', false);
+
+                }
+            }
+
+
+        });
+        $('#isApprove1').change(function () {
+            debugger;
+            var roleSales = '@isSalesRole';
+            if (roleSales == "False") {
+                var isapprove2 = $("#APPROVAL_1").val();
+                if (isapprove2 == "1") {
+                    $(this).prop('checked', true);
+
+                } else {
+                    $(this).prop('checked', false);
+
+                }
+            } else {
+                var isapprove2 = $("#APPROVAL_1").val();
+                if (isapprove2 == "1") {
+                    $(this).prop('checked', true);
+                } else {
+                    if (this.checked) {
+                        var returnVal = confirm("Harap perhatikan detil data dan nilai yang tercantum, di karenakan data tidak bisa di rubah lagi");
+                        $(this).prop("checked", returnVal);
+                        if (returnVal) {
+                            $("#APPROVAL_1Temp").val("1");
+                            $("#APPROVAL_1TempUpl").val("1");
+                            $("#APPROVAL_1TempEdit").val("1");
+                            $("#ORDER_DATE").attr("readonly", "readonly");
+                            $("#id_customer").attr("readonly", "readonly");
+                            $("#addArticle").hide();
+                            $("#UploadArticle").hide();
+                            $("#INV_DISC").attr("readonly", "readonly");
+                            $("#INV_DISC_AMT").attr("readonly", "readonly");
+                            for (var i = 0; i < dtltbls.rows().count(); i++) {
+                                var idx = i + 1;
+                                var idEdit = "EditArticle" + idx;
+                                var idDelete = "DeleteArticle" + idx;
+                                $("#" + idEdit).hide();
+                                $("#" + idDelete).hide();
+                            }
+
+                        } else {
+                            $("#APPROVAL_1Temp").val("0");
+                            $("#APPROVAL_1TempUpl").val("0");
+                            $("#APPROVAL_1TempEdit").val("0");
+                            $("#ORDER_DATE").removeAttr('readonly');
+                            $("#id_customer").removeAttr('readonly');
+                            $("#addArticle").show();
+                            $("#UploadArticle").show();
+                            $("#INV_DISC").removeAttr('readonly');
+                            $("#INV_DISC_AMT").removeAttr('readonly');
+                            for (var i = 0; i < dtltbls.rows().count(); i++) {
+                                var idx = i + 1;
+                                var idEdit = "EditArticle" + idx;
+                                var idDelete = "DeleteArticle" + idx;
+                                $("#" + idEdit).show();
+                                $("#" + idDelete).show();
+                            }
+                        }
+                        //var returnVal = confirm("Are you sure?");
+                        //$(this).prop("checked", returnVal);
+
+
+
+                    } else {
+                        $("#APPROVAL_1Temp").val("0");
+                        $("#APPROVAL_1TempUpl").val("0");
+                        $("#APPROVAL_1TempEdit").val("0");
+                        $("#ORDER_DATE").removeAttr('readonly');
+                        $("#id_customer").removeAttr('readonly');
+                        $("#addArticle").show();
+                        $("#UploadArticle").show();
+                        $("#INV_DISC").removeAttr('readonly');
+                        $("#INV_DISC_AMT").removeAttr('readonly');
+                        for (var i = 0; i < dtltbls.rows().count(); i++) {
+                            var idx = i + 1;
+                            var idEdit = "EditArticle" + idx;
+                            var idDelete = "DeleteArticle" + idx;
+                            $("#" + idEdit).show();
+                            $("#" + idDelete).show();
+                        }
+                    }
+                }
+                }
+
+
+        });
+        $('#size').on('change', function () {
+            var value = $("#article").val();
+            var sizeval = $("#size").val();
+
+            //if (lastclickedbtn == "addPeserta") {
+
+            //}
+            var lastclickedbtn = window.lastclicked;
+            var getValidate = function () {
+                var tmp = null;
+                $.ajax({
+                    'async': false,
+                    'type': "POST",
+                    'global': false,
+                    'dataType': 'html',
+                    'url': "/SalesOrder/validatearticle",
+                    'data': { 'request': "", 'target': 'arrange_url', 'method': 'method_target', 'article': value, 'size' : sizeval,'btnid': lastclickedbtn },
+                    'success': function (data) {
+                        tmp = data;
+                    }
+                });
+                return tmp;
+            }();
+            debugger;
+            if (getValidate == '"nopass"') {
+                alert("article sudah di tambahkan");
+                $("#size").val(null);
+                $("#size").trigger('change');
+            }
+
+        });
+    function openpopup(sender,article,size) {
+        debugger;
+        $("#datamode").val(sender.id);
+        window.lastclicked = sender.id;
+        if (sender.id == "addArticle") {
+            $("#size").val(null);
+            $("#size").trigger('change');
+            $("#article").val(null);
+            $("#article").trigger('change');
+            //$("#size").attr("disabled", "disabled");
+            $("#Size_1").val(0);
+            $("#Size_2").val(0);
+            $("#Size_3").val(0);
+            $("#Size_4").val(0);
+            $("#Size_5").val(0);
+            $("#Size_6").val(0);
+            $("#Size_7").val(0);
+            $("#Size_8").val(0);
+            $("#Size_9").val(0);
+            $("#Size_10").val(0);
+            $("#Size_11").val(0);
+            $("#Size_12").val(0);
+            $("#Size_13").val(0);
+
+            $("#qty").val(0);
+            $("#price").val(0);
+            $("#disc").val(0);
+            $("#disc_amt").val(0);
+
+            $("#final_price").val(0);
+            $("#is_disc_percBool").prop("checked", false);
+            //$("#discpercval").hide();
+            //$("#discamtval").show();
+            $("#dialog").dialog("open");
+        }
+        else if (sender.id == "UploadArticle") {
+            $("#dialogUpload").dialog("open");
+        }
+        else if (sender.id == "ViewPayments") {
+            var idval = $("#id").val();
+            debugger;
+
+            $.ajax({
+            url: '@Url.Action("getPaymentDetail", "SalesOrder")',
+                type: "GET",
+                data: { idorder: idval },
+                //startDate: mFromDate, endDate: mToDate1
+                dataType: 'json',
+                success: function (data) {
+
+                    if (data.length != 0) {
+                        debugger;
+                        console.log(data);
+                        //$("#tbodyiddtl").empty();
+                        dtltbls2.clear();
+
+                        var x = 1;
+                        data.forEach(function (item) { //insert rows
+                            var btnList = "<a href=\"/SalesOrder/DownloadFilePayment?iddata=\'"+ item.id +"\'\" id='DOWNLOAD" + x + "' class='btn btn-sm btn-dark'>" + item.filE_PAYMENT_NAME +"</a>";
+                            dtltbls2.row.add([item.bank, item.reF_ID, item.totaL_PAY, btnList]);
+                            //totalorder = totalorder + item.final_price;
+                            //totalqty = totalqty + item.qty;
+                            x++
+                        })
+
+
+                        dtltbls2.draw();
+                    }
+
+                },
+                error: function () {
+
+                }
+        });
+
+            $("#dialogPayment").dialog("open");
+        }
+        else {
+            var lastclickbtn = window.lastclicked;
+            var splitbtn = lastclickbtn.split("EditArticle");
+            //$("#SS_CODE").select2("readonly", true);
+            $("#articleEdit").attr("readonly", "readonly");
+            //$("#sizeEdit").attr("readonly", "readonly");
+            $("#priceEdit").attr("readonly", "readonly");
+            $("#qtyEdit").removeAttr('readonly');
+            $("#discEdit").removeAttr('readonly');
+            $("#Size_1_Edit").removeAttr('readonly');
+            $("#Size_2_Edit").removeAttr('readonly');
+            $("#Size_3_Edit").removeAttr('readonly');
+            $("#Size_4_Edit").removeAttr('readonly');
+            $("#Size_5_Edit").removeAttr('readonly');
+            $("#Size_6_Edit").removeAttr('readonly');
+            $("#Size_7_Edit").removeAttr('readonly');
+            $("#Size_8_Edit").removeAttr('readonly');
+            $("#Size_9_Edit").removeAttr('readonly');
+            $("#Size_10_Edit").removeAttr('readonly');
+            $("#Size_11_Edit").removeAttr('readonly');
+            $("#Size_12_Edit").removeAttr('readonly');
+            $("#Size_13_Edit").removeAttr('readonly');
+            $("#is_disc_percBoolEdit").removeAttr("disabled");
+            $("#disc_amtEdit").removeAttr('readonly');
+            var code = article;
+            var sizes = size;
+            $.ajax({
+            url: '@Url.Action("getOrderDataEdit2", "SalesOrder")',
+                type: "GET",
+                data: { article: code },
+                //startDate: mFromDate, endDate: mToDate1
+                dataType: 'json',
+                success: function (data) {
+                    console.log(data);
+                    if (splitbtn.length > 1) {
+                        var articledata = data.article;
+                        $("#articleEdit").val(articledata);
+                        $("#articleEdit").trigger('change');
+                        $("#qtyEdit").val(data.qty);
+                        $("#priceEdit").val(data.price);
+                        //$("#discEdit").val(data.disc);
+
+                        $("#Size_1_Edit").val(data.size_1);
+                        $("#Size_2_Edit").val(data.size_2);
+                        $("#Size_3_Edit").val(data.size_3);
+                        $("#Size_4_Edit").val(data.size_4);
+                        $("#Size_5_Edit").val(data.size_5);
+                        $("#Size_6_Edit").val(data.size_6);
+                        $("#Size_7_Edit").val(data.size_7);
+                        $("#Size_8_Edit").val(data.size_8);
+                        $("#Size_9_Edit").val(data.size_9);
+                        $("#Size_10_Edit").val(data.size_10);
+                        $("#Size_11_Edit").val(data.size_11);
+                        $("#Size_12_Edit").val(data.size_12);
+                        $("#Size_13_Edit").val(data.size_13);
+                        var disctype = data.is_disc_perc;
+                        if (disctype == "1") {
+                            $("#is_disc_percBoolEdit").prop("checked", true);
+                            $("#discEdit").val(data.disc);
+                            $("#disc_amtEdit").val(0);
+                            //$("#discamtvalEdit").hide();
+                            //$("#discpercvalEdit").show();
+
+                        } else {
+                            $("#is_disc_percBoolEdit").prop("checked", false);
+                            $("#discEdit").val(0);
+                            $("#disc_amtEdit").val(data.disc_amt);
+                            //$("#discpercvalEdit").hide();
+                        //    $("#discamtvalEdit").show();
+                        }
+                        $.ajax({
+                            type: "GET",
+                            url: "/SalesOrder/getdataprice",
+                            data: { article: articledata },
+                            success: function (data) {
+                                debugger;
+                                console.log(data);
+                                $("#priceEdit").val(data.articleprice)
+
+                                var priceval = $("#priceEdit").val();
+                                var qtyval = $("#qtyEdit").val();
+                                var discval = $("#discEdit").val();
+                                var discamtval = $("#disc_amtEdit").val();
+                                if (disctype == "1") {
+                                    if (qtyval != 0) {
+                                        priceval = priceval * qtyval;
+                                        if (priceval != null && discval != null) {
+                                            var discvalue = (priceval * discval) / 100;
+                                            var total = (priceval - discvalue).toFixed(2);
+                                            $("#final_priceEdit").val(total);
+                                        } else {
+                                            $("#final_priceEdit").val(0);
+                                        }
+                                    } else {
+                                        $("#final_priceEdit").val(0);
+                                    }
+
+                                } else {
+                                    if (qtyval != 0) {
+                                        priceval = priceval * qtyval;
+                                        if (priceval != null && discamtval != null) {
+                                            var discvalue = discamtval;
+                                            var total = (priceval - discvalue).toFixed(2);
+                                            $("#final_priceEdit").val(total);
+                                        } else {
+                                            $("#final_priceEdit").val(0);
+                                        }
+                                    } else {
+                                        $("#final_priceEdit").val(0);
+                                    }
+                                }
+                                //$('#SS_CODE_EDIT').html(s);
+                                ////$("#SSList").select2({ placeholder: "Select SS" });
+                                //$("#SS_CODE_EDIT").val(null);
+                                //$("#SS_CODE_EDIT").trigger('change');
+
+                            }
+                        })
+                        $.ajax({
+                            type: "GET",
+                            url: "/SalesOrder/getsizecode",
+                            data: { article: articledata },
+                            success: function (data) {
+                                debugger;
+                                console.log(data);
+                                $("#sizeCodeTxtEdit").val(data.sizecode)
+                                if (data.size1 != null && data.size1 != "") {
+                                    $("#Size1lblEdit").text(data.size1);
+                                    var size1 = data.size1.substr(1);
+                                    if (data.size1.length > 2) {
+                                        size1 = data.size1.substr(2);
+                                    }
+                                    if (size1 == "5") {
+                                        $("#Size_1_Edit").val(0);
+                                        $("#Size_1_Edit").attr("readonly", "readonly");
+
+                                    } else {
+                                        $("#Size_1_Edit").removeAttr('readonly');
+
+                                    }
+                                }
+                                if (data.size2 != null && data.size2 != "") {
+                                    $("#Size2lblEdit").text(data.size2);
+                                    var size2 = data.size2.substr(1);
+                                    if (data.size2.length > 2) {
+                                        size2 = data.size2.substr(2);
+                                    }
+                                    if (size2 == "5") {
+                                        $("#Size_2_Edit").val(0);
+
+                                        $("#Size_2_Edit").attr("readonly", "readonly");
+
+                                    } else {
+                                        $("#Size_2_Edit").removeAttr('readonly');
+
+                                    }
+                                }
+                                if (data.size3 != null && data.size3 != "") {
+                                    $("#Size3lblEdit").text(data.size3);
+                                    var size3 = data.size3.substr(1);
+                                    if (data.size3.length > 2) {
+                                        size3 = data.size3.substr(2);
+                                    }
+                                    if (size3 == "5") {
+                                        $("#Size_3_Edit").val(0);
+
+                                        $("#Size_3_Edit").attr("readonly", "readonly");
+
+                                    } else {
+                                        $("#Size_3_Edit").removeAttr('readonly');
+
+                                    }
+                                }
+                                if (data.size4 != null && data.size4 != "") {
+                                    $("#Size4lblEdit").text(data.size4);
+                                    var size4 = data.size4.substr(1);
+                                    if (data.size4.length > 2) {
+                                        size4 = data.size4.substr(2);
+                                    }
+                                    if (size4 == "5") {
+                                        $("#Size_4_Edit").val(0);
+
+                                        $("#Size_4_Edit").attr("readonly", "readonly");
+
+                                    } else {
+                                        $("#Size_4_Edit").removeAttr('readonly');
+
+                                    }
+                                }
+                                if (data.size5 != null && data.size5 != "") {
+                                    $("#Size5lblEdit").text(data.size5);
+                                    var size5 = data.size5.substr(1);
+                                    if (data.size5.length > 2) {
+                                        size5 = data.size5.substr(2);
+                                    }
+                                    if (size5 == "5") {
+                                        $("#Size_5_Edit").val(0);
+
+                                        $("#Size_5_Edit").attr("readonly", "readonly");
+
+                                    } else {
+                                        $("#Size_5_Edit").removeAttr('readonly');
+
+                                    }
+                                }
+                                if (data.size6 != null && data.size6 != "") {
+                                    $("#Size6lblEdit").text(data.size6);
+                                    var size6 = data.size6.substr(1);
+                                    if (data.size6.length > 2) {
+                                        size6 = data.size6.substr(2);
+                                    }
+                                    if (size6 == "5") {
+                                        $("#Size_6_Edit").val(0);
+
+                                        $("#Size_6_Edit").attr("readonly", "readonly");
+
+                                    } else {
+                                        $("#Size_6_Edit").removeAttr('readonly');
+
+                                    }
+                                }
+                                if (data.size7 != null && data.size7 != "") {
+                                    $("#Size7lblEdit").text(data.size7);
+                                    var size7 = data.size7.substr(1);
+                                    if (data.size7.length > 2) {
+                                        size7 = data.size7.substr(2);
+                                    }
+                                    if (size7 == "5") {
+                                        $("#Size_7_Edit").val(0);
+
+                                        $("#Size_7_Edit").attr("readonly", "readonly");
+
+                                    } else {
+                                        $("#Size_7_Edit").removeAttr('readonly');
+
+                                    }
+                                }
+                                if (data.size8 != null && data.size8 != "") {
+                                    $("#Size8lblEdit").text(data.size8);
+                                    var size8 = data.size8.substr(1);
+                                    if (data.size8.length > 2) {
+                                        size8 = data.size8.substr(2);
+                                    }
+                                    if (size8 == "5") {
+                                        $("#Size_8_Edit").val(0);
+
+                                        $("#Size_8_Edit").attr("readonly", "readonly");
+
+                                    } else {
+                                        $("#Size_8_Edit").removeAttr('readonly');
+
+                                    }
+                                }
+                                if (data.size9 != null && data.size9 != "") {
+                                    $("#Size9lblEdit").text(data.size9);
+                                    var size9 = data.size9.substr(1);
+                                    if (data.size9.length > 2) {
+                                        size9 = data.size9.substr(2);
+                                    }
+                                    if (size9 == "5") {
+                                        $("#Size_9_Edit").val(0);
+
+                                        $("#Size_9_Edit").attr("readonly", "readonly");
+
+                                    } else {
+                                        $("#Size_9_Edit").removeAttr('readonly');
+
+                                    }
+                                }
+                                if (data.size10 != null && data.size10 != "") {
+                                    $("#Size10lblEdit").text(data.size10);
+                                    var size10 = data.size10.substr(1);
+                                    if (data.size10.length > 2) {
+                                        size10 = data.size10.substr(2);
+                                    }
+                                    if (size10 == "5") {
+                                        $("#Size_10_Edit").val(0);
+
+                                        $("#Size_10_Edit").attr("readonly", "readonly");
+
+                                    } else {
+                                        $("#Size_10_Edit").removeAttr('readonly');
+
+                                    }
+                                }
+                                if (data.size11 != null && data.size11 != "") {
+                                    $("#Size11lblEdit").text(data.size11);
+                                    var size11 = data.size11.substr(1);
+                                    if (data.size11.length > 2) {
+                                        size11 = data.size11.substr(2);
+                                    }
+                                    if (size11 == "5") {
+                                        $("#Size_11_Edit").val(0);
+
+                                        $("#Size_11_Edit").attr("readonly", "readonly");
+
+                                    } else {
+                                        $("#Size_11_Edit").removeAttr('readonly');
+
+                                    }
+                                }
+                                if (data.size12 != null && data.size12 != "") {
+                                    $("#Size12lblEdit").text(data.size12);
+                                    var size12 = data.size12.substr(1);
+                                    if (data.size12.length > 2) {
+                                        size12 = data.size12.substr(2);
+                                    }
+                                    if (size12 == "5") {
+                                        $("#Size_12_Edit").val(0);
+
+                                        $("#Size_12_Edit").attr("readonly", "readonly");
+
+                                    } else {
+                                        $("#Size_12_Edit").removeAttr('readonly');
+
+                                    }
+                                }
+                                if (data.size13 != null && data.size13 != "") {
+                                    $("#Size13lblEdit").text(data.size13);
+                                    var size13 = data.size13.substr(1);
+                                    if (data.size13.length > 2) {
+                                        size13 = data.size13.substr(2);
+                                    }
+                                    if (size13 == "5") {
+                                        $("#Size_13_Edit").val(0);
+
+                                        $("#Size_13_Edit").attr("readonly", "readonly");
+
+                                    } else {
+                                        $("#Size_13_Edit").removeAttr('readonly');
+
+                                    }
+                                }
+                            }
+                        })
+                        $("#btnPopupMod").attr('value', 'Update Order');
+
+                    } else {
+                        var articledata = data.article;
+                        $("#articleEdit").val(articledata);
+                        $("#articleEdit").trigger('change');
+                        $("#qtyEdit").val(data.qty);
+                        $("#priceEdit").val(data.price);
+                        $("#discEdit").val(data.disc);
+
+                        $("#Size_1_Edit").val(data.size_1);
+                        $("#Size_2_Edit").val(data.size_2);
+                        $("#Size_3_Edit").val(data.size_3);
+                        $("#Size_4_Edit").val(data.size_4);
+                        $("#Size_5_Edit").val(data.size_5);
+                        $("#Size_6_Edit").val(data.size_6);
+                        $("#Size_7_Edit").val(data.size_7);
+                        $("#Size_8_Edit").val(data.size_8);
+                        $("#Size_9_Edit").val(data.size_9);
+                        $("#Size_10_Edit").val(data.size_10);
+                        $("#Size_11_Edit").val(data.size_11);
+                        $("#Size_12_Edit").val(data.size_12);
+                        $("#Size_13_Edit").val(data.size_13);
+
+                        $("#Size_1_Edit").attr("readonly", "readonly");
+                        $("#Size_2_Edit").attr("readonly", "readonly");
+                        $("#Size_3_Edit").attr("readonly", "readonly");
+                        $("#Size_4_Edit").attr("readonly", "readonly");
+                        $("#Size_5_Edit").attr("readonly", "readonly");
+                        $("#Size_6_Edit").attr("readonly", "readonly");
+                        $("#Size_7_Edit").attr("readonly", "readonly");
+                        $("#Size_8_Edit").attr("readonly", "readonly");
+                        $("#Size_9_Edit").attr("readonly", "readonly");
+                        $("#Size_10_Edit").attr("readonly", "readonly");
+                        $("#Size_11_Edit").attr("readonly", "readonly");
+                        $("#Size_12_Edit").attr("readonly", "readonly");
+                        var disctype = data.is_disc_perc;
+                        if (disctype == "1") {
+                            $("#is_disc_percBoolEdit").prop("checked", true);
+                            $("#discEdit").val(data.disc);
+                            $("#disc_amtEdit").val(0);
+                            //$("#discamtvalEdit").hide();
+                            //$("#discpercvalEdit").show();
+
+                        } else {
+                            $("#is_disc_percBoolEdit").prop("checked", false);
+                            $("#discEdit").val(0);
+                            $("#disc_amtEdit").val(data.disc_amt);
+                            //$("#discpercvalEdit").hide();
+                        //    $("#discamtvalEdit").show();
+                        }
+                        $("#is_disc_percBoolEdit").attr("disabled", true);
+                        $("#disc_amtEdit").attr("readonly", "readonly");
+                        $.ajax({
+                            type: "GET",
+                            url: "/SalesOrder/getdataprice",
+                            data: { article: articledata },
+                            success: function (data) {
+                                debugger;
+                                console.log(data);
+                                $("#priceEdit").val(data.articleprice)
+
+                                var priceval = $("#priceEdit").val();
+                                var qtyval = $("#qtyEdit").val();
+                                var discval = $("#discEdit").val();
+                                var discamtval = $("#disc_amtEdit").val();
+                                if (disctype == "1") {
+                                    if (qtyval != 0) {
+                                        priceval = priceval * qtyval;
+                                        if (priceval != null && discval != null) {
+                                            var discvalue = (priceval * discval) / 100;
+                                            var total = (priceval - discvalue).toFixed(2);
+                                            $("#final_priceEdit").val(total);
+                                        } else {
+                                            $("#final_priceEdit").val(0);
+                                        }
+                                    } else {
+                                        $("#final_priceEdit").val(0);
+                                    }
+
+                                } else {
+                                    if (qtyval != 0) {
+                                        priceval = priceval * qtyval;
+                                        if (priceval != null && discamtval != null) {
+                                            var discvalue = discamtval;
+                                            var total = (priceval - discvalue).toFixed(2);
+                                            $("#final_priceEdit").val(total);
+                                        } else {
+                                            $("#final_priceEdit").val(0);
+                                        }
+                                    } else {
+                                        $("#final_priceEdit").val(0);
+                                    }
+                                }
+
+                                //$('#SS_CODE_EDIT').html(s);
+                                ////$("#SSList").select2({ placeholder: "Select SS" });
+                                //$("#SS_CODE_EDIT").val(null);
+                                //$("#SS_CODE_EDIT").trigger('change');
+
+                            }
+                        })
+
+
+
+                        $("#qtyEdit").attr("readonly", "readonly");
+                        $("#discEdit").attr("readonly", "readonly");
+
+                        //$("#NILAI_EDIT").attr("disabled", "disabled");
+                        //$("#NoSertifikat_EDIT").attr("disabled", "disabled");
+                        //$("#isCertified_EDIT").attr("disabled", "disabled");
+                        //$("#isPresent_EDIT").attr("disabled", "disabled");
+                        //$("#fileSertifikat_EDIT").attr("disabled", "disabled");
+                        $("#btnPopupMod").attr('value', 'Hapus Order');
+                    }
+
+                },
+                error: function () {
+
+                }
+
+        });
+            $("#dialogEdit").dialog("open");
+
+        }
+    }
+
+        function allowOnlyNumber(evt) {
+            var charCode = (evt.which) ? evt.which : event.keyCode
+            if (charCode > 31 && (charCode < 48 || charCode > 57))
+                return false;
+            return true;
+        }
+        function alertfirst() {
+            var totalqty = $("#TOTAL_QTY").val();
+            var getValidate = function () {
+                var tmp = null;
+                $.ajax({
+                    'async': false,
+                    'type': "POST",
+                    'global': false,
+                    'dataType': 'html',
+                    'url': "/SalesOrder/validateqtyShipping",
+                    'data': { 'request': "", 'target': 'arrange_url', 'method': 'method_target', 'qty': totalqty },
+                    'success': function (data) {
+                        tmp = data;
+                    }
+                });
+                return tmp;
+            }();
+            if (getValidate == '"pass"') {
+                if (confirm("Are you sure saving data?")) {
+                    $('#formcreate').submit();
+                    //SaveForm();
+                } else {
+                    return false;
+                }
+            } else {
+                alert("Minimum qty has not met");
+            }
+
+        }
+        function numberWithCommas(x) {
+            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+        function alertfirst2(sender) {
+            console.log(sender);
+            debugger;
+            // $("#" + sender.id).val()
+            if (sender.id == "btnAdd") {
+                var qtyval = $('#qty').val();
+                var getValidate = function () {
+                    var tmp = null;
+                    $.ajax({
+                        'async': false,
+                        'type': "POST",
+                        'global': false,
+                        'dataType': 'html',
+                        'url': "/SalesOrder/validateqty",
+                        'data': { 'request': "", 'target': 'arrange_url', 'method': 'method_target', 'qty': qtyval },
+                        'success': function (data) {
+                            tmp = data;
+                        }
+                    });
+                    return tmp;
+                }();
+
+                debugger;
+                if (getValidate == '"pass"') {
+
+                    if (confirm("Are you sure saving data?")) {
+                        $('#formdtl').submit();
+
+                        //SaveForm();
+                    } else {
+                        return false;
+                    }
+                } else {
+                    var errmsg = "";
+                    if (qtyval < 20) {
+                        errmsg += "minimum quantity has not been met \n"
+                    }
+
+                    alert(errmsg);
+
+                }
+            } else {
+                var textval = $("#" + sender.id).val();
+                if (textval == "Update Order") {
+                    var qtyval = $('#qtyEdit').val();
+                    var getValidate = function () {
+                        var tmp = null;
+                        $.ajax({
+                            'async': false,
+                            'type': "POST",
+                            'global': false,
+                            'dataType': 'html',
+                            'url': "/SalesOrder/validateqty",
+                            'data': { 'request': "", 'target': 'arrange_url', 'method': 'method_target', 'qty': qtyval },
+                            'success': function (data) {
+                                tmp = data;
+                            }
+                        });
+                        return tmp;
+                    }();
+
+                    debugger;
+                    if (getValidate == '"pass"') {
+                        if (confirm("Are you sure saving data?")) {
+                            $('#formdtlEdit').submit();
+
+                            //SaveForm();
+                        } else {
+                            return false;
+                        }
+                    } else {
+                        var errmsg = "";
+                        if (qtyval < 20) {
+                            errmsg += "minimum quantity has not been met \n"
+                        }
+
+                        alert(errmsg);
+
+                    }
+                } else {
+                    if (confirm("Are you sure saving data?")) {
+                        $('#formdtlEdit').submit();
+
+                        //SaveForm();
+                    } else {
+                        return false;
+                    }
+                }
+            }
+
+
+        }
+        function alertfirstupl(sender) {
+            debugger;
+
+            if (confirm("Are you sure saving data?")) {
+                $('#formdtlupload').submit();
+
+                //SaveForm();
+            } else {
+                return false;
+            }
+
+        }
+        function alertfirst3(sender) {
+            debugger;
+
+            if (confirm("Are you sure saving data?")) {
+                $('#formdtlEdit').submit();
+
+                //SaveForm();
+            } else {
+                return false;
+            }
+
+        }
+    </script>
+}

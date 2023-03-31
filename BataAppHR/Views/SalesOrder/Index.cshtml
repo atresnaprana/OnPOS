@@ -1,0 +1,226 @@
+﻿@model BataAppHR.Models.SalesFront
+@{
+    ViewData["Title"] = "Form Data Sales Order";
+
+    var isAdmin = User.IsInRole("Admin").ToString();
+    var typecode = ViewData["TypeCode"];
+    var errors = Model.error;
+}
+
+<style>
+    #myPopup {
+        display: none;
+        position: absolute;
+        top: 50px;
+        right: 50%;
+        background-color: blue;
+        height: 100px;
+        width: 100px;
+    }
+
+    #myExit {
+        position: absolute;
+        right: 0px;
+        text-align: right;
+        color: white;
+        background-color: red;
+    }
+
+    .btn-primary2 {
+        color: #ffffff;
+        background-color: #000000;
+        border-color: #000000 !important
+    }
+
+        .btn-primary2:hover {
+            color: #fff;
+            background-color: #be0000;
+            border-color: #be0000 !important
+        }
+</style>
+<p>
+</p>
+
+<div class="container" id="bootstrap-overrides">
+    <div class="row">
+        <div class="col-sm align-self-end">
+            <table>
+                <tr>
+                    <td>
+                        <a asp-action="Create" class="btn btn-dark">Input Data Baru</a>
+                    </td>
+                    @*<td>
+                        <a href="#/" onclick="openpopupUpload(this,'')" id="UploadPeserta" class="btn btn-dark">Upload Artikel</a>
+                    </td>*@
+                </tr>
+            </table>
+        </div>
+
+    </div>
+</div>
+<br />
+
+<table class="table table-striped" id="IndexTbl">
+    <thead>
+        <tr>
+            <th>
+                Order Date
+            </th>
+            <th>
+                Order Id
+            </th>
+            <th>
+                Sales
+            </th>
+            <th>
+                Total Order
+            </th>
+            <th>
+                Total Qty
+            </th>
+            <th>
+                Inv no
+            </th>
+            <th>
+                Customer
+            </th>
+            <th>
+                <label>Actions</label>
+            </th>
+        </tr>
+    </thead>
+    <tbody id="tbodyid">
+
+        @foreach (var dt in Model.salesOrdeData)
+        {
+        <tr>
+            @if (dt.ORDER_DATE != null)
+            {
+                <td data-order="@dt.ORDER_DATE.Value.ToString("MMddyyyyHHmmss")">
+                    @Html.DisplayFor(modelItem => dt.ORDER_DATE)
+
+                </td>
+            }
+            else
+            {
+
+                <td>
+                    @Html.DisplayFor(modelItem => dt.ORDER_DATE)
+
+                </td>
+            }
+            <td>
+                @Html.DisplayFor(modelItem => dt.id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => dt.EMP_CODE)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => dt.TOTAL_ORDER)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => dt.TOTAL_QTY)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => dt.picking_no)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => dt.EMAIL)
+            </td>
+            <td>
+                <div>
+                    <a asp-action="Edit" asp-route-id="@dt.id" class="btn btn-sm btn-dark">Edit</a>
+                    &nbsp;
+                    @*@if (User.IsInRole("Admin"))
+        {
+            <a asp-action="Delete" asp-route-id="@dt.id" class="btn btn-sm btn-dark">Delete</a>
+
+        }*@
+                    <a asp-action="Delete" asp-route-id="@dt.id" class="btn btn-sm btn-dark">Delete</a>
+
+                </div>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
+
+<div id="dialogUpload" title="Upload Article">
+    <center>
+        <form asp-action="UploadPesertaAll" id="formdtlupload" enctype="multipart/form-data">
+            <div class="container" style="width:100%;height:100%;">
+                <div class="row">
+                    <div class="form-group">
+                        <table>
+                            <tr>
+                                <td>
+                                    <label class="control-label">Upload: </label>
+                                </td>
+                                <td style="padding-left:50%">
+                                    <input type="file" asp-for="fileUplArticle" />
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group">
+                        <input type="button" value="Upload Article" onclick="alertfirstupl(this)" class="btn btn-red" />
+
+                    </div>
+                </div>
+            </div>
+        </form>
+    </center>
+</div>
+@section Scripts{
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+    <script>
+    var tableDtl;
+    var IndexTbl;
+    $(document).ready(function () {
+        var msg = '@errors';
+        if (msg != '' && msg != 'null') {
+            alert(msg);
+        }
+        $("#dialogUpload").dialog({
+            width: 450,
+            height: 410,
+            modal: true,
+            resizable: false,
+            close: function () {
+                //var audio = $("#player");
+                //audio[0].pause();
+            }
+        });
+        $("#dialogUpload").dialog("close");
+     
+      
+            IndexTbl = $('#IndexTbl').DataTable({
+                stateSave: true,
+                "order": [[0, "desc"]],
+                "bPaginate": true,
+                "sPaginationType": "full_numbers",
+                "iDisplayLength": 10
+            });
+          
+            
+        });
+    function openpopupUpload() {
+        $("#dialogUpload").dialog("open");
+    }
+    function alertfirstupl(sender) {
+        debugger;
+
+        if (confirm("Are you sure saving data?")) {
+            $('#formdtlupload').submit();
+
+            //SaveForm();
+        } else {
+            return false;
+        }
+
+    }
+    </script>
+}
+

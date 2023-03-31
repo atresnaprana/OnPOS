@@ -1,0 +1,60 @@
+﻿@model BataAppHR.Models.dbProgram
+
+@{
+    ViewData["Title"] = "Update Data";
+}
+<style>
+    input.largerCheckbox {
+        width: 20px;
+        height: 20px;
+    }
+</style>
+<h1>Update Data</h1>
+<h3 class="display-5">Form Edit</h3>
+<hr />
+<form asp-action="Edit" id="formcreate" enctype="multipart/form-data">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm">
+
+                <div class="form-group">
+                    <label class="control-label">Program Description:</label>
+                    <input asp-for="ProgramName" class="form-control" />
+                    <span asp-validation-for="ProgramName" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <input type="button" value="Simpan data" onclick="alertfirst()" class="btn btn-red" />
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+<div>
+    <a asp-action="Index" class="btn btn-dark">Kembali ke List</a>
+</div>
+@section Scripts{
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+    <script>
+
+    function allowOnlyNumber(evt) {
+        var charCode = (evt.which) ? evt.which : event.keyCode
+        if (charCode > 31 && (charCode < 48 || charCode > 57))
+            return false;
+        return true;
+        }
+    function alertfirst() {
+
+        if (confirm("Are you sure saving data?")) {
+            $('#formcreate').submit();
+        } else {
+            return false;
+        }
+
+    }
+    </script>
+}
+
+

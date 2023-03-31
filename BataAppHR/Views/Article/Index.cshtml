@@ -1,0 +1,164 @@
+﻿@model BataAppHR.Models.articlefront
+@{
+    ViewData["Title"] = "Article List";
+}
+
+<style>
+    #myPopup {
+        display: none;
+        position: absolute;
+        top: 50px;
+        right: 50%;
+        background-color: blue;
+        height: 100px;
+        width: 100px;
+    }
+
+    #myExit {
+        position: absolute;
+        right: 0px;
+        text-align: right;
+        color: white;
+        background-color: red;
+    }
+
+    .btn-primary2 {
+        color: #ffffff;
+        background-color: #000000;
+        border-color: #000000 !important
+    }
+
+        .btn-primary2:hover {
+            color: #fff;
+            background-color: #be0000;
+            border-color: #be0000 !important
+        }
+</style>
+<p>
+</p>
+<div class="container" id="bootstrap-overrides">
+    <div class="row">
+        <div class="col-sm align-self-end">
+            <table>
+                <tr>
+                    <td>
+                        <a asp-action="Create" class="btn btn-dark">Input Data Baru</a>
+                    </td>
+                    <td>
+                        <a href="#/" onclick="openpopupUpload(this,'')" id="UploadArticle" class="btn btn-dark">Upload Artikel</a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+    </div>
+</div>
+<br />
+<table class="table table-striped" id="IndexTbl">
+    <thead>
+        <tr>
+            <th>Num.</th>
+            <th>
+                Article
+            </th>
+            <th>
+                File Name
+            </th>
+            <th>
+                <label>Actions</label>
+            </th>
+        </tr>
+    </thead>
+    <tbody id="tbodyid">
+        @{
+            var i = 1;
+        }
+        @foreach (var dt in Model.dataarticle)
+        {
+            <tr>
+                <td>
+                    @i
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => dt.Article)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => dt.FILE_IMG_NAME)
+                </td>
+
+                <td>
+                    <div>
+                        <a asp-action="Edit" asp-route-id="@dt.id" class="btn btn-sm btn-dark">Edit</a>
+                        &nbsp;
+                        <a asp-action="Delete" asp-route-id="@dt.id" class="btn btn-sm btn-dark">Delete</a>
+                    </div>
+                </td>
+            </tr>
+            i++;
+        }
+    </tbody>
+</table>
+<div id="dialogUpload" title="Upload Peserta">
+    <center>
+        <form asp-action="UploadArticleAll" id="formdtlupload" enctype="multipart/form-data">
+            <div class="container" style="width:100%;height:100%;">
+                <div class="row">
+                    <div class="form-group">
+                        <table>
+                            <tr>
+                                <td>
+                                    <label class="control-label">Upload: </label>
+                                </td>
+                                <td style="padding-left:50%">
+                                    <input type="file" asp-for="fileUploadArticle" />
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group">
+                        <input type="button" value="Upload peserta" onclick="alertfirstupl(this)" class="btn btn-red" />
+
+                    </div>
+                </div>
+            </div>
+        </form>
+    </center>
+</div>
+@section Scripts{
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+    <script>
+        $(document).ready(function () {
+            $('#IndexTbl').DataTable({
+                stateSave: true,
+            });
+            $("#dialogUpload").dialog({
+                width: 450,
+                height: 410,
+                modal: true,
+                resizable: false,
+                close: function () {
+                    //var audio = $("#player");
+                    //audio[0].pause();
+                }
+            });
+            $("#dialogUpload").dialog("close");
+        });
+        function openpopupUpload() {
+            $("#dialogUpload").dialog("open");
+        }
+        function alertfirstupl(sender) {
+            debugger;
+
+            if (confirm("Are you sure saving data?")) {
+                $('#formdtlupload').submit();
+
+                //SaveForm();
+            } else {
+                return false;
+            }
+
+        }
+    </script>
+}

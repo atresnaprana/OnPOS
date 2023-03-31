@@ -1,0 +1,387 @@
+﻿@model IEnumerable<BataAppHR.Models.ReportModel>
+@{
+    ViewData["Title"] = "Report Data SS";
+    var edpCode = ViewData["EdpCode"];
+    var isAdmin = User.IsInRole("Admin").ToString();
+}
+
+<style>
+    #myPopup {
+        display: none;
+        position: absolute;
+        top: 50px;
+        right: 50%;
+        background-color: blue;
+        height: 100px;
+        width: 100px;
+    }
+
+    #myExit {
+        position: absolute;
+        right: 0px;
+        text-align: right;
+        color: white;
+        background-color: red;
+    }
+
+    .btn-primary2 {
+        color: #ffffff;
+        background-color: #000000;
+        border-color: #000000 !important
+    }
+
+        .btn-primary2:hover {
+            color: #fff;
+            background-color: #be0000;
+            border-color: #be0000 !important
+        }
+</style>
+<p>
+</p>
+<div class="container" id="bootstrap-overrides" style="display:none;">
+    <div class="row">
+        <div class="col-sm">
+            @*<form asp-action="Index" id="ReloadIndex" method="post">
+
+                </form>*@
+            @if (User.IsInRole("Admin"))
+            {
+                <label><b>Pilih/ketik EDP untuk melihat data: </b></label>
+                <select id="EdpCodeList" name="EdpCodeList"></select>
+                <br />
+                <br />
+                <input type="button" value="Cari Data" onclick="PopulateTable()" class="btn btn-dark" />
+            }
+            @*<a asp-controller="FormVaksin" asp-action="Index" class="btn btn-dark" id="ReloadIndex"> Submit</a>*@
+        </div>
+
+    </div>
+</div>
+<br />
+<table class="table table-striped" id="IndexTbl">
+    <thead>
+        <tr>
+            <th>Num.</th>
+            <th>
+                District
+            </th>
+            <th>
+                EDP
+            </th>
+            <th>
+                Store Location
+            </th>
+            <th>
+                Area
+            </th>
+            <th>
+                SS Code
+            </th>
+            <th>
+                Nama
+            </th>
+            <th>
+                Position
+            </th>
+            <th>
+                Flag Aktif
+            </th>
+            <th>
+                Jenis Kelamin
+            </th>
+            <th>
+                KTP
+            </th>
+            <th>
+                No HP
+            </th>
+            <th>
+                Email
+            </th>
+            <th>
+                Size Seragam
+            </th>
+            <th>
+                Size Sepatu (UK)
+            </th>
+            <th>
+                Join Date
+            </th>
+            <th>
+                Resign Date
+            </th>
+            <th>
+                Alasan Resign
+            </th>
+            <th>
+                Resign Group 1
+            </th>
+            <th>
+                Resign Group 2
+            </th>
+            <th>
+                Lama Kerja
+            </th>
+            <th>
+                Vaksin 1
+            </th>
+            <th>
+                Vaksin 2
+            </th>
+            <th>
+                Days
+            </th>
+            <th>
+                Month
+            </th>
+            <th>
+                Year
+            </th>
+            <th>
+                Last Update Store
+            </th>
+            <th>
+                Last Update Store user
+            </th>
+            <th>
+                Last Update
+            </th>
+            <th>
+                Last Update user
+            </th>
+        </tr>
+    </thead>
+    <tbody id="tbodyid">
+        @{
+            var i = 1;
+        }
+        @foreach (var dt in Model)
+        {
+        <tr>
+            <td>
+                @i
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => dt.DISTRICT)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => dt.EDP_CODE)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => dt.STORE_LOCATION)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => dt.AREA)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => dt.SS_CODE)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => dt.NAMA_SS)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => dt.POSITION)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => dt.FLAG_AKTIF)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => dt.SEX)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => dt.KTP)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => dt.HP_SS)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => dt.EMAIL_SS)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => dt.SIZE_SERAGAM)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => dt.SIZE_SEPATU_UK)
+            </td>
+            <td>
+                @if (dt.JOIN_DATE != null)
+                {
+                    @dt.JOIN_DATE.Value.ToString("dd/MM/yyyy")
+                }
+            </td>
+            <td>
+                @if (dt.RESIGN_DATE != null)
+                {
+                    @dt.RESIGN_DATE.Value.ToString("dd/MM/yyyy")
+                }
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => dt.RESIGN_TXT)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => dt.RESIGN_TYPE)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => dt.RESIGN_TYPE2)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => dt.LAMA_KERJA)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => dt.VAKSIN1)
+                @*@Html.DisplayFor(modelItem => dt.VAKSIN1)*@
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => dt.VAKSIN2)
+
+                @*@Html.DisplayFor(modelItem => dt.VAKSIN2)*@
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => dt.DAYS_LENGTH)
+
+                @*@Html.DisplayFor(modelItem => dt.VAKSIN2)*@
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => dt.MONTH_LENGTH)
+
+                @*@Html.DisplayFor(modelItem => dt.VAKSIN2)*@
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => dt.YEAR_LENGTH)
+
+                @*@Html.DisplayFor(modelItem => dt.VAKSIN2)*@
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => dt.STORE_UPDATE)
+
+
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => dt.STORE_UPDATE_PERSON)
+
+
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => dt.UPDATE_DATE)
+
+
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => dt.UPDATE_USER)
+
+
+            </td>
+        </tr>
+            i++;
+        }
+    </tbody>
+</table>
+
+@section Scripts{
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+    <script>
+    $(document).ready(function () {
+        $('#IndexTbl').DataTable({
+            "sPaginationType": "full_numbers",
+            "bJQueryUI": true,
+            "bProcessing": true,
+            "aLengthMenu": [[10, 50, 100, 200, -1], ["10", "50", "100", "200", "All"]],
+            "stateSave": true,
+            "oSelectorOpts": { filter: 'applied' },
+            dom: "<'row'<'col-sm-12'B>>" +
+                "<'row'<'col-sm-6'l><'col-sm-6'f>>" +
+                "<'row'<'col-sm-12'tr>>" +
+                "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+            buttons: [
+                {
+                    extend: 'excel',
+                    text: 'Export to Excel',
+                    title: 'SSListTable',
+                    exportOptions: {
+                        columns: ':visible'
+                        //,modifier: {
+                        //    page: 'current'
+                        //}
+                    }
+                }
+            ],
+            "columnDefs": [{
+                "className": "dt-center",
+                "targets": [0, 1]
+            }],
+        });
+            $.ajax({
+                type: "GET",
+                url: "/FormVaksin/getdata",
+                data: "{}",
+                success: function (data) {
+                    debugger;
+                    var s = '';
+                    for (var i = 0; i < data.length; i++) {
+                        s += '<option value="' + data[i].edp + '">' + data[i].edp + ' - ' + data[i].store_location +'</option>';
+                    }
+                    $("#EdpCodeList").html(s);
+                    $("#EdpCodeList").select2({ placeholder: "Select Edp Code" });
+                    var edpCode = "@edpCode";
+                    debugger;
+                    if (edpCode != "0") {
+                        $("#EdpCodeList").val(edpCode).change();
+                    }
+                }
+            });
+        });
+        $('#EdpCodeList').on('change', function () {
+            var value = $("#EdpCodeList").val();
+            $('#ReloadIndex').attr('asp-route-id', value);
+        });
+    function PopulateTable() {
+        $("#tbodyid").empty();
+        var value = $("#EdpCodeList").val();
+        if (value != null && value != "") {
+
+            $.ajax({
+                url: '@Url.Action("getTbl", "FormVaksin")',
+                type: "GET",
+                data: { id: value },
+                //startDate: mFromDate, endDate: mToDate1
+                dataType: 'json',
+                success: function (data) {
+                    debugger;
+                    var tr;
+                    //Append each row to html table
+                    for (var i = 0; i < data.length; i++) {
+                        debugger;
+                        var number = parseInt(i) + 1;
+                        tr = $('<tr/>');
+                        tr.append("<td>" + number + "</td>");
+                        tr.append("<td>" + data[i].sS_CODE + "</td>");
+                        tr.append("<td>" + data[i].namA_SS + "</td>");
+                        tr.append("<td>" + data[i].ktp + "</td>");
+                        tr.append("<td>" + data[i].hP_SS + "</td>");
+                        if (data[i].vaksiN1 == "Y") {
+                            tr.append("<td><input type='checkbox' name='vaksin1' checked disabled></td>");
+                        } else {
+                            tr.append("<td><input type='checkbox' name='vaksin1' disabled></td>");
+                        }
+                        if (data[i].vaksiN2 == "Y") {
+                            tr.append("<td><input type='checkbox' name='vaksin2' checked disabled></td>");
+                        } else {
+                            tr.append("<td><input type='checkbox' name='vaksin2' disabled></td>");
+                        }
+                        $('#IndexTbl').append(tr);
+                       /* location.reload();*/
+                    }
+                },
+                error: function () {
+
+                }
+
+            });
+        } else {
+            alert('Please fill EDP Code');
+        }
+
+    }
+    </script>
+}
+

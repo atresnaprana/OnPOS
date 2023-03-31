@@ -1,0 +1,28 @@
+﻿@model BataAppHR.Models.VaksinModel
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1>Delete</h1>
+
+<div>
+    <h4>Data Info</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            <label>SS Code: </label> @Html.DisplayFor(model => model.SS_CODE)
+        </dt>
+        <dt>
+            <label>Nama SS: </label>@Html.DisplayFor(model => model.NAMA_SS)
+        </dt>
+        <dt>
+            <label>EDP Code: </label>@Html.DisplayFor(model => model.EDP_CODE)
+        </dt>
+    </dl>
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="ID" />
+        <input type="submit" value="Delete" class="btn btn-danger" />
+        <a asp-action="Index" class="btn btn-primary">Back to list</a>
+    </form>
+</div>

@@ -1,0 +1,139 @@
+﻿@model BataAppHR.Models.dbPaymentList
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+<h3>Payment Entry</h3>
+<hr />
+<form asp-action="Create" id="formcreate" enctype="multipart/form-data">
+
+    <div class="row">
+        <div class="col-sm">
+            <div class="form-group">
+                <label class="control-label">Payment Date</label>
+                <input asp-for="PAYMENT_DATE" class="form-control" />
+                <span asp-validation-for="PAYMENT_DATE" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Order</label>
+                @Html.DropDownListFor(m => m.id_order, new SelectList(Model.ddorder, "id", "ENTRY_USER"), new { @class = "form-control" })
+                <span asp-validation-for="id_order" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Customer</label>
+                @Html.DropDownListFor(m => m.id_customer, new SelectList(Model.ddCustomer, "id", "CUST_NAME"), new { @class = "form-control" })
+                <span asp-validation-for="id_customer" class="text-danger"></span>
+            </div>
+          
+            <div class="form-group">
+                <input type="button" value="Simpan data baru" onclick="alertfirst()" class="btn btn-red" />
+
+            </div>
+
+            @*<form asp-action="Create">
+                    <div asp-validation-summary="ModelOnly" class="text-danger">
+                        <div class="form-group">
+                            <label asp-for="BOOK_NAME" class="control-label"></label>
+                            <input asp-for="BOOK_NAME" class="form-control" />
+                            <span asp-validation-for="BOOK_NAME" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" value="Create" class="btn btn-success" />
+                        </div>
+                    </div>
+                </form>*@
+        </div>
+        <div class="col-sm">
+            <div class="form-group">
+                <label class="control-label">Bank</label>
+                <input asp-for="BANK" class="form-control" />
+                <span asp-validation-for="BANK" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Ref No.</label>
+                <input asp-for="REF_ID" class="form-control" />
+                <span asp-validation-for="REF_ID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">File Transaction:</label>
+                <i style="font-size:smaller">
+                    Max Size: 4MB,
+                    file: JPG, JPEG, PNG
+                </i>
+                <br />
+                <input type="file" asp-for="fileTransaction" />
+            </div>
+            <div class="form-group">
+                <label class="control-label">Payment Amt.</label>
+                <input asp-for="TOTAL_PAY" class="form-control" onkeypress="return allowOnlyNumber(event);" />
+                <span asp-validation-for="TOTAL_PAY" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+</form>
+
+<div>
+    <a asp-action="Index" class="btn btn-dark">Kembali ke List</a>
+</div>
+@section Scripts{
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+    <script>
+        $("#id_order").select2({
+            placeholder: "Select Order",
+            initSelection: function (element, callback) {
+            },
+            dropdownAutoWidth: true,
+            width: 'element'
+        });
+        $("#id_order").val(null);
+        $("#id_order").trigger('change');
+        $("#id_customer").select2({
+            placeholder: "Select Customer Code",
+            initSelection: function (element, callback) {
+            },
+            dropdownAutoWidth: true,
+            width: 'element'
+        });
+        $("#id_customer").val(null);
+        $("#id_customer").trigger('change');
+        $("#id_customer").attr('readonly', 'readonly');
+
+        $('#id_order').on('change', function () {
+            var value = $("#id_order").val();
+          
+            $.ajax({
+                type: "GET",
+                url: "/Payment/getdatacustomer",
+                data: { id_order: value },
+                success: function (data) {
+                    debugger;
+                    console.log(data);
+                    var idcust = data[0].id_customer;
+                  
+
+                    //$('#SS_CODE_EDIT').html(s);
+                    ////$("#SSList").select2({ placeholder: "Select SS" });
+                    $("#id_customer").val(idcust);
+                    $("#id_customer").trigger('change');
+                    //$("#SS_CODE_EDIT").val(null);
+                    //$("#SS_CODE_EDIT").trigger('change');
+
+                }
+            })
+        });
+        function allowOnlyNumber(evt) {
+            var charCode = (evt.which) ? evt.which : event.keyCode
+            if (charCode > 31 && (charCode < 48 || charCode > 57))
+                return false;
+            return true;
+        }
+        function alertfirst() {
+            if (confirm("Are you sure saving data?")) {
+                $('#formcreate').submit();
+            } else {
+                return false;
+            }
+        }
+    </script>
+}

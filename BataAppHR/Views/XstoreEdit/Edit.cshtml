@@ -1,0 +1,359 @@
+﻿@model BataAppHR.Models.XstoreModel
+@using System.Globalization;
+@{
+    ViewData["Title"] = "Edit";
+    var filenameToko = Model.STORE_IMAGE;
+    var filenameLease = Model.FILE_LEASE;
+    var filenameOthers = Model.FILE_OTHERS;
+}
+<style>
+    input.largerCheckbox {
+        width: 20px;
+        height: 20px;
+    }
+</style>
+<h1>Edit</h1>
+<h4>Update Data Toko</h4>
+<hr />
+<form asp-action="Edit" id="formcreate" enctype="multipart/form-data">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm">
+                <div class="form-group">
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <label class="control-label">EDP</label>
+                        </div>
+                        <div class="col-sm-6">
+                            <input asp-for="edp" class="form-control" readonly />
+                            <span asp-validation-for="edp" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <label class="control-label">District</label>
+                        </div>
+                        <div class="col-sm-6">
+                            <input asp-for="district" class="form-control" />
+
+                            <span asp-validation-for="district" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <label class="control-label">Store Location</label>
+                        </div>
+                        <div class="col-sm-6">
+                            <input asp-for="store_location" class="form-control" />
+                            <span asp-validation-for="store_location" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <label class="control-label">Area</label>
+                        </div>
+                        <div class="col-sm-6">
+                            <input asp-for="area" class="form-control" />
+
+                            <span asp-validation-for="area" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <label class="control-label">Inactive Flag</label>
+                        </div>
+                        <div class="col-sm-6">
+                            <input asp-for="inactive_flagBool" class="largerCheckbox" />
+                            <span asp-validation-for="inactive_flagBool" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <label class="control-label">Genesis Flag</label>
+                        </div>
+                        <div class="col-sm-6">
+                            <input asp-for="genesis_FlagBool" class="largerCheckbox" />
+                            <span asp-validation-for="genesis_FlagBool" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Foto Toko: </label>
+                    <i style="font-size:smaller">
+                        Max: 4MB,
+                        file: JPG, JPEG, PNG
+                    </i>
+                    <br />
+                    <input type="file" asp-for="fileToko" />
+                    <span asp-validation-for="fileToko" class="text-danger"></span>
+                    <br />
+                    <a href="#" id="fileNameToko"></a>
+                    <br />
+                    <img id="StorePhotoId" src="@ViewBag.ImageData" width="400" height="200">
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="form-group">
+                    <label class="control-label">Store Concept: </label>
+                    <input asp-for="STORE_CONCEPT" class="form-control" />
+                    <span asp-validation-for="STORE_CONCEPT" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Selling Area:</label>
+                    <input asp-for="SELLING_AREA_STRING" class="form-control" />
+                    <span asp-validation-for="SELLING_AREA_STRING" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Stock Area:</label>
+                    <input asp-for="STOCK_AREA_STRING" class="form-control" />
+                    <span asp-validation-for="STOCK_AREA_STRING" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Total Area:</label>
+                    <input asp-for="TOTAL_AREA_STRING" class="form-control" readonly="readonly" />
+                    <span asp-validation-for="TOTAL_AREA_STRING" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Alamat:</label>
+                    <textarea asp-for="ADDRESS" class="form-control" > </textarea>
+                    <span asp-validation-for="ADDRESS" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">File Lease Agreement: </label>
+                    <i style="font-size:smaller">
+                        Max Size: 4MB
+                    </i>
+                    <br />
+                    <input type="file" asp-for="LeaseFile" />
+                    <br />
+                    <a href="#" id="fileNameLease"></a>
+                    <span asp-validation-for="LeaseFile" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">File others: </label>
+                    <i style="font-size:smaller">
+                        Max Size: 4MB
+                    </i>
+                    <br />
+                    <input type="file" asp-for="FileOthers" />
+                    <br />
+                    <a href="#" id="fileNameOthers"></a>
+                    <span asp-validation-for="FileOthers" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <label class="control-label">Is Department Store</label>
+                        </div>
+                        <div class="col-sm-6">
+                            <input asp-for="IS_DS_BOOL" class="largerCheckbox" />
+                            <span asp-validation-for="IS_DS_BOOL" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm">
+                @if (User.IsInRole("AdminRealEstate"))
+                {
+                     <div class="form-group">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <label class="control-label">Opening Date:</label>
+                                <br />
+                                <input type="date" asp-for="OPENING_DATE" class="form-control" />
+                                <br />
+                                <span asp-validation-for="OPENING_DATE" class="text-danger"></span>
+                            </div>
+                            <div class="col-sm-6">
+                                <label class="control-label">Close Date:</label>
+                                <br />
+                                <input type="date" asp-for="CLOSE_DATE" class="form-control" />
+                                <br />
+                                <span asp-validation-for="CLOSE_DATE" class="text-danger"></span>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+                    <div class="form-group">
+                        <label class="control-label">Lease Start:</label>
+                        <br />
+                        <input type="date" asp-for="LEASE_START" class="form-control" />
+                        <br />
+                        <span asp-validation-for="LEASE_START" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Lease Expired:</label>
+                        <br />
+                        <input type="date" asp-for="LEASE_EXPIRED" class="form-control" />
+                        <br />
+                        <span asp-validation-for="LEASE_EXPIRED" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Last Renovation Date:</label>
+                        <br />
+                        <input type="date" asp-for="LAST_RENOVATION_DATE" class="form-control" />
+                        <br />
+                        <span asp-validation-for="LAST_RENOVATION_DATE" class="text-danger"></span>
+                    </div>
+                }
+                <div class="form-group">
+                    <label class="control-label">Gross Value:</label>
+                    <input asp-for="GROSS_VAL_STRING" class="form-control" />
+                    <span asp-validation-for="GROSS_VAL_STRING" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Selling Value:</label>
+                    <input asp-for="SELLING_VAL_STRING" class="form-control" />
+                    <span asp-validation-for="SELLING_VAL_STRING" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Storage Value:</label>
+                    <input asp-for="STORAGE_VAL_STRING" class="form-control" />
+                    <span asp-validation-for="STORAGE_VAL_STRING" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="button" value="Update Data" onclick="alertfirst()" class="btn btn-red" />
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+
+<div>
+    <a asp-action="Index" class="btn btn-dark">Kembali ke list</a>
+</div>
+@section Scripts{
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+<script>
+    $('#SELLING_AREA_STRING').keypress(function (event) {
+        if ((event.which != 44 || $(this).val().indexOf(',') != -1) && (event.which < 48 || event.which > 57)) {
+            event.preventDefault();
+        }
+    });
+    $('#STOCK_AREA_STRING').keypress(function (event) {
+        if ((event.which != 44 || $(this).val().indexOf(',') != -1) && (event.which < 48 || event.which > 57)) {
+            event.preventDefault();
+        }
+    });
+    $('#TOTAL_AREA_STRING').keypress(function (event) {
+        if ((event.which != 44 || $(this).val().indexOf(',') != -1) && (event.which < 48 || event.which > 57)) {
+            event.preventDefault();
+        }
+    });
+    $('#GROSS_VAL_STRING').keypress(function (event) {
+        if ((event.which != 44 || $(this).val().indexOf(',') != -1) && (event.which < 48 || event.which > 57)) {
+            event.preventDefault();
+        }
+    });
+    $('#STORAGE_VAL_STRING').keypress(function (event) {
+        if ((event.which != 44 || $(this).val().indexOf(',') != -1) && (event.which < 48 || event.which > 57)) {
+            event.preventDefault();
+        }
+    });
+    $('#SELLING_VAL_STRING').keypress(function (event) {
+        if ((event.which != 44 || $(this).val().indexOf(',') != -1) && (event.which < 48 || event.which > 57)) {
+            event.preventDefault();
+        }
+    });
+    $("#SELLING_AREA_STRING").change(function () {
+        debugger;
+        var value = parseFloat($("#SELLING_AREA_STRING").val().replace(",", ".")).toFixed(2);
+        var value2 = parseFloat($("#STOCK_AREA_STRING").val().replace(",", ".")).toFixed(2);
+        var result = parseFloat(value) + parseFloat(value2);
+        $('#TOTAL_AREA_STRING').val(result.toFixed(2).replace(".", ","));
+    });
+    $("#STOCK_AREA_STRING").change(function () {
+        var value = parseFloat($("#SELLING_AREA_STRING").val().replace(",", ".")).toFixed(2);
+        var value2 = parseFloat($("#STOCK_AREA_STRING").val().replace(",", ".")).toFixed(2);
+        var result = parseFloat(value) + parseFloat(value2);
+        $('#TOTAL_AREA_STRING').val(result.toFixed(2).replace(".", ","));
+    });
+    $(document).ready(function () {
+        var filenameLease = '@filenameLease';
+        var filenameOthers = '@filenameOthers';
+        var filenameToko = '@filenameToko';
+        $("#fileNameOthers").html(filenameOthers);
+        $("#fileNameLease").html(filenameLease);
+        $("#fileNameToko").html(filenameToko);
+
+        $("#fileNameLease").attr("href", "/XstoreEdit/DownloadLease?fname=" + filenameLease);
+        $("#fileNameOthers").attr("href", "/XstoreEdit/DownloadOthers?fname=" + filenameOthers);
+        $("#fileNameToko").attr("href", "/XstoreEdit/DownloadStoreImg?fname=" + filenameToko);
+        @*var imgctrl1 = $("#StorePhotoId");
+        var linkPhoto = '@filenameToko';
+        if (linkPhoto != null && linkPhoto != "" && linkPhoto != "null") {
+            var iPhotoUrl1 = "/UploadsStoreImage/" + linkPhoto;
+            imgctrl1.attr("src", iPhotoUrl1);
+        }*@
+    });
+    function allowOnlyNumber(evt) {
+        var charCode = (evt.which) ? evt.which : event.keyCode
+        if (charCode > 31 && (charCode < 48 || charCode > 57))
+            return false;
+        return true;
+    }
+    $('#fileToko').on('change', function () {
+        const size =
+            (this.files[0].size / 1024 / 1024).toFixed(2);
+        debugger;
+        var errmsg = "";
+        if (size > 4) {
+            $('#filePhoto').val('');
+            //alert("File size maximum is 4 MB");
+            errmsg += "File size maximum is 4 MB \r\n";
+        }
+        var fileExtension = ['jpeg', 'jpg', 'png'];
+        if ($.inArray($(this).val().split('.').pop().toLowerCase(), fileExtension) == -1) {
+            //alert("Only formats are allowed : " + fileExtension.join(', '));
+            errmsg += "Only formats are allowed : " + fileExtension.join(', ');
+
+        }
+        if (errmsg != "") {
+            $('#filePhoto').val('');
+            alert(errmsg);
+        }
+
+    });
+    function alertfirst() {
+        //var fileMedic = $('#fileMedic').val();
+        //var fileVaksin1 = $('#fileVaksin1').val();
+        //var fileVaksin2 = $('#fileVaksin2').val();
+        //if (fileVaksin1 == '' && fileVaksin2 == '') {
+        //    if (fileMedic != '') {
+        //        $('#formcreate').submit();
+        //    } else {
+        //        alert("Medical Letter must be uploaded");
+        //        return false;
+        //    }
+        //} else {
+
+        //}
+        if (confirm("Are you sure saving data?")) {
+            $('#formcreate').submit();
+        } else {
+            return false;
+        }
+
+    }
+
+</script>    
+}
+

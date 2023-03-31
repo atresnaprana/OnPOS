@@ -1,0 +1,26 @@
+﻿
+@{
+    ViewData["Title"] = "Upload Data Vaksin";
+}
+
+<h1>Upload Data Vaksin</h1>
+<form asp-controller="UploadVaksin" asp-action="AddVaksin" method="post"
+      enctype="multipart/form-data">
+
+    <input type="file" name="file" />
+    <br />
+    <button type="submit">Upload File</button>
+    <a href="#" id="fileName"></a>
+</form>
+@section Scripts{
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+    <script>
+    $(document).ready(function () {
+        debugger;
+        $("#fileName").html("@ViewData["fName"]");
+        $("#fileName").attr("href", "/Home/Download?fname=" + "@ViewData["fName"]");
+
+        });
+
+    </script>
+}

@@ -1,0 +1,66 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UserSecretsId>aspnet-BataAppHR-A3FC2538-A73E-4EA9-AE3B-42F89A938E2E</UserSecretsId>
+    <AssemblyName>OnPOS</AssemblyName>
+    <RootNamespace>OnPOS</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Migrations\FormDB\20210809162222_xstoreModel.cs" />
+    <Compile Remove="Migrations\FormDB\20210809162222_xstoreModel.Designer.cs" />
+    <Compile Remove="Migrations\FormDB\20210809162413_xStoreModule.cs" />
+    <Compile Remove="Migrations\FormDB\20210809162413_xStoreModule.Designer.cs" />
+    <Compile Remove="Migrations\FormDB\20210809162751_AddFK.cs" />
+    <Compile Remove="Migrations\FormDB\20210809162751_AddFK.Designer.cs" />
+    <Compile Remove="Migrations\FormDB\20210809163438_addFKDatas.cs" />
+    <Compile Remove="Migrations\FormDB\20210809163438_addFKDatas.Designer.cs" />
+    <Compile Remove="Migrations\FormDB\20210913043305_addRDTbl.cs" />
+    <Compile Remove="Migrations\FormDB\20210913043305_addRDTbl.Designer.cs" />
+    <Compile Remove="Migrations\FormDB\20211007033444_fixingdb.cs" />
+    <Compile Remove="Migrations\FormDB\20211007033444_fixingdb.Designer.cs" />
+    <Compile Remove="Migrations\FormDB\20211008020856_modifyRDTbl.cs" />
+    <Compile Remove="Migrations\FormDB\20211008020856_modifyRDTbl.Designer.cs" />
+    <Compile Remove="Migrations\FormDB\20211008061050_changetblrd.cs" />
+    <Compile Remove="Migrations\FormDB\20211008061050_changetblrd.Designer.cs" />
+    <Compile Remove="Migrations\FormDB\20211008061239_modtblrd.cs" />
+    <Compile Remove="Migrations\FormDB\20211008061239_modtblrd.Designer.cs" />
+    <Compile Remove="Migrations\FormDB\20211008061450_fixingtblrd.cs" />
+    <Compile Remove="Migrations\FormDB\20211008061450_fixingtblrd.Designer.cs" />
+    <Compile Remove="Migrations\FormDB\20220408030516_addCustomerTbl.cs" />
+    <Compile Remove="Migrations\FormDB\20220408030516_addCustomerTbl.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DinkToPdf" Version="1.0.8" />
+    <PackageReference Include="EPPlus" Version="5.7.2" />
+    <PackageReference Include="MailKit" Version="3.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.1.17" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.25" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.25" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.25" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.25">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.5" />
+    <PackageReference Include="Mime-detective" Version="22.7.19" />
+    <PackageReference Include="MimeKit" Version="3.2.0" />
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="3.1.0" />
+    <PackageReference Include="Syncfusion.Pdf.Net.Core" Version="20.1.0.59" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.3" />
+    <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="wwwroot\images\Bata_red_small.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="bin\" />
+  </ItemGroup>
+
+</Project>

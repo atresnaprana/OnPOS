@@ -1,0 +1,28 @@
+﻿@model BataAppHR.Models.dbTrainer
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1>Delete</h1>
+
+<div>
+    <h4>Book Info</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            <label>Nama: </label> @Html.DisplayFor(model => model.NmTrainer)
+        </dt>
+        <dt>
+            <label>HP: </label>@Html.DisplayFor(model => model.HP)
+        </dt>
+        <dt>
+            <label>Email: </label>@Html.DisplayFor(model => model.Email)
+        </dt>
+    </dl>
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="idTrainer" />
+        <input type="submit" value="Delete" class="btn btn-danger" />
+        <a asp-action="Index" class="btn btn-primary">Back to list</a>
+    </form>
+</div>

@@ -1,0 +1,93 @@
+﻿
+
+@{
+ 
+    var id = "my-own-id";
+
+    var random = new Random();
+    var length = random.Next(10, 21);
+    var items = new List<CardItem>();
+
+    for (int i = 0; i < length; i++)
+    {
+        items.Add(new CardItem
+        {
+            Image = $"https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20({i + 21}).jpg",
+            Title = $"Card Title {i + 1}"
+        });
+    }
+
+    var itmIndex = 0;
+    var pages = items.Count / 3;
+
+    if (items.Count % 3 > 0)
+    {
+        pages++;
+    }
+}
+    <div id="@id" class="carousel slide carousel-multi-item" data-ride="carousel">
+
+        <!--Controls-->
+        <div class="controls-top">
+            <a class="btn btn-primary rounded-circle" href="#@id" data-slide="prev"><</a>
+            <a class="btn btn-primary rounded-circle" href="#@id" data-slide="next">></a>
+        </div>
+        <!--/.Controls-->
+        <!--Indicators-->
+        <ol class="carousel-indicators">
+            @for (int i = 0; i < pages; i++)
+            {
+                if (i == 0)
+                {
+                    <li data-target="#@id" data-slide-to="@i" class="active"></li>
+                }
+                else
+                {
+                    <li data-target="#@id" data-slide-to="@i"></li>
+                }
+            }
+        </ol>
+        <!--/.Indicators-->
+        <!--Slides-->
+        <div class="carousel-inner" role="listbox">
+
+            <!--
+                This part should be placed in your partial view:
+                With some jQuery you can invoke a specific action that returns partial view and load its content hier.
+                See for more info: https://api.jquery.com/load/ how it works.
+            -->
+            @for (int slide = 0; slide < pages; slide++)
+            {
+                <div class="carousel-item @(slide == 0 ? "active" : string.Empty)">
+                    <div class="row">
+                        @for (int item = 0; item < 3; item++)
+                        {
+                            var itm = items[itmIndex++ % pages];
+                            var colCls = string.Empty;
+
+                            if (item > 0)
+                            {
+                                colCls = "clearfix d-none d-md-block";
+                            }
+
+                            <div class="col-md-4 @colCls">
+                                <div class="card mb-2">
+                                    <img class="card-img-top" src="@itm.Image" alt="Card image cap @(itmIndex + 1)">
+                                    <div class="card-body">
+                                        <h4 class="card-title">@itm.Title</h4>
+                                        <p class="card-text">
+                                            Some quick example text to build on the card title and make up the bulk of the
+                                            card's content.
+                                        </p>
+                                        <a class="btn btn-primary">Button</a>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+        <!--/.Slides-->
+
+    </div>

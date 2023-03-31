@@ -1,0 +1,210 @@
+﻿@model BataAppHR.Models.dbPaymentList
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+<h3>Payment Entry</h3>
+<hr />
+<form asp-action="PaymentForm" id="formcreate" enctype="multipart/form-data">
+
+    <div class="row">
+        <div class="col-sm">
+            <div class="form-group">
+                <label class="control-label">Payment Dat</label>
+                <input asp-for="PAYMENT_DATE" class="form-control" />
+                <input asp-for="id_orderCust" type="hidden" class="form-control" />
+                <span asp-validation-for="PAYMENT_DATE" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <table>
+                    <tr>
+                        <td>
+                            <label class="control-label">View Payments</label>
+                        </td>
+                        <td style="padding-left:10%">
+                            <a href="#/" onclick="openpopup(this,'')" id="ViewPayments" class="btn btn-sm btn-dark">Payments List</a>
+
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+            <div class="form-group">
+                <input type="button" value="Simpan data baru" onclick="alertfirst()" class="btn btn-red" />
+
+            </div>
+
+            @*<form asp-action="Create">
+                    <div asp-validation-summary="ModelOnly" class="text-danger">
+                        <div class="form-group">
+                            <label asp-for="BOOK_NAME" class="control-label"></label>
+                            <input asp-for="BOOK_NAME" class="form-control" />
+                            <span asp-validation-for="BOOK_NAME" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" value="Create" class="btn btn-success" />
+                        </div>
+                    </div>
+                </form>*@
+        </div>
+        <div class="col-sm">
+            <div class="form-group">
+                <label class="control-label">Bank</label>
+                <input asp-for="BANK" class="form-control" />
+                <span asp-validation-for="BANK" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Ref No.</label>
+                <input asp-for="REF_ID" class="form-control" />
+                <span asp-validation-for="REF_ID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">File Transaction:</label>
+                <i style="font-size:smaller">
+                    Max Size: 4MB,
+                    file: JPG, JPEG, PNG
+                </i>
+                <br />
+                <input type="file" asp-for="fileTransaction" />
+            </div>
+            <div class="form-group">
+                <label class="control-label">Payment Amt.</label>
+                <input asp-for="TOTAL_PAY" class="form-control" onkeypress="return allowOnlyNumber(event);" />
+                <span asp-validation-for="TOTAL_PAY" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+</form>
+<div id="dialogPayment" title="Payment List">
+    <center>
+        <table class="table table-striped" id="PaymentTbl">
+            <thead>
+                <tr>
+                    <th>Bank.</th>
+                    <th>
+                        Ref
+                    </th>
+                    <th>
+                        Total Payment
+                    </th>
+
+                    <th>
+                        File
+                    </th>
+
+
+                </tr>
+            </thead>
+            <tbody id="tbodyiddtl">
+            </tbody>
+        </table>
+    </center>
+</div>
+<div>
+    <a asp-action="PaymentPage" class="btn btn-dark">Kembali ke List</a>
+</div>
+@section Scripts{
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+<script>
+    var dtltbls2;
+
+      $(document).ready(function () {
+         $("#dialogPayment").dialog({
+            width: 450,
+            height: 410,
+            modal: true,
+            resizable: false,
+            close: function () {
+                //var audio = $("#player");
+                //audio[0].pause();
+             }
+
+         });
+          $("#TOTAL_PAY").rules("remove", 'number');
+
+        $("#dialogPayment").dialog("close");
+          dtltbls2 = $('#PaymentTbl').DataTable({
+              "iDisplayLength": 25,
+              'columnDefs': [
+                  {
+                      "targets": 0, // your case first column
+                      "className": "text-center",
+                  },
+                  {
+                      "targets": 1,
+                      "className": "text-center",
+                  },
+                  {
+                      "targets": 2,
+                      "className": "text-center",
+                  }
+                  ,
+                  {
+                      "targets": 3,
+                      "className": "text-center",
+                  }
+              ]
+          });
+
+
+        });
+        function allowOnlyNumber(evt) {
+            var charCode = (evt.which) ? evt.which : event.keyCode
+            if (charCode > 31 && (charCode < 48 || charCode > 57))
+                return false;
+            return true;
+        }
+    function alertfirst() {
+        debugger;
+        var files = $("#fileTransaction").val();
+        if (files != "") {
+            if (confirm("Are you sure saving data?")) {
+                $('#formcreate').submit();
+            } else {
+                return false;
+            }
+        } else {
+            alert("file cannot be empty");
+        }
+    }
+    function openpopup(sender) {
+         var idval = $("#id_orderCust").val();
+            debugger;
+            $.ajax({
+            url: '@Url.Action("getPaymentDetail", "SalesOrder")',
+                type: "GET",
+                data: { idorder: idval },
+                //startDate: mFromDate, endDate: mToDate1
+                dataType: 'json',
+                success: function (data) {
+
+                    if (data.length != 0) {
+                        debugger;
+                        console.log(data);
+                        //$("#tbodyiddtl").empty();
+                        dtltbls2.clear();
+
+                        var x = 1;
+                        data.forEach(function (item) { //insert rows
+                            var btnList = "<a href=\"/SalesOrder/DownloadFilePayment?iddata=\'"+ item.id +"\'\" id='DOWNLOAD" + x + "' class='btn btn-sm btn-dark'>" + item.filE_PAYMENT_NAME +"</a>";
+                            dtltbls2.row.add([item.bank, item.reF_ID, item.totaL_PAY, btnList]);
+                            //totalorder = totalorder + item.final_price;
+                            //totalqty = totalqty + item.qty;
+                            x++
+                        })
+
+
+                        dtltbls2.draw();
+                    }
+
+                },
+                error: function () {
+
+                }
+        });
+        $("#dialogPayment").dialog("open");
+
+    }
+</script>
+}

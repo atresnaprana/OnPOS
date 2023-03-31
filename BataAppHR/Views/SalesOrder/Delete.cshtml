@@ -1,0 +1,31 @@
+﻿@model BataAppHR.Models.dbSalesOrder
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1>Delete</h1>
+
+<div>
+    <h4>Program Info</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            <label>order id: </label> @Html.DisplayFor(model => model.id)
+        </dt>
+        <dt>
+            <label>Customer: </label>@Html.DisplayFor(model => model.EMAIL)
+        </dt>
+        <dt>
+            <label>Invoice: </label>@Html.DisplayFor(model => model.picking_no)
+        </dt>
+        <dt>
+            <label>order date: </label>@Html.DisplayFor(model => model.ORDER_DATE)
+        </dt>
+    </dl>
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="id" />
+        <input type="submit" value="Delete" class="btn btn-danger" />
+        <a asp-action="Index" class="btn btn-primary">Back to list</a>
+    </form>
+</div>
