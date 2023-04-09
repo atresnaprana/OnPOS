@@ -2480,7 +2480,7 @@ textarea.form-control {
 }
 
 .btn:hover {
-    color: #212529;
+    color: #007bff;
     text-decoration: none
 }
 
@@ -6539,7 +6539,8 @@ a.bg-dark:focus, a.bg-dark:hover, button.bg-dark:focus, button.bg-dark:hover {
 }
 
 .bg-bata {
-    background-color: #be0000;
+    /*background-color: #be0000;*/
+    background-color: #B9E9FC;
 }
 
 .bg-transparent {
@@ -10027,7 +10028,9 @@ a.text-warning:focus, a.text-warning:hover {
 a.text-danger:focus, a.text-danger:hover {
     color: #a71d2a !important
 }
-
+.text-blue {
+    color: #007bff !important
+}
 .text-light {
     
     color: #fff !important
