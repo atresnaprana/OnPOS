@@ -174,7 +174,7 @@ namespace BataAppHR.Areas.Identity
                     var result = await _userManager.CreateAsync(user, Input.Password);
                     if (result.Succeeded)
                     {
-                        var result1 = await _userManager.AddToRoleAsync(user, "CustomerIndustrial");
+                        var result1 = await _userManager.AddToRoleAsync(user, "CustomerOnPos");
                         var fieldCustomer = new dbCustomer();
                         fieldCustomer.CUST_NAME = Input.CUST_NAME;
                         fieldCustomer.Email = Input.Email;
@@ -345,7 +345,7 @@ namespace BataAppHR.Areas.Identity
                             //{
                             //    throw;
                             //}
-                            SendVerifyEmail(Input.Email);
+                            SendVerifyEmail(Input.Email, $"<a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>");
                             //return RedirectToPage("RegisterComplete", new { email = Input.Email, returnUrl = returnUrl });
                             return RedirectToAction("Index", "RegisterComplete");
 
@@ -379,27 +379,28 @@ namespace BataAppHR.Areas.Identity
             // If we got this far, something failed, redisplay form
             return Page();
         }
-        public async void SendVerifyEmail(string Email)
+        public async void SendVerifyEmail(string Email, string callbackurl)
         {
             //string Email = "aditya.tresnaprana@bata.com";
             var request = new WelcomeRequest();
             request.UserName = Email;
             request.ToEmail = Email;
+            request.callbackurl = callbackurl;
             //request.ToEmail = Input.Email;
-            var fileUrl = Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot");
-            var files = Path.Combine(fileUrl, "FileCodeofConduct.pdf");
-            List<IFormFile> fileList = new List<IFormFile>();
+            //var fileUrl = Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot");
+            //var files = Path.Combine(fileUrl, "FileCodeofConduct.pdf");
+            //List<IFormFile> fileList = new List<IFormFile>();
 
 
-            using (var stream = System.IO.File.OpenRead(files))
-            {
-                var file = new FormFile(stream, 0, stream.Length, null, Path.GetFileName(stream.Name));
+            //using (var stream = System.IO.File.OpenRead(files))
+            //{
+            //    var file = new FormFile(stream, 0, stream.Length, null, Path.GetFileName(stream.Name));
 
 
-                fileList.Add(file);
+            //    fileList.Add(file);
 
-                request.Attachments = fileList;
-            }
+            //    request.Attachments = fileList;
+            //}
             try
             {
                 await mailService.SendVerifyEmailAsync(request);
