@@ -75,15 +75,15 @@ namespace BataAppHR.Areas.Identity
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
-            [Required]
-            [StringLength(100, ErrorMessage = "not valid KTP", MinimumLength = 16)]
-            [DataType(DataType.Text)]
-            [Display(Name = "KTP")]
-            public string KTP { get; set; }
-            [Required]
-            [DataType(DataType.Text)]
-            [Display(Name = "NPWP")]
-            public string NPWP { get; set; }
+            //[Required]
+            //[StringLength(100, ErrorMessage = "not valid KTP", MinimumLength = 16)]
+            //[DataType(DataType.Text)]
+            //[Display(Name = "KTP")]
+            //public string KTP { get; set; }
+            //[Required]
+            //[DataType(DataType.Text)]
+            //[Display(Name = "NPWP")]
+            //public string NPWP { get; set; }
             [Required]
             [DataType(DataType.PhoneNumber)]
             [Display(Name = "Phone")]
@@ -112,46 +112,46 @@ namespace BataAppHR.Areas.Identity
             [DataType(DataType.Text)]
             [Display(Name = "Postal")]
             public string Postal { get; set; }
-            [Required]
-            [DataType(DataType.Upload)]
-            [Display(Name = "KTP")]
-            public IFormFile fileKtp { get; set; }
-            [Required]
-            [DataType(DataType.Upload)]
-            [Display(Name = "Akta Perusahaan")]
-            public IFormFile fileAkta { get; set; }
-            [Required]
-            [DataType(DataType.Upload)]
-            [Display(Name = "Rekening Perusahaan")]
-            public IFormFile fileRekening { get; set; }
-            [Required]
-            [DataType(DataType.Upload)]
-            [Display(Name = "NPWP")]
-            public IFormFile fileNPWP { get; set; }
-            [Required]
-            [DataType(DataType.Upload)]
-            [Display(Name = "TDP")]
-            public IFormFile fileTdp { get; set; }
-            [Required]
-            [DataType(DataType.Upload)]
-            [Display(Name = "SIUP")]
-            public IFormFile fileSIUP { get; set; }
-            [Required]
-            [DataType(DataType.Upload)]
-            [Display(Name = "NIB")]
-            public IFormFile fileNIB { get; set; }
-            [Required]
-            [DataType(DataType.Upload)]
-            [Display(Name = "SPPKP / PKP")]
-            public IFormFile fileSPPKP { get; set; }
-            [Required]
-            [DataType(DataType.Upload)]
-            [Display(Name = "SKT")]
-            public IFormFile fileSKT { get; set; }
-            [Required]
-            [DataType(DataType.Text)]
-            [Display(Name = "Phone")]
-            public string store_area { get; set; }
+            //[Required]
+            //[DataType(DataType.Upload)]
+            //[Display(Name = "KTP")]
+            //public IFormFile fileKtp { get; set; }
+            //[Required]
+            //[DataType(DataType.Upload)]
+            //[Display(Name = "Akta Perusahaan")]
+            //public IFormFile fileAkta { get; set; }
+            //[Required]
+            //[DataType(DataType.Upload)]
+            //[Display(Name = "Rekening Perusahaan")]
+            //public IFormFile fileRekening { get; set; }
+            //[Required]
+            //[DataType(DataType.Upload)]
+            //[Display(Name = "NPWP")]
+            //public IFormFile fileNPWP { get; set; }
+            //[Required]
+            //[DataType(DataType.Upload)]
+            //[Display(Name = "TDP")]
+            //public IFormFile fileTdp { get; set; }
+            //[Required]
+            //[DataType(DataType.Upload)]
+            //[Display(Name = "SIUP")]
+            //public IFormFile fileSIUP { get; set; }
+            //[Required]
+            //[DataType(DataType.Upload)]
+            //[Display(Name = "NIB")]
+            //public IFormFile fileNIB { get; set; }
+            //[Required]
+            //[DataType(DataType.Upload)]
+            //[Display(Name = "SPPKP / PKP")]
+            //public IFormFile fileSPPKP { get; set; }
+            //[Required]
+            //[DataType(DataType.Upload)]
+            //[Display(Name = "SKT")]
+            //public IFormFile fileSKT { get; set; }
+            //[Required]
+            //[DataType(DataType.Text)]
+            //[Display(Name = "Phone")]
+            //public string store_area { get; set; }
             [NotMapped]
             public dbCustomer dataCust { get; set; }
         }
@@ -179,14 +179,14 @@ namespace BataAppHR.Areas.Identity
                         fieldCustomer.CUST_NAME = Input.CUST_NAME;
                         fieldCustomer.Email = Input.Email;
                         fieldCustomer.PHONE1 = Input.PHONE1;
-                        fieldCustomer.KTP = Input.KTP;
-                        fieldCustomer.NPWP = Input.NPWP;
+                        //fieldCustomer.KTP = Input.KTP;
+                        //fieldCustomer.NPWP = Input.NPWP;
                         fieldCustomer.COMPANY = Input.COMPANY;
                         fieldCustomer.address = Input.Address;
                         fieldCustomer.city = Input.City;
                         fieldCustomer.province = Input.Province;
                         fieldCustomer.postal = Input.Postal;
-                        fieldCustomer.store_area = Input.store_area;
+                        //fieldCustomer.store_area = Input.store_area;
                         fieldCustomer.FLAG_AKTIF = "1";
                         fieldCustomer.REG_DATE = DateTime.Now;
                         fieldCustomer.UPDATE_DATE = DateTime.Now;
@@ -194,120 +194,119 @@ namespace BataAppHR.Areas.Identity
                         fieldCustomer.ENTRY_USER = Input.Email;
                         fieldCustomer.UPDATE_USER = Input.Email;
                         fieldCustomer.BL_FLAG = "0";
-                        if (Input.fileKtp != null)
-                        {
-                            fieldCustomer.FILE_KTP_NAME = Input.fileKtp.FileName;
-                            using (var ms = new MemoryStream())
-                            {
-                                Input.fileKtp.CopyTo(ms);
-                                var fileBytes = ms.ToArray();
-                                fieldCustomer.FILE_KTP = fileBytes;
-                                string s = Convert.ToBase64String(fileBytes);
-                                // act on the Base64 data
-                            }
-                        }
-                        if (Input.fileAkta != null)
-                        {
-                            fieldCustomer.FILE_AKTA_NAME = Input.fileAkta.FileName;
-                            using (var ms = new MemoryStream())
-                            {
-                                Input.fileAkta.CopyTo(ms);
-                                var fileBytes = ms.ToArray();
-                                fieldCustomer.FILE_AKTA = fileBytes;
-                                string s = Convert.ToBase64String(fileBytes);
-                                // act on the Base64 data
-                            }
-                        }
-                        if (Input.fileRekening != null)
-                        {
-                            fieldCustomer.FILE_REKENING_NAME = Input.fileRekening.FileName;
-                            using (var ms = new MemoryStream())
-                            {
-                                Input.fileRekening.CopyTo(ms);
-                                var fileBytes = ms.ToArray();
-                                fieldCustomer.FILE_REKENING = fileBytes;
-                                string s = Convert.ToBase64String(fileBytes);
-                                // act on the Base64 data
-                            }
-                        }
-                        if (Input.fileNPWP != null)
-                        {
-                            fieldCustomer.FILE_NPWP_NAME = Input.fileNPWP.FileName;
-                            using (var ms = new MemoryStream())
-                            {
-                                Input.fileNPWP.CopyTo(ms);
-                                var fileBytes = ms.ToArray();
-                                fieldCustomer.FILE_NPWP = fileBytes;
-                                string s = Convert.ToBase64String(fileBytes);
-                                // act on the Base64 data
-                            }
-                        }
-                        if (Input.fileTdp != null)
-                        {
-                            fieldCustomer.FILE_TDP_NAME = Input.fileTdp.FileName;
-                            using (var ms = new MemoryStream())
-                            {
-                                Input.fileTdp.CopyTo(ms);
-                                var fileBytes = ms.ToArray();
-                                fieldCustomer.FILE_TDP = fileBytes;
-                                string s = Convert.ToBase64String(fileBytes);
-                                // act on the Base64 data
-                            }
-                        }
-                        if (Input.fileSIUP != null)
-                        {
-                            fieldCustomer.FILE_SIUP_NAME = Input.fileSIUP.FileName;
-                            using (var ms = new MemoryStream())
-                            {
-                                Input.fileSIUP.CopyTo(ms);
-                                var fileBytes = ms.ToArray();
-                                fieldCustomer.FILE_SIUP = fileBytes;
-                                string s = Convert.ToBase64String(fileBytes);
-                                // act on the Base64 data
-                            }
-                        }
-                        if (Input.fileNIB != null)
-                        {
-                            fieldCustomer.FILE_NIB_NAME = Input.fileNIB.FileName;
-                            using (var ms = new MemoryStream())
-                            {
-                                Input.fileNIB.CopyTo(ms);
-                                var fileBytes = ms.ToArray();
-                                fieldCustomer.FILE_NIB = fileBytes;
-                                string s = Convert.ToBase64String(fileBytes);
-                                // act on the Base64 data
-                            }
-                        }
-                        if (Input.fileSPPKP != null)
-                        {
-                            fieldCustomer.FILE_SPPKP_NAME = Input.fileSPPKP.FileName;
-                            using (var ms = new MemoryStream())
-                            {
-                                Input.fileSPPKP.CopyTo(ms);
-                                var fileBytes = ms.ToArray();
-                                fieldCustomer.FILE_SPPKP = fileBytes;
-                                string s = Convert.ToBase64String(fileBytes);
-                                // act on the Base64 data
-                            }
-                        }
-                        if (Input.fileSKT != null)
-                        {
-                            fieldCustomer.FILE_SKT_NAME = Input.fileSKT.FileName;
-                            using (var ms = new MemoryStream())
-                            {
-                                Input.fileSKT.CopyTo(ms);
-                                var fileBytes = ms.ToArray();
-                                fieldCustomer.FILE_SKT = fileBytes;
-                                string s = Convert.ToBase64String(fileBytes);
-                                // act on the Base64 data
-                            }
-                        }
+                        //if (Input.fileKtp != null)
+                        //{
+                        //    fieldCustomer.FILE_KTP_NAME = Input.fileKtp.FileName;
+                        //    using (var ms = new MemoryStream())
+                        //    {
+                        //        Input.fileKtp.CopyTo(ms);
+                        //        var fileBytes = ms.ToArray();
+                        //        fieldCustomer.FILE_KTP = fileBytes;
+                        //        string s = Convert.ToBase64String(fileBytes);
+                        //        // act on the Base64 data
+                        //    }
+                        //}
+                        //if (Input.fileAkta != null)
+                        //{
+                        //    fieldCustomer.FILE_AKTA_NAME = Input.fileAkta.FileName;
+                        //    using (var ms = new MemoryStream())
+                        //    {
+                        //        Input.fileAkta.CopyTo(ms);
+                        //        var fileBytes = ms.ToArray();
+                        //        fieldCustomer.FILE_AKTA = fileBytes;
+                        //        string s = Convert.ToBase64String(fileBytes);
+                        //        // act on the Base64 data
+                        //    }
+                        //}
+                        //if (Input.fileRekening != null)
+                        //{
+                        //    fieldCustomer.FILE_REKENING_NAME = Input.fileRekening.FileName;
+                        //    using (var ms = new MemoryStream())
+                        //    {
+                        //        Input.fileRekening.CopyTo(ms);
+                        //        var fileBytes = ms.ToArray();
+                        //        fieldCustomer.FILE_REKENING = fileBytes;
+                        //        string s = Convert.ToBase64String(fileBytes);
+                        //        // act on the Base64 data
+                        //    }
+                        //}
+                        //if (Input.fileNPWP != null)
+                        //{
+                        //    fieldCustomer.FILE_NPWP_NAME = Input.fileNPWP.FileName;
+                        //    using (var ms = new MemoryStream())
+                        //    {
+                        //        Input.fileNPWP.CopyTo(ms);
+                        //        var fileBytes = ms.ToArray();
+                        //        fieldCustomer.FILE_NPWP = fileBytes;
+                        //        string s = Convert.ToBase64String(fileBytes);
+                        //        // act on the Base64 data
+                        //    }
+                        //}
+                        //if (Input.fileTdp != null)
+                        //{
+                        //    fieldCustomer.FILE_TDP_NAME = Input.fileTdp.FileName;
+                        //    using (var ms = new MemoryStream())
+                        //    {
+                        //        Input.fileTdp.CopyTo(ms);
+                        //        var fileBytes = ms.ToArray();
+                        //        fieldCustomer.FILE_TDP = fileBytes;
+                        //        string s = Convert.ToBase64String(fileBytes);
+                        //        // act on the Base64 data
+                        //    }
+                        //}
+                        //if (Input.fileSIUP != null)
+                        //{
+                        //    fieldCustomer.FILE_SIUP_NAME = Input.fileSIUP.FileName;
+                        //    using (var ms = new MemoryStream())
+                        //    {
+                        //        Input.fileSIUP.CopyTo(ms);
+                        //        var fileBytes = ms.ToArray();
+                        //        fieldCustomer.FILE_SIUP = fileBytes;
+                        //        string s = Convert.ToBase64String(fileBytes);
+                        //        // act on the Base64 data
+                        //    }
+                        //}
+                        //if (Input.fileNIB != null)
+                        //{
+                        //    fieldCustomer.FILE_NIB_NAME = Input.fileNIB.FileName;
+                        //    using (var ms = new MemoryStream())
+                        //    {
+                        //        Input.fileNIB.CopyTo(ms);
+                        //        var fileBytes = ms.ToArray();
+                        //        fieldCustomer.FILE_NIB = fileBytes;
+                        //        string s = Convert.ToBase64String(fileBytes);
+                        //        // act on the Base64 data
+                        //    }
+                        //}
+                        //if (Input.fileSPPKP != null)
+                        //{
+                        //    fieldCustomer.FILE_SPPKP_NAME = Input.fileSPPKP.FileName;
+                        //    using (var ms = new MemoryStream())
+                        //    {
+                        //        Input.fileSPPKP.CopyTo(ms);
+                        //        var fileBytes = ms.ToArray();
+                        //        fieldCustomer.FILE_SPPKP = fileBytes;
+                        //        string s = Convert.ToBase64String(fileBytes);
+                        //        // act on the Base64 data
+                        //    }
+                        //}
+                        //if (Input.fileSKT != null)
+                        //{
+                        //    fieldCustomer.FILE_SKT_NAME = Input.fileSKT.FileName;
+                        //    using (var ms = new MemoryStream())
+                        //    {
+                        //        Input.fileSKT.CopyTo(ms);
+                        //        var fileBytes = ms.ToArray();
+                        //        fieldCustomer.FILE_SKT = fileBytes;
+                        //        string s = Convert.ToBase64String(fileBytes);
+                        //        // act on the Base64 data
+                        //    }
+                        //}
 
                         try
                         {
                             //db.Database.BeginTransaction();
                             db.CustomerTbl.Add(fieldCustomer);
-
                             db.SaveChanges();
                             //db.Dispose();
                         }

@@ -15,5 +15,8 @@ namespace BataAppHR.Models
         public decimal? custdisc { get; set; }
         public decimal? creditnoteval { get; set; }
         public string fileinvoice { get; set; }
+        public string message { get; set; }
+        public string callbackurl { get; set; }
+
     }
 }

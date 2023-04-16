@@ -64,7 +64,7 @@
                 <input asp-for="Input.COMPANY" class="form-control" />
                 <span asp-validation-for="Input.COMPANY" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            @*<div class="form-group">
                 <label asp-for="Input.KTP"></label>
                 <input asp-for="Input.KTP" class="form-control" />
                 <span asp-validation-for="Input.KTP" class="text-danger"></span>
@@ -73,7 +73,7 @@
                 <label asp-for="Input.NPWP"></label>
                 <input asp-for="Input.NPWP" class="form-control" />
                 <span asp-validation-for="Input.NPWP" class="text-danger"></span>
-            </div>
+            </div>*@
             <div class="form-group">
                 <label asp-for="Input.PHONE1"></label>
                 <input asp-for="Input.PHONE1" class="form-control" onkeypress="return allowOnlyNumber(event);" />
@@ -104,7 +104,7 @@
                 <input asp-for="Input.Postal" class="form-control" onkeypress="return allowOnlyNumber(event);" />
                 <span asp-validation-for="Input.Postal" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            @*<div class="form-group">
                 <label class="control-label">Area</label>
                 <br />
                 @Html.DropDownListFor(model => model.Input.store_area, new List<SelectListItem>
@@ -116,10 +116,10 @@
 
                  }, new { @class = "form-control" })
                 <span asp-validation-for="Input.store_area" class="text-danger"></span>
-            </div>
+            </div>*@
         </div>
     </div>
-    <div class="row">
+    @*<div class="row">
         <div class="col-sm">
             <div class="form-group">
                 <div id="flip">Click to slide down panel</div>
@@ -327,7 +327,7 @@
             </div>
         </div>
 
-    </div>
+    </div>*@
     <button type="submit" class="btn btn-red">Daftar</button>
 
 </form>
@@ -336,10 +336,10 @@
     <partial name="_ValidationScriptsPartial" />
     <script>
          $(document).ready(function () {
-            $("#flip").click(function () {
-                $("#panel").slideToggle();
-                //$("#panel").slideUp("slow");
-            });
+            //$("#flip").click(function () {
+            //    $("#panel").slideToggle();
+            //    //$("#panel").slideUp("slow");
+            //});
 
           
 

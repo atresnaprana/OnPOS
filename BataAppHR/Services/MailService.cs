@@ -100,10 +100,10 @@ namespace BataAppHR.Services
             var builder = new BodyBuilder();
             //byte[] fileBytes;
 
-            var fileUrl = Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot");
-            var files = Path.Combine(fileUrl, "FileCodeofConduct.pdf");
+            //var fileUrl = Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot");
+            //var files = Path.Combine(fileUrl, "FileCodeofConduct.pdf");
          
-            builder.Attachments.Add(files);
+            //builder.Attachments.Add(files);
 
             //using (var stream = new FileStream(files, FileMode.Create))
             //{
