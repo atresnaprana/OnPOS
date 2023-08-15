@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BataAppHR.Models;
+using OnPOS.Models;
+
 using Microsoft.EntityFrameworkCore;
 
 namespace BataAppHR.Data
@@ -28,6 +30,7 @@ namespace BataAppHR.Data
 
         public DbSet<dbCustomer> CustomerTbl { get; set; }
         public DbSet<dbSalesWholeSale> SalesWholeSaleTbl { get; set; }
+        public DbSet<dbStoreList> StoreListTbl { get; set; }
 
         public DbSet<dbSalesOrder> SalesOrderTbl { get; set; }
         public DbSet<dbSalesOrderDtl> SalesOrderDtlTbl { get; set; }
@@ -53,6 +56,7 @@ namespace BataAppHR.Data
             modelBuilder.Entity<VaksinSeqModel>().ToTable("sstable_seq");
             modelBuilder.Entity<dbTrainerSeq>().ToTable("dbTrainer_seq");
             modelBuilder.Entity<dbProgramSeq>().ToTable("dbProgram_seq");
+            modelBuilder.Entity<dbCompanySeq>().ToTable("dbCompany_seq");
 
             modelBuilder.Entity<dbRekapTrainingSeq>().ToTable("dbRekapTraining_seq");
             modelBuilder.Entity<dbCustomerSeq>().ToTable("dbCustomer_seq");
@@ -82,6 +86,7 @@ namespace BataAppHR.Data
             modelBuilder.Entity<dbSalesOrderTemp>().ToTable("dbSalesOrderTemp");
             modelBuilder.Entity<dbSalesOrderDtlTemp>().ToTable("dbSalesOrderDtlTemp");
             modelBuilder.Entity<dbsalescreditlog>().ToTable("dbSalesCreditLog").HasKey(t => new { t.edp, t.invno });
+            modelBuilder.Entity<dbStoreList>().ToTable("dbStoreList");
 
             // Configure Primary Keys  
             modelBuilder.Entity<VaksinModel>().HasKey(ug => ug.ID).HasName("PK_SSTable");
@@ -105,6 +110,7 @@ namespace BataAppHR.Data
             modelBuilder.Entity<dbTrainerSeq>().HasKey(ug => ug.id).HasName("PK_Trainer_Seq");
             modelBuilder.Entity<dbProgramSeq>().HasKey(ug => ug.id).HasName("PK_Program_Seq");
             modelBuilder.Entity<dbRekapTrainingSeq>().HasKey(ug => ug.id).HasName("PK_RekapTraining_Seq");
+            modelBuilder.Entity<dbCompanySeq>().HasKey(ug => ug.id).HasName("PK_Company_Seq");
 
             modelBuilder.Entity<XstoreModel>().HasKey(ug => ug.edp).HasName("PK_xstore_organizations");
 
@@ -123,6 +129,7 @@ namespace BataAppHR.Data
             modelBuilder.Entity<dbSalesOrderDtlCredit>().HasKey(ug => ug.id).HasName("PK_SalesOrderDtlCredit");
             modelBuilder.Entity<dbsalesorderpicking>().HasKey(ug => ug.id).HasName("PK_salesorderpicking");
             modelBuilder.Entity<dbsalesorderpickingref>().HasKey(ug => ug.id).HasName("PK_salesorderpickingref");
+            modelBuilder.Entity<dbStoreList>().HasKey(ug => ug.id).HasName("PK_StoreList");
 
             // Configure indexes  
             //modelBuilder.Entity<UserGroup>().HasIndex(p => p.Name).IsUnique().HasDatabaseName("Idx_Name");  
@@ -167,7 +174,6 @@ namespace BataAppHR.Data
 
             //Model Sequence
             modelBuilder.Entity<VaksinSeqModel>().Property(ug => ug.id).HasColumnType("int").UseMySqlIdentityColumn().IsRequired();
-
             modelBuilder.Entity<dbRDSeq>().Property(ug => ug.id).HasColumnType("int").UseMySqlIdentityColumn().IsRequired();
             modelBuilder.Entity<dbTrainerSeq>().Property(ug => ug.id).HasColumnType("int").UseMySqlIdentityColumn().IsRequired();
             modelBuilder.Entity<dbProgramSeq>().Property(ug => ug.id).HasColumnType("int").UseMySqlIdentityColumn().IsRequired();
@@ -175,6 +181,7 @@ namespace BataAppHR.Data
             modelBuilder.Entity<dbCustomerSeq>().Property(ug => ug.id).HasColumnType("int").UseMySqlIdentityColumn().IsRequired();
             modelBuilder.Entity<dbsalesorderpicking>().Property(ug => ug.id).HasColumnType("int").UseMySqlIdentityColumn().IsRequired();
             modelBuilder.Entity<dbsalesorderpickingref>().Property(ug => ug.id).HasColumnType("int").UseMySqlIdentityColumn().IsRequired();
+            modelBuilder.Entity<dbCompanySeq>().Property(ug => ug.id).HasColumnType("int").UseMySqlIdentityColumn().IsRequired();
 
 
             //Model xstore
@@ -479,6 +486,34 @@ namespace BataAppHR.Data
             modelBuilder.Entity<dbCustomer>().Property(ug => ug.FILE_SKT_NAME).HasColumnType("varchar(255)");
             modelBuilder.Entity<dbCustomer>().Property(ug => ug.store_area).HasColumnType("varchar(50)");
             modelBuilder.Entity<dbCustomer>().Property(ug => ug.discount_customer).HasColumnType("varchar(50)");
+
+
+            //Store list tables
+            modelBuilder.Entity<dbStoreList>().Property(ug => ug.id).HasColumnType("int").UseMySqlIdentityColumn().IsRequired();
+            modelBuilder.Entity<dbStoreList>().Property(ug => ug.COMPANY_ID).HasColumnType("varchar(50)").IsRequired(false);
+            modelBuilder.Entity<dbStoreList>().Property(ug => ug.STORE_NAME).HasColumnType("varchar(255)").IsRequired(false);
+            modelBuilder.Entity<dbStoreList>().Property(ug => ug.STORE_ADDRESS).HasColumnType("varchar(255)").IsRequired(false);
+            modelBuilder.Entity<dbStoreList>().Property(ug => ug.STORE_CITY).HasColumnType("varchar(255)").IsRequired(false);
+            modelBuilder.Entity<dbStoreList>().Property(ug => ug.STORE_PROVINCE).HasColumnType("varchar(255)").IsRequired(false);
+            modelBuilder.Entity<dbStoreList>().Property(ug => ug.STORE_POSTAL).HasColumnType("varchar(255)").IsRequired(false);
+            modelBuilder.Entity<dbStoreList>().Property(ug => ug.STORE_BANK_NAME).HasColumnType("varchar(255)").IsRequired(false);
+            modelBuilder.Entity<dbStoreList>().Property(ug => ug.STORE_BANK_NUMBER).HasColumnType("varchar(255)").IsRequired(false);
+            modelBuilder.Entity<dbStoreList>().Property(ug => ug.STORE_BANK_BRANCH).HasColumnType("varchar(255)").IsRequired(false);
+            modelBuilder.Entity<dbStoreList>().Property(ug => ug.STORE_BANK_COUNTRY).HasColumnType("varchar(255)").IsRequired(false);
+            modelBuilder.Entity<dbStoreList>().Property(ug => ug.STORE_REG_DATE).HasColumnType("date");
+            modelBuilder.Entity<dbStoreList>().Property(ug => ug.STORE_BL_FLAG).HasColumnType("varchar(1)").IsRequired(false);
+            modelBuilder.Entity<dbStoreList>().Property(ug => ug.ENTRY_DATE).HasColumnType("datetime");
+            modelBuilder.Entity<dbStoreList>().Property(ug => ug.UPDATE_DATE).HasColumnType("datetime");
+            modelBuilder.Entity<dbStoreList>().Property(ug => ug.ENTRY_USER).HasColumnType("varchar(255)").IsRequired(false);
+            modelBuilder.Entity<dbStoreList>().Property(ug => ug.UPDATE_USER).HasColumnType("varchar(255)").IsRequired(false);
+            modelBuilder.Entity<dbStoreList>().Property(ug => ug.FLAG_AKTIF).HasColumnType("varchar(1)").IsRequired(false);
+            modelBuilder.Entity<dbStoreList>().Property(ug => ug.FILE_PHOTO_NAME).HasColumnType("varchar(255)").IsRequired(false);
+            modelBuilder.Entity<dbStoreList>().Property(ug => ug.FILE_PHOTO).HasColumnType("MediumBlob").IsRequired(false);
+            modelBuilder.Entity<dbStoreList>().Property(ug => ug.STORE_MANAGER_NAME).HasColumnType("varchar(255)").IsRequired(false);
+            modelBuilder.Entity<dbStoreList>().Property(ug => ug.STORE_MANAGER_EMAIL).HasColumnType("varchar(255)").IsRequired(false);
+            modelBuilder.Entity<dbStoreList>().Property(ug => ug.STORE_MANAGER_PHONE).HasColumnType("varchar(255)").IsRequired(false);
+            modelBuilder.Entity<dbStoreList>().Property(ug => ug.STORE_EMAIL).HasColumnType("varchar(255)").IsRequired(false);
+            modelBuilder.Entity<dbStoreList>().Property(ug => ug.STORE_MANAGER_KTP).HasColumnType("varchar(255)").IsRequired(false);
 
             //Article Tables
             modelBuilder.Entity<dbArticle>().Property(ug => ug.id).HasColumnType("int").UseMySqlIdentityColumn().IsRequired();

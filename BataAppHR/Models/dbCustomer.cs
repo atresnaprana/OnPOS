@@ -15,6 +15,7 @@ namespace BataAppHR.Models
         public int id { get; set; }
         public string EDP { get; set; }
         public string CUST_NAME { get; set; }
+        public string COMPANY_ID { get; set; }
         public string COMPANY { get; set; }
         public string NPWP { get; set; }
         public string address { get; set; }
@@ -63,7 +64,7 @@ namespace BataAppHR.Models
         public string isApproved2 { get; set; }
         public string store_area { get; set; }
         public decimal? discount_customer { get; set; }
-
+        public int totalstoreconfig { get; set; }
 
         [NotMapped]
         public bool isBlackList { get; set; }

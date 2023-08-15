@@ -14,9 +14,9 @@ namespace OnPOS.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int id { get; set; }
-        public int COMPANY_ID { get; set; }
+        public string COMPANY_ID { get; set; }
         public string STORE_NAME { get; set; }
-        public string STORE_ADRESS { get; set; }
+        public string STORE_ADDRESS { get; set; }
         public string STORE_CITY { get; set; }
         public string STORE_PROVINCE { get; set; }
         public string STORE_POSTAL { get; set; }
@@ -34,7 +34,12 @@ namespace OnPOS.Models
         public byte[] FILE_PHOTO { get; set; }
 
         public string FILE_PHOTO_NAME { get; set; }
-        
+        public string STORE_MANAGER_NAME { get; set; }
+        public string STORE_MANAGER_PHONE { get; set; }
+        public string STORE_MANAGER_EMAIL { get; set; }
+        public string STORE_MANAGER_KTP { get; set; }
+        public string STORE_EMAIL { get; set; }
+
         [NotMapped]
         public bool isBlackList { get; set; }
         [NotMapped]

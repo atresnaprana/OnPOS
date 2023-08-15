@@ -413,6 +413,9 @@ namespace BataAppHR.Migrations.FormDB
                     b.Property<string>("COMPANY")
                         .HasColumnType("varchar(255)");
 
+                    b.Property<string>("COMPANY_ID")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
                     b.Property<string>("CUST_NAME")
                         .HasColumnType("varchar(255)");
 
@@ -541,6 +544,9 @@ namespace BataAppHR.Migrations.FormDB
 
                     b.Property<string>("store_area")
                         .HasColumnType("varchar(50)");
+
+                    b.Property<int>("totalstoreconfig")
+                        .HasColumnType("int");
 
                     b.HasKey("id")
                         .HasName("PK_Customer");
@@ -1769,6 +1775,104 @@ namespace BataAppHR.Migrations.FormDB
                         .HasName("PK_salesorderpickingref");
 
                     b.ToTable("dbsalesorderpickingref");
+                });
+
+            modelBuilder.Entity("OnPOS.Models.dbCompanySeq", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn);
+
+                    b.HasKey("id")
+                        .HasName("PK_Company_Seq");
+
+                    b.ToTable("dbCompany_seq");
+                });
+
+            modelBuilder.Entity("OnPOS.Models.dbStoreList", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("COMPANY_ID")
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<DateTime>("ENTRY_DATE")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("ENTRY_USER")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<byte[]>("FILE_PHOTO")
+                        .HasColumnType("MediumBlob");
+
+                    b.Property<string>("FILE_PHOTO_NAME")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("FLAG_AKTIF")
+                        .HasColumnType("varchar(1)");
+
+                    b.Property<string>("STORE_ADDRESS")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("STORE_BANK_BRANCH")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("STORE_BANK_COUNTRY")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("STORE_BANK_NAME")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("STORE_BANK_NUMBER")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("STORE_BL_FLAG")
+                        .HasColumnType("varchar(1)");
+
+                    b.Property<string>("STORE_CITY")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("STORE_EMAIL")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("STORE_MANAGER_EMAIL")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("STORE_MANAGER_KTP")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("STORE_MANAGER_NAME")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("STORE_MANAGER_PHONE")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("STORE_NAME")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("STORE_POSTAL")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("STORE_PROVINCE")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<DateTime>("STORE_REG_DATE")
+                        .HasColumnType("date");
+
+                    b.Property<DateTime>("UPDATE_DATE")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("UPDATE_USER")
+                        .HasColumnType("varchar(255)");
+
+                    b.HasKey("id")
+                        .HasName("PK_StoreList");
+
+                    b.ToTable("dbStoreList");
                 });
 #pragma warning restore 612, 618
         }
