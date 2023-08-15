@@ -1,0 +1,431 @@
+﻿@model OnPOS.Models.dbStoreList
+@{
+    ViewData["Title"] = "Edit";
+    var errmsg = "";
+    if (Model != null)
+    {
+        if (!string.IsNullOrEmpty(Model.errmsg))
+        {
+            errmsg = Model.errmsg;
+        }
+    }
+
+}
+<style>
+    input.largerCheckbox {
+        width: 20px;
+        height: 20px;
+    }
+
+    #panel, #flip {
+        padding: 5px;
+        text-align: center;
+        background-color: #e5eecc;
+        border: solid 1px #c3c3c3;
+    }
+
+    #panel {
+        padding: 50px;
+        display: none;
+    }
+</style>
+<h1>Edit</h1>
+<h3>Store Information</h3>
+<hr />
+<form asp-action="Edit" id="formcreate" enctype="multipart/form-data">
+    <div class="row">
+        <div class="col-sm">
+            <div class="row">
+                <div class="col-sm">
+                    <div class="form-group">
+                        <label class="control-label">Store Name</label>
+                        <input asp-for="STORE_NAME" class="form-control" />
+                        <input asp-for="id" class="form-control" type="hidden"/>
+                        <span asp-validation-for="STORE_NAME" class="text-danger"></span>
+                    </div>
+                </div>
+
+            </div>
+            @*<div class="form-group">
+            <label class="control-label">Company</label>
+            <input asp-for="COMPANY" class="form-control" />
+            <span asp-validation-for="COMPANY" class="text-danger"></span>
+            </div>*@
+
+            <div class="form-group">
+                <label class="control-label">address</label>
+                <textarea asp-for="STORE_ADDRESS" class="form-control"></textarea>
+                <span asp-validation-for="STORE_ADDRESS" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">city</label>
+                <input asp-for="STORE_CITY" class="form-control" />
+                <span asp-validation-for="STORE_CITY" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Province</label>
+                <input asp-for="STORE_PROVINCE" class="form-control" />
+                <span asp-validation-for="STORE_PROVINCE" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Postal</label>
+                <input asp-for="STORE_POSTAL" class="form-control" />
+                <span asp-validation-for="STORE_POSTAL" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-sm">
+            <div class="form-group">
+                <label class="control-label">Store Register Dates</label>
+                <input type="date" asp-for="STORE_REG_DATE" class="form-control" />
+                <span asp-validation-for="STORE_REG_DATE" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label">Bank Name</label>
+                <input asp-for="STORE_BANK_NAME" class="form-control" />
+                <span asp-validation-for="STORE_BANK_NAME" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Bank No.</label>
+                <input asp-for="STORE_BANK_NUMBER" class="form-control" onkeypress="return allowOnlyNumber(event);" />
+                <span asp-validation-for="STORE_BANK_NUMBER" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Branch</label>
+                <input asp-for="STORE_BANK_BRANCH" class="form-control" />
+                <span asp-validation-for="STORE_BANK_BRANCH" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Bank Country</label>
+                <input asp-for="STORE_BANK_COUNTRY" class="form-control" />
+                <span asp-validation-for="STORE_BANK_COUNTRY" class="text-danger"></span>
+            </div>
+
+
+        </div>
+        <div class="col-sm">
+            <div class="row">
+                <div class="col-sm">
+                    <div class="form-group">
+
+                        <label class="control-label">Store Manager KTP</label>
+                        <input asp-for="STORE_MANAGER_KTP" class="form-control" onkeypress="return allowOnlyNumber(event);" />
+                        <span asp-validation-for="STORE_MANAGER_KTP" class="text-danger"></span>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class="col-sm">
+                    <div class="form-group">
+                        <label class="control-label">Store Manager Name</label>
+                        <input asp-for="STORE_MANAGER_NAME" class="form-control" />
+                        <span asp-validation-for="STORE_MANAGER_NAME" class="text-danger"></span>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row">
+
+                <div class="col-sm">
+                    <div class="form-group">
+                        <label class="control-label">Phone 1</label>
+                        <input asp-for="STORE_MANAGER_PHONE" class="form-control" onkeypress="return allowOnlyNumber(event);" />
+                        <span asp-validation-for="STORE_MANAGER_PHONE" class="text-danger"></span>
+                    </div>
+                </div>
+
+            </div>
+           
+            <div class="row">
+                
+                <div class="col-sm">
+                    <div class="form-group">
+                        <label class="control-label">Store Manager Email</label>
+                        <input asp-for="STORE_MANAGER_EMAIL" class="form-control" onkeypress="return allowOnlyNumber(event);" />
+                        <span asp-validation-for="STORE_MANAGER_EMAIL" class="text-danger"></span>
+                    </div>
+                </div>
+               
+            </div>
+            <div class="row">
+
+                <div class="col-sm">
+                    <div class="form-group">
+                        <label class="control-label">Email</label>
+                        <input asp-for="STORE_EMAIL" class="form-control" readonly />
+                        <span asp-validation-for="STORE_EMAIL" class="text-danger"></span>
+                    </div>
+                </div>
+
+            </div>
+          
+           
+        </div>
+    </div>
+    @*<div class="row">
+    <div class="col-sm">
+    <div class="form-group">
+    <div id="flip">Click to slide down panel</div>
+    <div id="panel">
+    <div class="container">
+    <div class="row">
+    <div class="col-sm">
+    <div class="row">
+    <div class="form-group">
+    <div class="row">
+    <div class="col-sm-2">
+    <div class="form-group">
+    <label class="control-label"> KTP</label>
+
+    </div>
+    </div>
+    <div class="col-sm-2">
+    <div class="form-group">
+    <input type="file" asp-for="fileKtp" />
+    <a href="#" id="fileKTPName"></a>
+
+    </div>
+    </div>
+
+    </div>
+
+    </div>
+    </div>
+    <div class="row">
+    <div class="form-group">
+    <div class="row">
+    <div class="col-sm-2">
+    <div class="form-group">
+    <label class="control-label"> Akta Perusahaan</label>
+
+    </div>
+    </div>
+    <div class="col-sm-2">
+    <div class="form-group">
+    <input type="file" asp-for="fileAkta" />
+    <a href="#" id="fileAktaName"></a>
+
+    </div>
+    </div>
+
+    </div>
+
+    </div>
+    </div>
+    <div class="row">
+    <div class="form-group">
+    <div class="row">
+    <div class="col-sm-2">
+    <div class="form-group">
+    <label class="control-label">Rekening Bank</label>
+
+    </div>
+    </div>
+    <div class="col-sm-2">
+    <div class="form-group">
+    <input type="file" asp-for="fileRekening" />
+    <a href="#" id="fileRekeningName"></a>
+
+    </div>
+    </div>
+
+    </div>
+
+    </div>
+    </div>
+    </div>
+    <div class="col-sm">
+    <div class="row">
+    <div class="form-group">
+    <div class="row">
+    <div class="col-sm-2">
+    <div class="form-group">
+    <label class="control-label">NPWP</label>
+
+    </div>
+    </div>
+    <div class="col-sm-2">
+    <div class="form-group">
+    <input type="file" asp-for="fileNPWP" />
+    <a href="#" id="fileNPWPName"></a>
+
+    </div>
+    </div>
+
+    </div>
+
+    </div>
+    </div>
+    <div class="row">
+    <div class="form-group">
+    <div class="row">
+    <div class="col-sm-2">
+    <div class="form-group">
+    <label class="control-label">TDP</label>
+
+    </div>
+    </div>
+    <div class="col-sm-2">
+    <div class="form-group">
+    <input type="file" asp-for="fileTdp" />
+    <a href="#" id="fileTDPName"></a>
+
+    </div>
+    </div>
+
+    </div>
+
+    </div>
+    </div>
+    <div class="row">
+    <div class="form-group">
+    <div class="row">
+    <div class="col-sm-2">
+    <div class="form-group">
+    <label class="control-label">SIUP</label>
+    </div>
+    </div>
+    <div class="col-sm-2">
+    <div class="form-group">
+    <input type="file" asp-for="fileSIUP" />
+    <a href="#" id="fileSIUPName"></a>
+    </div>
+    </div>
+
+    </div>
+
+    </div>
+    </div>
+    </div>
+    <div class="col-sm">
+    <div class="row">
+    <div class="form-group">
+    <div class="row">
+    <div class="col-sm-2">
+    <div class="form-group">
+    <label class="control-label">NIB</label>
+
+    </div>
+    </div>
+    <div class="col-sm-2">
+    <div class="form-group">
+    <input type="file" asp-for="fileNIB" />
+    <a href="#" id="fileNIBName"></a>
+
+    </div>
+    </div>
+
+    </div>
+
+    </div>
+    </div>
+    <div class="row">
+    <div class="form-group">
+    <div class="row">
+    <div class="col-sm-2">
+    <div class="form-group">
+    <label class="control-label">SPPKP / PKP</label>
+
+    </div>
+    </div>
+    <div class="col-sm-2">
+    <div class="form-group">
+    <input type="file" asp-for="fileSPPKP" />
+    <a href="#" id="fileSPPKPName"></a>
+
+    </div>
+    </div>
+
+    </div>
+
+    </div>
+    </div>
+    <div class="row">
+    <div class="form-group">
+    <div class="row">
+    <div class="col-sm-2">
+    <div class="form-group">
+    <label class="control-label">SKT</label>
+
+    </div>
+    </div>
+    <div class="col-sm-2">
+    <div class="form-group">
+    <input type="file" asp-for="fileSKT" />
+    <a href="#" id="fileSKTName"></a>
+
+    </div>
+    </div>
+
+    </div>
+
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+
+    </div>*@
+    <div class="row">
+        <div class="col-sm">
+            <div class="form-group">
+                <input type="button" value="Simpan Data" onclick="alertfirst()" class="btn btn-red" />
+            </div>
+        </div>
+
+    </div>
+
+</form>
+
+
+<div>
+    <a asp-action="Index" class="btn btn-dark">Kembali ke List</a>
+</div>
+@section Scripts{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        $(document).ready(function () {
+
+            $("#flip").click(function () {
+                $("#panel").slideToggle();
+                //$("#panel").slideUp("slow");
+            });
+            var errmsg = '@errmsg';
+            if (errmsg != "" && errmsg != null) {
+                alert(errmsg);
+            }
+
+
+        });
+
+        function allowOnlyNumber(evt) {
+            var charCode = (evt.which) ? evt.which : event.keyCode
+            if (charCode > 31 && (charCode < 48 || charCode > 57))
+                return false;
+            return true;
+        }
+        function alertfirst() {
+            var pass = $("#Password").val();
+            if (pass == "" || pass == null) {
+                alert("empty password");
+            } else {
+                if (confirm("Are you sure saving data?")) {
+                    $('#formcreate').submit();
+                } else {
+                    return false;
+                }
+            }
+
+        }
+
+
+    </script>
+}

@@ -103,20 +103,38 @@
 
         </div>
         <div class="col-sm">
-            <div class="form-group">
-
-                <label class="control-label">Store Manager KTP</label>
-                <input asp-for="STORE_MANAGER_KTP" class="form-control" onkeypress="return allowOnlyNumber(event);" />
-                <span asp-validation-for="STORE_MANAGER_KTP" class="text-danger"></span>
-            </div>
             <div class="row">
-                <div class="form-group">
-                    <label class="control-label">Store Manager Name</label>
-                    <input asp-for="STORE_MANAGER_NAME" class="form-control" onkeypress="return allowOnlyNumber(event);" />
-                    <span asp-validation-for="STORE_MANAGER_NAME" class="text-danger"></span>
+                <div class="col-sm">
+                    <div class="form-group">
+
+                        <label class="control-label">Store Manager KTP</label>
+                        <input asp-for="STORE_MANAGER_KTP" class="form-control" onkeypress="return allowOnlyNumber(event);" />
+                        <span asp-validation-for="STORE_MANAGER_KTP" class="text-danger"></span>
+                    </div>
+                </div>
+               
+            </div>
+           
+            <div class="row">
+                <div class="col-sm">
+                    <div class="form-group">
+                        <label class="control-label">Store Manager Name</label>
+                        <input asp-for="STORE_MANAGER_NAME" class="form-control" />
+                        <span asp-validation-for="STORE_MANAGER_NAME" class="text-danger"></span>
+                    </div>
+                </div>
+             
+            </div>
+          
+            <div class="row">
+                <div class="col-sm">
+                    <div class="form-group">
+                        <label class="control-label">Store Manager Email</label>
+                        <input asp-for="STORE_MANAGER_EMAIL" class="form-control" onkeypress="return allowOnlyNumber(event);" />
+                        <span asp-validation-for="STORE_MANAGER_EMAIL" class="text-danger"></span>
+                    </div>
                 </div>
             </div>
-
             <div class="row">
                 <div class="col-sm">
                     <div class="form-group">
@@ -125,68 +143,44 @@
                         <span asp-validation-for="STORE_MANAGER_PHONE" class="text-danger"></span>
                     </div>
                 </div>
+             
+               
+            </div>
+            <div class="row">
                 <div class="col-sm">
                     <div class="form-group">
-                        <label class="control-label">Store Manager Email</label>
-                        <input asp-for="STORE_MANAGER_EMAIL" class="form-control" onkeypress="return allowOnlyNumber(event);" />
-                        <span asp-validation-for="STORE_MANAGER_EMAIL" class="text-danger"></span>
+                        <label class="control-label">Email</label>
+                        <input asp-for="STORE_EMAIL" class="form-control" />
+                        <span asp-validation-for="STORE_EMAIL" class="text-danger"></span>
                     </div>
                 </div>
-                @*<div class="col-sm">
-            <div class="form-group">
-                <label class="control-label">Phone 2</label>
-                <input asp-for="PHONE2" class="form-control" onkeypress="return allowOnlyNumber(event);" />
-                <span asp-validation-for="PHONE2" class="text-danger"></span>
+
+
             </div>
-        </div>*@
-            </div>
-            @*<div class="row" style="display:none;">
+            <div class="row">
                 <div class="col-sm">
                     <div class="form-group">
-                        <label class="control-label">VA Note</label>
-                        <input asp-for="VA1NOTE" class="form-control" value="BNI" />
-                        <span asp-validation-for="VA1NOTE" class="text-danger"></span>
+                        <label asp-for="Password"></label>
+                        <input asp-for="Password" class="form-control" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
                     </div>
                 </div>
+
+
+            </div>
+            <div class="row">
                 <div class="col-sm">
                     <div class="form-group">
-                        <label class="control-label">VA </label>
-                        <input asp-for="VA1" class="form-control" onkeypress="return allowOnlyNumber(event);" />
-                        <span asp-validation-for="VA1" class="text-danger"></span>
+                        <label asp-for="ConfirmPassword"></label>
+                        <input asp-for="ConfirmPassword" class="form-control" />
+                        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
                     </div>
                 </div>
-            </div>*@
-            @*<div class="row" style="display:none;">
-                <div class="col-sm">
-                    <div class="form-group">
-                        <label class="control-label">VA 2 Note</label>
-                        <input asp-for="VA2NOTE" class="form-control" />
-                        <span asp-validation-for="VA2NOTE" class="text-danger"></span>
-                    </div>
-                </div>
-                <div class="col-sm">
-                    <div class="form-group">
-                        <label class="control-label">VA 2 </label>
-                        <input asp-for="VA2" class="form-control" onkeypress="return allowOnlyNumber(event);" />
-                        <span asp-validation-for="VA2" class="text-danger"></span>
-                    </div>
-                </div>
-            </div>*@
-            <div class="form-group">
-                <label class="control-label">Email</label>
-                <input asp-for="STORE_EMAIL" class="form-control" />
-                <span asp-validation-for="STORE_EMAIL" class="text-danger"></span>
+
+
             </div>
-            <div class="form-group">
-                <label asp-for="Password"></label>
-                <input asp-for="Password" class="form-control" />
-                <span asp-validation-for="Password" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ConfirmPassword"></label>
-                <input asp-for="ConfirmPassword" class="form-control" />
-                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-            </div>
+
+           
         </div>
     </div>
     @*<div class="row">
