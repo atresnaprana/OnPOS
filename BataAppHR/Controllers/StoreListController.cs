@@ -175,5 +175,169 @@ namespace OnPOS.Controllers
 
             return View(fld);
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(int id, [Bind] dbStoreList fld)
+        {
+            //if (id == null)
+            //{
+            //    return NotFound();
+            //}
+            if (ModelState.IsValid)
+            {
+                var editFld = db.StoreListTbl.Find(id);
+                editFld.STORE_NAME = fld.STORE_NAME;
+                editFld.STORE_ADDRESS = fld.STORE_ADDRESS;
+                editFld.STORE_CITY = fld.STORE_CITY;
+                editFld.STORE_PROVINCE = fld.STORE_PROVINCE;
+                editFld.STORE_POSTAL = fld.STORE_POSTAL;
+                editFld.STORE_REG_DATE = fld.STORE_REG_DATE;
+                editFld.STORE_BANK_NAME = fld.STORE_BANK_NAME;
+                editFld.STORE_BANK_NUMBER = fld.STORE_BANK_NUMBER;
+                editFld.STORE_BANK_BRANCH = fld.STORE_BANK_BRANCH;
+                editFld.STORE_BANK_COUNTRY = fld.STORE_BANK_COUNTRY;
+                editFld.STORE_MANAGER_KTP = fld.STORE_MANAGER_KTP;
+                editFld.STORE_MANAGER_NAME = fld.STORE_MANAGER_NAME;
+                editFld.STORE_MANAGER_PHONE = fld.STORE_MANAGER_PHONE;
+                editFld.STORE_MANAGER_EMAIL = fld.STORE_MANAGER_EMAIL;
+                editFld.STORE_EMAIL = fld.STORE_EMAIL;
+               
+
+                //editFld.FLAG_AKTIF = "0";
+                if (fld.isBlackList == true)
+                {
+                    editFld.STORE_BL_FLAG = "1";
+                }
+                else
+                {
+                    editFld.STORE_BL_FLAG = "0";
+
+                }
+
+                editFld.UPDATE_DATE = DateTime.Now;
+                editFld.UPDATE_USER = User.Identity.Name;
+
+                try
+                {
+                    db.SaveChanges();
+
+                }
+                catch (Exception ex)
+                {
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot\ErrorLog");
+                    if (!Directory.Exists(filePath))
+                    {
+                        Directory.CreateDirectory(filePath);
+                    }
+                    using (StreamWriter outputFile = new StreamWriter(Path.Combine(filePath, "ErrMsgEdit" + (DateTime.Now).ToString("dd-MM-yyyy HH-mm-ss") + ".txt")))
+                    {
+                        outputFile.WriteLine(ex.ToString());
+                    }
+                }
+                return RedirectToAction("Index");
+            }
+            return View(fld);
+        }
+        [Authorize]
+        public IActionResult Delete(int id)
+        {
+            //if (string.IsNullOrEmpty(id))
+            //{
+            //    return NotFound();
+            //}
+            dbStoreList fld = db.StoreListTbl.Find(id);
+            if (fld == null)
+            {
+                return NotFound();
+            }
+            return View(fld);
+        }
+        [HttpPost, ActionName("Delete")]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeactivateStore(int id)
+        {
+            dbStoreList fld = db.StoreListTbl.Find(id);
+
+            if (fld == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                try
+                {
+                    //db.trainerDb.Remove(fld);
+                    fld.FLAG_AKTIF = "0";
+                    fld.UPDATE_DATE = DateTime.Now;
+                    fld.UPDATE_USER = User.Identity.Name;
+                    db.SaveChanges();
+                }
+                catch (Exception ex)
+                {
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot\ErrorLog");
+                    if (!Directory.Exists(filePath))
+                    {
+                        Directory.CreateDirectory(filePath);
+                    }
+                    using (StreamWriter outputFile = new StreamWriter(Path.Combine(filePath, "ErrMsgEdit" + (DateTime.Now).ToString("dd-MM-yyyy HH-mm-ss") + ".txt")))
+                    {
+                        outputFile.WriteLine(ex.ToString());
+                    }
+                }
+            }
+            return RedirectToAction("Index");
+        }
+
+        [Authorize]
+        public IActionResult Reactivate(int id)
+        {
+            //if (string.IsNullOrEmpty(id))
+            //{
+            //    return NotFound();
+            //}
+            dbStoreList fld = db.StoreListTbl.Find(id);
+            if (fld == null)
+            {
+                return NotFound();
+            }
+            return View(fld);
+        }
+        [HttpPost, ActionName("Reactivate")]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public IActionResult ReactivateStore(int id)
+        {
+            dbStoreList fld = db.StoreListTbl.Find(id);
+
+            if (fld == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                try
+                {
+                    //db.trainerDb.Remove(fld);
+                    fld.FLAG_AKTIF = "1";
+                    fld.UPDATE_DATE = DateTime.Now;
+                    fld.UPDATE_USER = User.Identity.Name;
+                    db.SaveChanges();
+                }
+                catch (Exception ex)
+                {
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot\ErrorLog");
+                    if (!Directory.Exists(filePath))
+                    {
+                        Directory.CreateDirectory(filePath);
+                    }
+                    using (StreamWriter outputFile = new StreamWriter(Path.Combine(filePath, "ErrMsgEdit" + (DateTime.Now).ToString("dd-MM-yyyy HH-mm-ss") + ".txt")))
+                    {
+                        outputFile.WriteLine(ex.ToString());
+                    }
+                }
+            }
+            return RedirectToAction("Index");
+        }
     }
 }

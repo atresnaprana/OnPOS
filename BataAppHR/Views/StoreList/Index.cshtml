@@ -162,7 +162,18 @@
                         &nbsp;
                         @if (User.IsInRole("CustomerOnPos"))
                         {
-                            <a asp-action="Delete" asp-route-id="@dt.id" class="btn btn-sm btn-dark">Delete</a>
+                            @if (dt.FLAG_AKTIF == "1")
+                            {
+
+
+                                <a asp-action="Delete" asp-route-id="@dt.id" class="btn btn-sm btn-dark">Deactivate</a>
+                            }
+                            else
+                            {
+                                <a asp-action="Reactivate" asp-route-id="@dt.id" class="btn btn-sm btn-dark">Reactivate</a>
+
+                            }                           
+
 
                         }
                     </div>

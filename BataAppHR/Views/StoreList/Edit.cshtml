@@ -144,7 +144,7 @@
                 <div class="col-sm">
                     <div class="form-group">
                         <label class="control-label">Store Manager Email</label>
-                        <input asp-for="STORE_MANAGER_EMAIL" class="form-control" onkeypress="return allowOnlyNumber(event);" />
+                        <input asp-for="STORE_MANAGER_EMAIL" class="form-control" />
                         <span asp-validation-for="STORE_MANAGER_EMAIL" class="text-danger"></span>
                     </div>
                 </div>
@@ -413,15 +413,10 @@
             return true;
         }
         function alertfirst() {
-            var pass = $("#Password").val();
-            if (pass == "" || pass == null) {
-                alert("empty password");
+            if (confirm("Are you sure saving data?")) {
+                $('#formcreate').submit();
             } else {
-                if (confirm("Are you sure saving data?")) {
-                    $('#formcreate').submit();
-                } else {
-                    return false;
-                }
+                return false;
             }
 
         }

@@ -36,6 +36,7 @@ namespace OnPOS.Models
         public string FILE_PHOTO_NAME { get; set; }
         public string STORE_MANAGER_NAME { get; set; }
         public string STORE_MANAGER_PHONE { get; set; }
+        [DataType(DataType.EmailAddress, ErrorMessage = "E-mail is not valid")]
         public string STORE_MANAGER_EMAIL { get; set; }
         public string STORE_MANAGER_KTP { get; set; }
         public string STORE_EMAIL { get; set; }
