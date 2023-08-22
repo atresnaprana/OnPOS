@@ -1,0 +1,28 @@
+﻿@model OnPOS.Models.dbStoreList
+
+@{
+    ViewData["Title"] = "Deactivate";
+}
+
+<h1>Delete</h1>
+
+<div>
+    <h4>Book Info</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            <label>Nama: </label> @Html.DisplayFor(model => model.STORE_NAME)
+        </dt>
+        <dt>
+            <label>Manager: </label>@Html.DisplayFor(model => model.STORE_MANAGER_NAME)
+        </dt>
+        <dt>
+            <label>Phone: </label>@Html.DisplayFor(model => model.STORE_MANAGER_PHONE)
+        </dt>
+    </dl>
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="id" />
+        <input type="submit" value="Delete" class="btn btn-danger" />
+        <a asp-action="Index" class="btn btn-primary">Back to list</a>
+    </form>
+</div>

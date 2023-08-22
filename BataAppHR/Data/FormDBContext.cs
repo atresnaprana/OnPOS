@@ -30,7 +30,6 @@ namespace BataAppHR.Data
 
         public DbSet<dbCustomer> CustomerTbl { get; set; }
         public DbSet<dbSalesWholeSale> SalesWholeSaleTbl { get; set; }
-        public DbSet<dbStoreList> StoreListTbl { get; set; }
 
         public DbSet<dbSalesOrder> SalesOrderTbl { get; set; }
         public DbSet<dbSalesOrderDtl> SalesOrderDtlTbl { get; set; }
@@ -43,6 +42,12 @@ namespace BataAppHR.Data
         public DbSet<dbSalesOrderDtlCredit> SalesOrderDtlCreditTbl { get; set; }
         public DbSet<dbsalescreditlog> creditlogtbl { get; set; }
 
+
+        public DbSet<dbStoreList> StoreListTbl { get; set; }
+        public DbSet<dbItemMaster> ItemMasterTbl { get; set; }
+        public DbSet<dbCategory> CategoryTbl { get; set; }
+        public DbSet<dbSubCategory> SubCategoryTbl { get; set; }
+        public DbSet<dbItemStore> ItemStoreTbl { get; set; }
 
         public FormDBContext(DbContextOptions<FormDBContext> options) : base(options)
         {
@@ -87,6 +92,10 @@ namespace BataAppHR.Data
             modelBuilder.Entity<dbSalesOrderDtlTemp>().ToTable("dbSalesOrderDtlTemp");
             modelBuilder.Entity<dbsalescreditlog>().ToTable("dbSalesCreditLog").HasKey(t => new { t.edp, t.invno });
             modelBuilder.Entity<dbStoreList>().ToTable("dbStoreList");
+            modelBuilder.Entity<dbItemMaster>().ToTable("dbItemMaster");
+            modelBuilder.Entity<dbCategory>().ToTable("dbCategory");
+            modelBuilder.Entity<dbSubCategory>().ToTable("dbSubCategory");
+            modelBuilder.Entity<dbItemStore>().ToTable("dbItemStore");
 
             // Configure Primary Keys  
             modelBuilder.Entity<VaksinModel>().HasKey(ug => ug.ID).HasName("PK_SSTable");
@@ -130,6 +139,10 @@ namespace BataAppHR.Data
             modelBuilder.Entity<dbsalesorderpicking>().HasKey(ug => ug.id).HasName("PK_salesorderpicking");
             modelBuilder.Entity<dbsalesorderpickingref>().HasKey(ug => ug.id).HasName("PK_salesorderpickingref");
             modelBuilder.Entity<dbStoreList>().HasKey(ug => ug.id).HasName("PK_StoreList");
+            modelBuilder.Entity<dbItemMaster>().HasKey(ug => ug.id).HasName("PK_ItemMaster");
+            modelBuilder.Entity<dbCategory>().HasKey(ug => ug.id).HasName("PK_Category");
+            modelBuilder.Entity<dbSubCategory>().HasKey(ug => ug.id).HasName("PK_SubCategory");
+            modelBuilder.Entity<dbItemStore>().HasKey(ug => ug.id).HasName("PK_ItemStore");
 
             // Configure indexes  
             //modelBuilder.Entity<UserGroup>().HasIndex(p => p.Name).IsUnique().HasDatabaseName("Idx_Name");  
@@ -487,33 +500,10 @@ namespace BataAppHR.Data
             modelBuilder.Entity<dbCustomer>().Property(ug => ug.store_area).HasColumnType("varchar(50)");
             modelBuilder.Entity<dbCustomer>().Property(ug => ug.discount_customer).HasColumnType("varchar(50)");
 
+            
 
-            //Store list tables
-            modelBuilder.Entity<dbStoreList>().Property(ug => ug.id).HasColumnType("int").UseMySqlIdentityColumn().IsRequired();
-            modelBuilder.Entity<dbStoreList>().Property(ug => ug.COMPANY_ID).HasColumnType("varchar(50)").IsRequired(false);
-            modelBuilder.Entity<dbStoreList>().Property(ug => ug.STORE_NAME).HasColumnType("varchar(255)").IsRequired(false);
-            modelBuilder.Entity<dbStoreList>().Property(ug => ug.STORE_ADDRESS).HasColumnType("varchar(255)").IsRequired(false);
-            modelBuilder.Entity<dbStoreList>().Property(ug => ug.STORE_CITY).HasColumnType("varchar(255)").IsRequired(false);
-            modelBuilder.Entity<dbStoreList>().Property(ug => ug.STORE_PROVINCE).HasColumnType("varchar(255)").IsRequired(false);
-            modelBuilder.Entity<dbStoreList>().Property(ug => ug.STORE_POSTAL).HasColumnType("varchar(255)").IsRequired(false);
-            modelBuilder.Entity<dbStoreList>().Property(ug => ug.STORE_BANK_NAME).HasColumnType("varchar(255)").IsRequired(false);
-            modelBuilder.Entity<dbStoreList>().Property(ug => ug.STORE_BANK_NUMBER).HasColumnType("varchar(255)").IsRequired(false);
-            modelBuilder.Entity<dbStoreList>().Property(ug => ug.STORE_BANK_BRANCH).HasColumnType("varchar(255)").IsRequired(false);
-            modelBuilder.Entity<dbStoreList>().Property(ug => ug.STORE_BANK_COUNTRY).HasColumnType("varchar(255)").IsRequired(false);
-            modelBuilder.Entity<dbStoreList>().Property(ug => ug.STORE_REG_DATE).HasColumnType("date");
-            modelBuilder.Entity<dbStoreList>().Property(ug => ug.STORE_BL_FLAG).HasColumnType("varchar(1)").IsRequired(false);
-            modelBuilder.Entity<dbStoreList>().Property(ug => ug.ENTRY_DATE).HasColumnType("datetime");
-            modelBuilder.Entity<dbStoreList>().Property(ug => ug.UPDATE_DATE).HasColumnType("datetime");
-            modelBuilder.Entity<dbStoreList>().Property(ug => ug.ENTRY_USER).HasColumnType("varchar(255)").IsRequired(false);
-            modelBuilder.Entity<dbStoreList>().Property(ug => ug.UPDATE_USER).HasColumnType("varchar(255)").IsRequired(false);
-            modelBuilder.Entity<dbStoreList>().Property(ug => ug.FLAG_AKTIF).HasColumnType("varchar(1)").IsRequired(false);
-            modelBuilder.Entity<dbStoreList>().Property(ug => ug.FILE_PHOTO_NAME).HasColumnType("varchar(255)").IsRequired(false);
-            modelBuilder.Entity<dbStoreList>().Property(ug => ug.FILE_PHOTO).HasColumnType("MediumBlob").IsRequired(false);
-            modelBuilder.Entity<dbStoreList>().Property(ug => ug.STORE_MANAGER_NAME).HasColumnType("varchar(255)").IsRequired(false);
-            modelBuilder.Entity<dbStoreList>().Property(ug => ug.STORE_MANAGER_EMAIL).HasColumnType("varchar(255)").IsRequired(false);
-            modelBuilder.Entity<dbStoreList>().Property(ug => ug.STORE_MANAGER_PHONE).HasColumnType("varchar(255)").IsRequired(false);
-            modelBuilder.Entity<dbStoreList>().Property(ug => ug.STORE_EMAIL).HasColumnType("varchar(255)").IsRequired(false);
-            modelBuilder.Entity<dbStoreList>().Property(ug => ug.STORE_MANAGER_KTP).HasColumnType("varchar(255)").IsRequired(false);
+
+
 
             //Article Tables
             modelBuilder.Entity<dbArticle>().Property(ug => ug.id).HasColumnType("int").UseMySqlIdentityColumn().IsRequired();
@@ -692,6 +682,92 @@ namespace BataAppHR.Data
             modelBuilder.Entity<dbsalescreditlog>().Property(ug => ug.valuecredit).HasColumnType("decimal(15,2)");
             modelBuilder.Entity<dbsalescreditlog>().Property(ug => ug.isused).HasColumnType("varchar(1)").IsRequired(false);
             modelBuilder.Entity<dbsalescreditlog>().Property(ug => ug.edp).HasColumnType("varchar(15)").IsRequired(true);
+
+            #region onposmodel
+            //Store list tables
+            modelBuilder.Entity<dbStoreList>().Property(ug => ug.id).HasColumnType("int").UseMySqlIdentityColumn().IsRequired();
+            modelBuilder.Entity<dbStoreList>().Property(ug => ug.COMPANY_ID).HasColumnType("varchar(50)").IsRequired(false);
+            modelBuilder.Entity<dbStoreList>().Property(ug => ug.STORE_NAME).HasColumnType("varchar(255)").IsRequired(false);
+            modelBuilder.Entity<dbStoreList>().Property(ug => ug.STORE_ADDRESS).HasColumnType("varchar(255)").IsRequired(false);
+            modelBuilder.Entity<dbStoreList>().Property(ug => ug.STORE_CITY).HasColumnType("varchar(255)").IsRequired(false);
+            modelBuilder.Entity<dbStoreList>().Property(ug => ug.STORE_PROVINCE).HasColumnType("varchar(255)").IsRequired(false);
+            modelBuilder.Entity<dbStoreList>().Property(ug => ug.STORE_POSTAL).HasColumnType("varchar(255)").IsRequired(false);
+            modelBuilder.Entity<dbStoreList>().Property(ug => ug.STORE_BANK_NAME).HasColumnType("varchar(255)").IsRequired(false);
+            modelBuilder.Entity<dbStoreList>().Property(ug => ug.STORE_BANK_NUMBER).HasColumnType("varchar(255)").IsRequired(false);
+            modelBuilder.Entity<dbStoreList>().Property(ug => ug.STORE_BANK_BRANCH).HasColumnType("varchar(255)").IsRequired(false);
+            modelBuilder.Entity<dbStoreList>().Property(ug => ug.STORE_BANK_COUNTRY).HasColumnType("varchar(255)").IsRequired(false);
+            modelBuilder.Entity<dbStoreList>().Property(ug => ug.STORE_REG_DATE).HasColumnType("date");
+            modelBuilder.Entity<dbStoreList>().Property(ug => ug.STORE_BL_FLAG).HasColumnType("varchar(1)").IsRequired(false);
+            modelBuilder.Entity<dbStoreList>().Property(ug => ug.ENTRY_DATE).HasColumnType("datetime");
+            modelBuilder.Entity<dbStoreList>().Property(ug => ug.UPDATE_DATE).HasColumnType("datetime");
+            modelBuilder.Entity<dbStoreList>().Property(ug => ug.ENTRY_USER).HasColumnType("varchar(255)").IsRequired(false);
+            modelBuilder.Entity<dbStoreList>().Property(ug => ug.UPDATE_USER).HasColumnType("varchar(255)").IsRequired(false);
+            modelBuilder.Entity<dbStoreList>().Property(ug => ug.FLAG_AKTIF).HasColumnType("varchar(1)").IsRequired(false);
+            modelBuilder.Entity<dbStoreList>().Property(ug => ug.FILE_PHOTO_NAME).HasColumnType("varchar(255)").IsRequired(false);
+            modelBuilder.Entity<dbStoreList>().Property(ug => ug.FILE_PHOTO).HasColumnType("MediumBlob").IsRequired(false);
+            modelBuilder.Entity<dbStoreList>().Property(ug => ug.STORE_MANAGER_NAME).HasColumnType("varchar(255)").IsRequired(false);
+            modelBuilder.Entity<dbStoreList>().Property(ug => ug.STORE_MANAGER_EMAIL).HasColumnType("varchar(255)").IsRequired(false);
+            modelBuilder.Entity<dbStoreList>().Property(ug => ug.STORE_MANAGER_PHONE).HasColumnType("varchar(255)").IsRequired(false);
+            modelBuilder.Entity<dbStoreList>().Property(ug => ug.STORE_EMAIL).HasColumnType("varchar(255)").IsRequired(false);
+            modelBuilder.Entity<dbStoreList>().Property(ug => ug.STORE_MANAGER_KTP).HasColumnType("varchar(255)").IsRequired(false);
+
+
+            //dbItemMaster
+            modelBuilder.Entity<dbItemMaster>().Property(ug => ug.id).HasColumnType("int").UseMySqlIdentityColumn().IsRequired();
+            modelBuilder.Entity<dbItemMaster>().Property(ug => ug.COMPANY_ID).HasColumnType("varchar(50)");
+            modelBuilder.Entity<dbItemMaster>().Property(ug => ug.itemid).HasColumnType("varchar(50)");
+            modelBuilder.Entity<dbItemMaster>().Property(ug => ug.color).HasColumnType("varchar(50)");
+            modelBuilder.Entity<dbItemMaster>().Property(ug => ug.size).HasColumnType("varchar(50)");
+            modelBuilder.Entity<dbItemMaster>().Property(ug => ug.category).HasColumnType("varchar(50)");
+            modelBuilder.Entity<dbItemMaster>().Property(ug => ug.subcategory).HasColumnType("varchar(50)");
+            modelBuilder.Entity<dbItemMaster>().Property(ug => ug.itemdescription).HasColumnType("varchar(255)");
+            modelBuilder.Entity<dbItemMaster>().Property(ug => ug.price1).HasColumnType("decimal(19,2)");
+            modelBuilder.Entity<dbItemMaster>().Property(ug => ug.price2).HasColumnType("decimal(19,2)");
+            modelBuilder.Entity<dbItemMaster>().Property(ug => ug.price3).HasColumnType("decimal(19,2)");
+            modelBuilder.Entity<dbItemMaster>().Property(ug => ug.brand).HasColumnType("varchar(100)");
+            modelBuilder.Entity<dbItemMaster>().Property(ug => ug.FLAG_AKTIF).HasColumnType("varchar(1)").IsRequired(false);
+            modelBuilder.Entity<dbItemMaster>().Property(ug => ug.ENTRY_USER).HasColumnType("varchar(50)").IsRequired(false);
+            modelBuilder.Entity<dbItemMaster>().Property(ug => ug.UPDATE_USER).HasColumnType("varchar(10)").IsRequired();
+            modelBuilder.Entity<dbItemMaster>().Property(ug => ug.ENTRY_DATE).HasColumnType("date");
+            modelBuilder.Entity<dbItemMaster>().Property(ug => ug.UPDATE_DATE).HasColumnType("date");
+
+
+            //dbCategory
+            modelBuilder.Entity<dbCategory>().Property(ug => ug.id).HasColumnType("int").UseMySqlIdentityColumn().IsRequired();
+            modelBuilder.Entity<dbCategory>().Property(ug => ug.COMPANY_ID).HasColumnType("varchar(50)");
+            modelBuilder.Entity<dbCategory>().Property(ug => ug.Category).HasColumnType("varchar(50)");
+            modelBuilder.Entity<dbCategory>().Property(ug => ug.description).HasColumnType("varchar(100)");
+            modelBuilder.Entity<dbCategory>().Property(ug => ug.FLAG_AKTIF).HasColumnType("varchar(1)").IsRequired(false);
+            modelBuilder.Entity<dbCategory>().Property(ug => ug.ENTRY_USER).HasColumnType("varchar(50)").IsRequired(false);
+            modelBuilder.Entity<dbCategory>().Property(ug => ug.UPDATE_USER).HasColumnType("varchar(10)").IsRequired();
+            modelBuilder.Entity<dbCategory>().Property(ug => ug.ENTRY_DATE).HasColumnType("date");
+            modelBuilder.Entity<dbCategory>().Property(ug => ug.UPDATE_DATE).HasColumnType("date");
+
+            //dbsubcategory
+            modelBuilder.Entity<dbSubCategory>().Property(ug => ug.id).HasColumnType("int").UseMySqlIdentityColumn().IsRequired();
+            modelBuilder.Entity<dbSubCategory>().Property(ug => ug.COMPANY_ID).HasColumnType("varchar(50)");
+            modelBuilder.Entity<dbSubCategory>().Property(ug => ug.Category).HasColumnType("varchar(50)");
+            modelBuilder.Entity<dbSubCategory>().Property(ug => ug.SubCategory).HasColumnType("varchar(50)");
+            modelBuilder.Entity<dbSubCategory>().Property(ug => ug.description).HasColumnType("varchar(100)");
+            modelBuilder.Entity<dbSubCategory>().Property(ug => ug.FLAG_AKTIF).HasColumnType("varchar(1)").IsRequired(false);
+            modelBuilder.Entity<dbSubCategory>().Property(ug => ug.ENTRY_USER).HasColumnType("varchar(50)").IsRequired(false);
+            modelBuilder.Entity<dbSubCategory>().Property(ug => ug.UPDATE_USER).HasColumnType("varchar(10)").IsRequired();
+            modelBuilder.Entity<dbSubCategory>().Property(ug => ug.ENTRY_DATE).HasColumnType("date");
+            modelBuilder.Entity<dbSubCategory>().Property(ug => ug.UPDATE_DATE).HasColumnType("date");
+
+            //dbitemstore
+            modelBuilder.Entity<dbItemStore>().Property(ug => ug.id).HasColumnType("int").UseMySqlIdentityColumn().IsRequired();
+            modelBuilder.Entity<dbItemStore>().Property(ug => ug.COMPANY_ID).HasColumnType("varchar(50)");
+            modelBuilder.Entity<dbItemStore>().Property(ug => ug.storeid).HasColumnType("int");
+            modelBuilder.Entity<dbItemStore>().Property(ug => ug.itemidint).HasColumnType("int");
+            modelBuilder.Entity<dbItemStore>().Property(ug => ug.STORE_NAME).HasColumnType("varchar(50)");
+            modelBuilder.Entity<dbItemStore>().Property(ug => ug.itemid).HasColumnType("varchar(50)");
+            modelBuilder.Entity<dbItemStore>().Property(ug => ug.FLAG_AKTIF).HasColumnType("varchar(1)").IsRequired(false);
+            modelBuilder.Entity<dbItemStore>().Property(ug => ug.ENTRY_USER).HasColumnType("varchar(50)").IsRequired(false);
+            modelBuilder.Entity<dbItemStore>().Property(ug => ug.UPDATE_USER).HasColumnType("varchar(10)").IsRequired();
+            modelBuilder.Entity<dbItemStore>().Property(ug => ug.ENTRY_DATE).HasColumnType("date");
+            modelBuilder.Entity<dbItemStore>().Property(ug => ug.UPDATE_DATE).HasColumnType("date");
+            #endregion onposmodel
 
 
 

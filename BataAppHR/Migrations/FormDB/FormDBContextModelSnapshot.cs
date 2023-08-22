@@ -1777,6 +1777,44 @@ namespace BataAppHR.Migrations.FormDB
                     b.ToTable("dbsalesorderpickingref");
                 });
 
+            modelBuilder.Entity("OnPOS.Models.dbCategory", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("COMPANY_ID")
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("Category")
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<DateTime>("ENTRY_DATE")
+                        .HasColumnType("date");
+
+                    b.Property<string>("ENTRY_USER")
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("FLAG_AKTIF")
+                        .HasColumnType("varchar(1)");
+
+                    b.Property<DateTime>("UPDATE_DATE")
+                        .HasColumnType("date");
+
+                    b.Property<string>("UPDATE_USER")
+                        .IsRequired()
+                        .HasColumnType("varchar(10)");
+
+                    b.Property<string>("description")
+                        .HasColumnType("varchar(100)");
+
+                    b.HasKey("id")
+                        .HasName("PK_Category");
+
+                    b.ToTable("dbCategory");
+                });
+
             modelBuilder.Entity("OnPOS.Models.dbCompanySeq", b =>
                 {
                     b.Property<int>("id")
@@ -1788,6 +1826,113 @@ namespace BataAppHR.Migrations.FormDB
                         .HasName("PK_Company_Seq");
 
                     b.ToTable("dbCompany_seq");
+                });
+
+            modelBuilder.Entity("OnPOS.Models.dbItemMaster", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("COMPANY_ID")
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<DateTime>("ENTRY_DATE")
+                        .HasColumnType("date");
+
+                    b.Property<string>("ENTRY_USER")
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("FLAG_AKTIF")
+                        .HasColumnType("varchar(1)");
+
+                    b.Property<DateTime>("UPDATE_DATE")
+                        .HasColumnType("date");
+
+                    b.Property<string>("UPDATE_USER")
+                        .IsRequired()
+                        .HasColumnType("varchar(10)");
+
+                    b.Property<string>("brand")
+                        .IsRequired()
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<string>("category")
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("color")
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("itemdescription")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("itemid")
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<decimal>("price1")
+                        .HasColumnType("decimal(19,2)");
+
+                    b.Property<decimal>("price2")
+                        .HasColumnType("decimal(19,2)");
+
+                    b.Property<decimal>("price3")
+                        .HasColumnType("decimal(19,2)");
+
+                    b.Property<string>("size")
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("subcategory")
+                        .HasColumnType("varchar(50)");
+
+                    b.HasKey("id")
+                        .HasName("PK_ItemMaster");
+
+                    b.ToTable("dbItemMaster");
+                });
+
+            modelBuilder.Entity("OnPOS.Models.dbItemStore", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("COMPANY_ID")
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<DateTime>("ENTRY_DATE")
+                        .HasColumnType("date");
+
+                    b.Property<string>("ENTRY_USER")
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("FLAG_AKTIF")
+                        .HasColumnType("varchar(1)");
+
+                    b.Property<string>("STORE_NAME")
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<DateTime>("UPDATE_DATE")
+                        .HasColumnType("date");
+
+                    b.Property<string>("UPDATE_USER")
+                        .IsRequired()
+                        .HasColumnType("varchar(10)");
+
+                    b.Property<string>("itemid")
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<int>("itemidint")
+                        .HasColumnType("int");
+
+                    b.Property<int>("storeid")
+                        .HasColumnType("int");
+
+                    b.HasKey("id")
+                        .HasName("PK_ItemStore");
+
+                    b.ToTable("dbItemStore");
                 });
 
             modelBuilder.Entity("OnPOS.Models.dbStoreList", b =>
@@ -1873,6 +2018,47 @@ namespace BataAppHR.Migrations.FormDB
                         .HasName("PK_StoreList");
 
                     b.ToTable("dbStoreList");
+                });
+
+            modelBuilder.Entity("OnPOS.Models.dbSubCategory", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("COMPANY_ID")
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("Category")
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<DateTime>("ENTRY_DATE")
+                        .HasColumnType("date");
+
+                    b.Property<string>("ENTRY_USER")
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("FLAG_AKTIF")
+                        .HasColumnType("varchar(1)");
+
+                    b.Property<string>("SubCategory")
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<DateTime>("UPDATE_DATE")
+                        .HasColumnType("date");
+
+                    b.Property<string>("UPDATE_USER")
+                        .IsRequired()
+                        .HasColumnType("varchar(10)");
+
+                    b.Property<string>("description")
+                        .HasColumnType("varchar(100)");
+
+                    b.HasKey("id")
+                        .HasName("PK_SubCategory");
+
+                    b.ToTable("dbSubCategory");
                 });
 #pragma warning restore 612, 618
         }
