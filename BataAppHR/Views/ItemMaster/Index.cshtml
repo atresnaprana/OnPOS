@@ -1,5 +1,204 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model IEnumerable<OnPOS.Models.dbItemMaster>
 @{
+    ViewData["Title"] = "Form Daftar Barang";
+
+    var isAdmin = User.IsInRole("Admin").ToString();
 }
+
+<style>
+    #myPopup {
+        display: none;
+        position: absolute;
+        top: 50px;
+        right: 50%;
+        background-color: blue;
+        height: 100px;
+        width: 100px;
+    }
+
+    #myExit {
+        position: absolute;
+        right: 0px;
+        text-align: right;
+        color: white;
+        background-color: red;
+    }
+
+    .btn-primary2 {
+        color: #ffffff;
+        background-color: #000000;
+        border-color: #000000 !important
+    }
+
+        .btn-primary2:hover {
+            color: #fff;
+            background-color: #be0000;
+            border-color: #be0000 !important
+        }
+
+    input.largerCheckbox {
+        width: 20px;
+        height: 20px;
+    }
+</style>
+<p>
+</p>
+<div class="container" id="bootstrap-overrides">
+    <div class="row">
+        <div class="col-sm align-self-end">
+            <a asp-action="Create" class="btn btn-dark">Input Data Baru</a>
+        </div>
+
+    </div>
+</div>
+<br />
+<table class="table table-striped" id="IndexTbl">
+    <thead>
+        <tr>
+            <th>Num.</th>
+            <th>
+                Tanggal Daftar Item
+            </th>
+            <th>
+                ItemId
+            </th>
+            <th>
+               Item Description
+            </th>
+            <th>
+                Color
+            </th>
+            <th>
+                Size
+            </th>
+            <th>
+                Category
+            </th>
+
+            <th>
+                Sub Category
+            </th>
+            <th>
+                Price 1
+            </th>
+            <th>
+                Price 2
+            </th>
+            <th>
+                Price 3
+            </th>
+            <th>
+                isActive
+            </th>
+            
+            <th>
+                <label>Actions</label>
+            </th>
+        </tr>
+    </thead>
+    <tbody id="tbodyid">
+        @{
+            var i = 1;
+        }
+        @foreach (var dt in Model)
+        {
+            <tr>
+                <td>
+                    @i
+                </td>
+                <td>
+                    @if (dt.ENTRY_DATE != null)
+                    {
+                        @dt.ENTRY_DATE.Date.ToString("dd/MM/yyyy")
+                        ;
+                    }
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => dt.itemid)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => dt.itemdescription)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => dt.color)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => dt.size)
+
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => dt.category)
+
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => dt.subcategory)
+
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => dt.price1)
+
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => dt.price2)
+
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => dt.price3)
+
+                </td>
+                <td align="center">
+                    @if (dt.FLAG_AKTIF == "1")
+                    {
+
+
+                        <input type="checkbox" class="largerCheckbox" checked="checked" disabled="disabled" />
+
+                    }
+                    else
+                    {
+                        <input type="checkbox" class="largerCheckbox" disabled="disabled" />
+
+                    }
+
+                </td>
+              
+                <td>
+                    <div>
+                        <a asp-action="Edit" asp-route-id="@dt.id" class="btn btn-sm btn-dark">Edit</a>
+                        &nbsp;
+                        @if (User.IsInRole("CustomerOnPos"))
+                        {
+                            @if (dt.FLAG_AKTIF == "1")
+                            {
+
+
+                                <a asp-action="Delete" asp-route-id="@dt.id" class="btn btn-sm btn-dark">Deactivate</a>
+                            }
+                            else
+                            {
+                                <a asp-action="Reactivate" asp-route-id="@dt.id" class="btn btn-sm btn-dark">Reactivate</a>
+
+                            }
+
+
+                        }
+                    </div>
+                </td>
+            </tr>
+            i++;
+        }
+    </tbody>
+</table>
+
+@section Scripts{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        $(document).ready(function () {
+            $('#IndexTbl').DataTable();
+        });
+    </script>
+}
+
