@@ -62,7 +62,6 @@ namespace OnPOS.Controllers
         {
             dbItemMaster fld = new dbItemMaster();
             var data = db.CustomerTbl.Where(y => y.Email == User.Identity.Name).FirstOrDefault();
-
             fld.ddcat = db.CategoryTbl.Where(y => y.COMPANY_ID == data.COMPANY_ID && y.FLAG_AKTIF == "1").ToList();
             fld.ddsubcat = db.SubCategoryTbl.Where(y => y.COMPANY_ID == data.COMPANY_ID && y.FLAG_AKTIF == "1").ToList();
             return View(fld);
@@ -225,6 +224,22 @@ namespace OnPOS.Controllers
                 }
             }
             return RedirectToAction("Index");
+        }
+        public string getcat(string subcat)
+        {
+            var data = db.CustomerTbl.Where(y => y.Email == User.Identity.Name).FirstOrDefault();
+            string cat = "";
+            var getcat = db.SubCategoryTbl.Where(y => y.SubCategory == subcat && y.COMPANY_ID == data.COMPANY_ID && y.FLAG_AKTIF == "1").FirstOrDefault();
+            cat = getcat.Category;
+            return cat;
+        }
+        public JsonResult getsubcatlist(string cat)
+        {
+            var data = db.CustomerTbl.Where(y => y.Email == User.Identity.Name).FirstOrDefault();
+
+            //Creating List    
+            List<dbSubCategory> subcattbl = db.SubCategoryTbl.Where(y => y.COMPANY_ID == data.COMPANY_ID && y.Category == cat && y.FLAG_AKTIF == "1").ToList();
+            return Json(subcattbl);
         }
     }
 }

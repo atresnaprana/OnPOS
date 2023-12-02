@@ -102,8 +102,70 @@
             });
             $("#subcategory").val(null);
             $("#subcategory").trigger('change');
+         
         });
+        $('#category').on('change', function () {
+            var value = $("#category").val();
+            if (value != null) {
+                $("#subcategory").empty()
+                $.ajax({
+                    url: '@Url.Action("getsubcatlist", "ItemMaster")',
+                    type: "GET",
+                    data: { cat: value },
+                    //startDate: mFromDate, endDate: mToDate1
+                    dataType: 'json',
+                    success: function (data) {
+                        debugger;
+                        if (data.length != 0) {
+                            //$("#tbodyiddtl").empty();
+                           
+                            var x = 1;
+                            data.forEach(function (item) { //insert rows
+                                console.log(item);
+                                var newOption = new Option(item.description, item.subCategory, true, true);
+                                // Append it to the select
+                                $('#subcategory').append(newOption).trigger('change');
+                                x++
+                            })
+                          
+                        
 
+                       
+                        }
+
+                    },
+                    error: function () {
+
+                    }
+                });
+
+
+            }
+        });
+        $('#subcategory').on('change', function () {
+            var value = $("#subcategory").val();
+            if (value != null) {
+                $.ajax({
+                    url: '@Url.Action("getcat", "ItemMaster")',
+                    type: "GET",
+                    data: { subcat: value },
+                    //startDate: mFromDate, endDate: mToDate1
+                    dataType: 'json',
+                    success: function (data) {
+                        debugger;
+                        if (data.length != 0) {
+                            $("#category").val(data);
+                            $("#category").trigger('change');
+                        }
+
+                    },
+                    error: function () {
+
+                    }
+                });
+            }
+          
+        });
         function allowOnlyNumber(evt) {
             var charCode = (evt.which) ? evt.which : event.keyCode
             if (charCode > 31 && (charCode < 48 || charCode > 57))
