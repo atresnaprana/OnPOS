@@ -24,12 +24,17 @@ namespace OnPOS.Models
         public decimal price1 { get; set; }
         public decimal price2 { get; set; }
         public decimal price3 { get; set; }
-        public decimal brand { get; set; }
+        public string brand { get; set; }
 
         public DateTime ENTRY_DATE { get; set; }
         public DateTime UPDATE_DATE { get; set; }
         public string ENTRY_USER { get; set; }
         public string UPDATE_USER { get; set; }
         public string FLAG_AKTIF { get; set; }
+
+        [NotMapped]
+        public List<dbCategory> ddcat { get; set; }
+        [NotMapped]
+        public List<dbSubCategory> ddsubcat { get; set; }
     }
 }

@@ -23,12 +23,14 @@
            
             <div class="form-group">
                 <label asp-for="category" class="control-label"></label>
-                <input asp-for="category" class="form-control" />
+                <br />
+                @Html.DropDownListFor(m => m.category, new SelectList(Model.ddcat, "Category", "description"), new { @class = "form-control" })
                 <span asp-validation-for="category" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="subcategory" class="control-label"></label>
-                <input asp-for="subcategory" class="form-control" />
+                <br />
+                @Html.DropDownListFor(m => m.subcategory, new SelectList(Model.ddsubcat, "SubCategory", "description"), new { @class = "form-control" })
                 <span asp-validation-for="subcategory" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -81,6 +83,27 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
     <script>
+        $(document).ready(function () {
+            $("#category").select2({
+                placeholder: "Select Category",
+                initSelection: function (element, callback) {
+                },
+                dropdownAutoWidth: true,
+                width: 'auto'
+            });
+            $("#category").val(null);
+            $("#category").trigger('change');
+            $("#subcategory").select2({
+                placeholder: "Select Sub Category",
+                initSelection: function (element, callback) {
+                },
+                dropdownAutoWidth: true,
+                width: 'auto'
+            });
+            $("#subcategory").val(null);
+            $("#subcategory").trigger('change');
+        });
+
         function allowOnlyNumber(evt) {
             var charCode = (evt.which) ? evt.which : event.keyCode
             if (charCode > 31 && (charCode < 48 || charCode > 57))
