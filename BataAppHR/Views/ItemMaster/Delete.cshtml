@@ -1,0 +1,28 @@
+﻿@model OnPOS.Models.dbItemMaster
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1>Delete</h1>
+
+<div>
+    <h4>Item Info</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            <label>itemid: </label> @Html.DisplayFor(model => model.itemid)
+        </dt>
+        <dt>
+            <label>desc: </label>@Html.DisplayFor(model => model.itemdescription)
+        </dt>
+        <dt>
+            <label>cat: </label>@Html.DisplayFor(model => model.category)
+        </dt>
+    </dl>
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="id" />
+        <input type="submit" value="Delete" class="btn btn-danger" />
+        <a asp-action="Index" class="btn btn-primary">Back to list</a>
+    </form>
+</div>
