@@ -1,0 +1,76 @@
+﻿@{
+    ViewData["Title"] = "Form Pengaturan Barang";
+
+}
+
+<style>
+    #myPopup {
+        display: none;
+        position: absolute;
+        top: 50px;
+        right: 50%;
+        background-color: blue;
+        height: 100px;
+        width: 100px;
+    }
+
+    #myExit {
+        position: absolute;
+        right: 0px;
+        text-align: right;
+        color: white;
+        background-color: red;
+    }
+
+    .btn-primary2 {
+        color: #ffffff;
+        background-color: #000000;
+        border-color: #000000 !important
+    }
+
+        .btn-primary2:hover {
+            color: #fff;
+            background-color: #be0000;
+            border-color: #be0000 !important
+        }
+
+    input.largerCheckbox {
+        width: 20px;
+        height: 20px;
+    }
+</style>
+<p>
+</p>
+<div class="container" id="bootstrap-overrides">
+    <div class="row">
+        <div class="col-sm align-self-end">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="home-tab" data-toggle="tab" href="#bystore" role="tab" aria-controls="bystore" aria-selected="true">Setting berdasarkan Toko</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#byitem" role="tab" aria-controls="byitem" aria-selected="false">Setting berdasarkan barang</a>
+                </li>
+              
+            </ul>
+            <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade show active" id="bystore" role="tabpanel" aria-labelledby="bystore-tab">test1</div>
+                <div class="tab-pane fade" id="byitem" role="tabpanel" aria-labelledby="byitem-tab">test2</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<br />
+
+@section Scripts{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        // $(document).ready(function () {
+        //     $('#IndexTbl').DataTable();
+        // });
+    </script>
+}
+
