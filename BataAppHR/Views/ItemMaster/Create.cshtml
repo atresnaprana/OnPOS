@@ -102,6 +102,8 @@
             });
             $("#subcategory").val(null);
             $("#subcategory").trigger('change');
+            $("#subcategory").prop('disabled', true);
+
          
         });
         $('#category').on('change', function () {
@@ -118,19 +120,27 @@
                         debugger;
                         if (data.length != 0) {
                             //$("#tbodyiddtl").empty();
-                           
+                            $("#subcategory").prop('disabled', false);
+
                             var x = 1;
                             data.forEach(function (item) { //insert rows
                                 console.log(item);
                                 var newOption = new Option(item.description, item.subCategory, true, true);
                                 // Append it to the select
-                                $('#subcategory').append(newOption).trigger('change');
+                                // $('#subcategory').append(newOption).trigger('change');
+                                $('#subcategory').append(newOption);
+
+                                // $("#subcategory").val(null);
+                                // $("#subcategory").trigger('change');
                                 x++
                             })
-                          
-                        
 
-                       
+
+
+
+                        } else {
+                            $("#subcategory").prop('disabled', true);
+
                         }
 
                     },
@@ -141,30 +151,6 @@
 
 
             }
-        });
-        $('#subcategory').on('change', function () {
-            var value = $("#subcategory").val();
-            if (value != null) {
-                $.ajax({
-                    url: '@Url.Action("getcat", "ItemMaster")',
-                    type: "GET",
-                    data: { subcat: value },
-                    //startDate: mFromDate, endDate: mToDate1
-                    dataType: 'json',
-                    success: function (data) {
-                        debugger;
-                        if (data.length != 0) {
-                            $("#category").val(data);
-                            $("#category").trigger('change');
-                        }
-
-                    },
-                    error: function () {
-
-                    }
-                });
-            }
-          
         });
         function allowOnlyNumber(evt) {
             var charCode = (evt.which) ? evt.which : event.keyCode

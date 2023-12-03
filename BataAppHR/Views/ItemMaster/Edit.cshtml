@@ -1,6 +1,8 @@
 ﻿@model OnPOS.Models.dbItemMaster
 @{
     ViewData["Title"] = "Edit";
+    var subcat = Model.subcategory;
+
 }
 
 <h1>Edit</h1>
@@ -19,15 +21,16 @@
                 <input asp-for="color" class="form-control" />
                 <span asp-validation-for="color" class="text-danger"></span>
             </div>
-
             <div class="form-group">
                 <label asp-for="category" class="control-label"></label>
-                <input asp-for="category" class="form-control" />
+                <br />
+                @Html.DropDownListFor(m => m.category, new SelectList(Model.ddcat, "Category", "description"), new { @class = "form-control" })
                 <span asp-validation-for="category" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="subcategory" class="control-label"></label>
-                <input asp-for="subcategory" class="form-control" />
+                <br />
+                @Html.DropDownListFor(m => m.subcategory, new SelectList(Model.ddsubcat, "SubCategory", "description"), new { @class = "form-control" })
                 <span asp-validation-for="subcategory" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -81,6 +84,99 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
     <script>
+        var subcat = '@subcat' 
+        $(document).ready(function () {
+            $("#category").select2({
+                placeholder: "Select Category",
+                initSelection: function (element, callback) {
+                },
+                dropdownAutoWidth: true,
+                width: 'auto'
+            });
+          
+            $("#subcategory").select2({
+                placeholder: "Select Sub Category",
+                initSelection: function (element, callback) {
+                },
+                dropdownAutoWidth: true,
+                width: 'auto'
+            });
+            if (subcat != "" || subcat != 'null') {
+                $("#subcategory").val(subcat);
+                $("#subcategory").trigger('change');
+                $("#subcategory").prop('disabled', false);
+            } else {
+                $("#subcategory").val(null);
+                $("#subcategory").trigger('change');
+                $("#subcategory").prop('disabled', true);
+            }
+          
+
+
+        });
+        $('#category').on('change', function () {
+            var value = $("#category").val();
+            if (value != null) {
+                $("#subcategory").empty()
+                $.ajax({
+                    url: '@Url.Action("getsubcatlist", "ItemMaster")',
+                    type: "GET",
+                    data: { cat: value },
+                    //startDate: mFromDate, endDate: mToDate1
+                    dataType: 'json',
+                    success: function (data) {
+                        debugger;
+                        var catnew = "";
+                        if (data.length != 0) {
+                            //$("#tbodyiddtl").empty();
+                            $("#subcategory").prop('disabled', false);
+                            var cat = $("#category").val();
+                            var x = 1;
+                            data.forEach(function (item) { //insert rows
+                                console.log(item);
+                                var newOption = new Option(item.description, item.subCategory, true, true);
+                                // Append it to the select
+                                // $('#subcategory').append(newOption).trigger('change');
+                                $('#subcategory').append(newOption);
+                                catnew = item.category;
+                                // $("#subcategory").val(null);
+                                // $("#subcategory").trigger('change');
+                                x++
+                            })
+
+
+
+
+                        } else {
+                            $("#subcategory").prop('disabled', true);
+
+                        }
+                        if (catnew == cat) {
+                            console.log("catnew: " + catnew);
+
+                            console.log("subcat: " + subcat);
+                            if (subcat != "" || subcat != 'null') {
+                                $("#subcategory").val(subcat);
+                                $("#subcategory").trigger('change');
+                            } else {
+                                $("#subcategory").val(null);
+                                $("#subcategory").trigger('change');
+                            }
+                        } else {
+                            $("#subcategory").val(null);
+                            $("#subcategory").trigger('change');
+                        }
+
+                    },
+                    error: function () {
+
+                    }
+                });
+
+
+            }
+        });
+
         function allowOnlyNumber(evt) {
             var charCode = (evt.which) ? evt.which : event.keyCode
             if (charCode > 31 && (charCode < 48 || charCode > 57))
