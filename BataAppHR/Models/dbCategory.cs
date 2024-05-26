@@ -17,5 +17,8 @@ namespace OnPOS.Models
         public string ENTRY_USER { get; set; }
         public string UPDATE_USER { get; set; }
         public string FLAG_AKTIF { get; set; }
+       
+        [NotMapped]
+        public string syserr { get; set; }
     }
 }

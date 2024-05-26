@@ -1,6 +1,11 @@
 ﻿@model OnPOS.Models.dbCategory
 @{
     ViewData["Title"] = "Create";
+    var errmsg = "";
+    if (!string.IsNullOrEmpty(Model.syserr))
+    {
+        errmsg = Model.syserr;
+    }
 }
 
 <h1>Create</h1>
@@ -20,8 +25,9 @@
                 <input asp-for="description" class="form-control" />
                 <span asp-validation-for="description" class="text-danger"></span>
             </div>
-
-           
+            <div class="form-group">
+                <label id="error" class="control-label" style="color:red;font-style:italic;font-weight:bold;">@errmsg</label>
+            </div>
         </div>
     </div>
     <div class="form-group">

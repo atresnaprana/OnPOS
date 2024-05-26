@@ -28,6 +28,8 @@ using static System.Net.WebRequestMethods;
 using OfficeOpenXml;
 using BataAppHR.Models;
 using MimeDetective.Storage.Xml.v2;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.Engineering;
+using System.ComponentModel.DataAnnotations;
 
 namespace OnPOS.Controllers
 {
@@ -71,6 +73,7 @@ namespace OnPOS.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create([Bind] dbItemMaster objTrainer)
         {
+            string err = "";
             if (ModelState.IsValid)
             {
                 var data = db.CustomerTbl.Where(y => y.Email == User.Identity.Name).FirstOrDefault();
@@ -82,8 +85,25 @@ namespace OnPOS.Controllers
                 objTrainer.FLAG_AKTIF = "1";
                 try
                 {
-                    db.ItemMasterTbl.Add(objTrainer);
-                    db.SaveChanges();
+                    var validate = db.ItemMasterTbl.Where(y => y.itemid == objTrainer.itemid && y.COMPANY_ID == data.COMPANY_ID).ToList();
+                    if(objTrainer.price1 == 0)
+                    {
+                        err += " - harga utama tidak boleh kosong " + System.Environment.NewLine; 
+                    }
+                    if(validate.Count > 0) {
+
+                        err += " - itemid duplikat " + System.Environment.NewLine;
+                    }
+
+                    objTrainer.syserr = err;
+
+                    if (string.IsNullOrEmpty(objTrainer.syserr)){
+                       
+                        db.ItemMasterTbl.Add(objTrainer);
+                        db.SaveChanges();
+
+                    }
+
 
                 }
                 catch (Exception ex)
@@ -99,7 +119,17 @@ namespace OnPOS.Controllers
                     }
                 }
                 //apprDal.AddApproval(objApproval);
-                return RedirectToAction("Index");
+                if (string.IsNullOrEmpty(objTrainer.syserr)){
+                    return RedirectToAction("Index");
+
+                }
+                else
+                {
+                    objTrainer.ddcat = db.CategoryTbl.Where(y => y.COMPANY_ID == data.COMPANY_ID && y.FLAG_AKTIF == "1").ToList();
+                    objTrainer.ddsubcat = db.SubCategoryTbl.Where(y => y.COMPANY_ID == data.COMPANY_ID && y.FLAG_AKTIF == "1").ToList();
+                    return View(objTrainer);
+
+                }
             }
             return View(objTrainer);
         }
@@ -127,6 +157,7 @@ namespace OnPOS.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(string id, [Bind] dbItemMaster fld)
         {
+            string err = "";
             if (id == null)
             {
                 return NotFound();
@@ -134,7 +165,7 @@ namespace OnPOS.Controllers
             if (ModelState.IsValid)
             {
                 int ids = Convert.ToInt32(id);
-
+                var data = db.CustomerTbl.Where(y => y.Email == User.Identity.Name).FirstOrDefault();
                 var editFld = db.ItemMasterTbl.Find(ids);
                 editFld.itemid = fld.itemid;
                 editFld.color = fld.color;
@@ -152,7 +183,21 @@ namespace OnPOS.Controllers
 
                 try
                 {
-                    db.SaveChanges();
+                    if (fld.price1 == 0)
+                    {
+                        err += " - harga utama tidak boleh kosong " + System.Environment.NewLine;
+                    }
+              
+
+                    fld.syserr = err;
+
+                    if (string.IsNullOrEmpty(fld.syserr))
+                    {
+
+                        db.SaveChanges();
+
+
+                    }
 
                 }
                 catch (Exception ex)
@@ -167,7 +212,18 @@ namespace OnPOS.Controllers
                         outputFile.WriteLine(ex.ToString());
                     }
                 }
-                return RedirectToAction("Index");
+                if (string.IsNullOrEmpty(fld.syserr))
+                {
+                    return RedirectToAction("Index");
+
+                }
+                else
+                {
+                    fld.ddcat = db.CategoryTbl.Where(y => y.COMPANY_ID == data.COMPANY_ID && y.FLAG_AKTIF == "1").ToList();
+                    fld.ddsubcat = db.SubCategoryTbl.Where(y => y.COMPANY_ID == data.COMPANY_ID && y.FLAG_AKTIF == "1").ToList();
+                    return View(fld);
+
+                }
             }
             return View(fld);
         }

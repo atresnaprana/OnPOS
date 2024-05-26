@@ -21,9 +21,16 @@ namespace OnPOS.Models
         public string category { get; set; }
         public string subcategory { get; set; }
         public string itemdescription { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:0}", ApplyFormatInEditMode = true)]
         public decimal price1 { get; set; }
+        
+        [DisplayFormat(DataFormatString = "{0:0}", ApplyFormatInEditMode = true)]
         public decimal price2 { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:0}", ApplyFormatInEditMode = true)]
         public decimal price3 { get; set; }
+        
         public string brand { get; set; }
 
         public DateTime ENTRY_DATE { get; set; }
@@ -34,7 +41,16 @@ namespace OnPOS.Models
 
         [NotMapped]
         public List<dbCategory> ddcat { get; set; }
+        
         [NotMapped]
         public List<dbSubCategory> ddsubcat { get; set; }
+        
+        [NotMapped]
+        public string syserr { get; set; }
+        [NotMapped]
+        public List<dbStoreList> StoreList { get; set; }
+        [NotMapped]
+        public List<dbItemStore> itemSettings { get; set; }
+
     }
 }

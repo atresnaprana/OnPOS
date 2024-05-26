@@ -49,9 +49,74 @@ namespace OnPOS.Controllers
             Configuration = configuration;
 
         }
+        [Authorize(Roles = "CustomerOnPos")]
         public IActionResult Index()
         {
-            return View();
+            var field = new StockEnablerView();
+            var data = db.CustomerTbl.Where(y => y.Email == User.Identity.Name).FirstOrDefault();
+            var datastore = db.StoreListTbl.Where(y => y.FLAG_AKTIF == "1" && y.COMPANY_ID == data.COMPANY_ID).ToList();
+            var dataitems = db.ItemMasterTbl.Where(y => y.FLAG_AKTIF == "1" && y.COMPANY_ID == data.COMPANY_ID).ToList();
+            field.dataItems = dataitems;
+            field.dataStore = datastore; 
+            return View(field);
+        }
+        [Authorize(Roles = "CustomerOnPos")]
+        public IActionResult EditStore(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                return NotFound();
+            }
+            int ids = Convert.ToInt32(id);
+            dbCategory fld = db.CategoryTbl.Find(ids);
+            if (fld == null)
+            {
+                return NotFound();
+            }
+
+            return View(fld);
+        }
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult EditStore(string id, [Bind] dbCategory fld)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            if (ModelState.IsValid)
+            {
+                int ids = Convert.ToInt32(id);
+
+                var editFld = db.CategoryTbl.Find(ids);
+                editFld.Category = fld.Category;
+                editFld.description = fld.description;
+
+
+                editFld.UPDATE_DATE = DateTime.Now;
+                editFld.UPDATE_USER = User.Identity.Name;
+
+                try
+                {
+                    db.SaveChanges();
+
+                }
+                catch (Exception ex)
+                {
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot\ErrorLog");
+                    if (!Directory.Exists(filePath))
+                    {
+                        Directory.CreateDirectory(filePath);
+                    }
+                    using (StreamWriter outputFile = new StreamWriter(Path.Combine(filePath, "ErrMsgEdit" + (DateTime.Now).ToString("dd-MM-yyyy HH-mm-ss") + ".txt")))
+                    {
+                        outputFile.WriteLine(ex.ToString());
+                    }
+                }
+                return RedirectToAction("Index");
+            }
+            return View(fld);
         }
     }
 }

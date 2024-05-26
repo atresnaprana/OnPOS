@@ -105,6 +105,7 @@ namespace BataAppHR.Data
             modelBuilder.Entity<dbRekapTraining>().HasKey(ug => ug.TRN_ID).HasName("PK_RekapTrainingTbl");
             modelBuilder.Entity<dbrekapTrainingfixed>().HasKey(ug => ug.id).HasName("PK_RekapTrainingTblFixed");
             modelBuilder.Entity<dbTrainerList>().HasKey(ug => ug.idTrainerList).HasName("PK_idTrainerList");
+            modelBuilder.Entity<dbsalescreditlog>().HasKey(ug => ug.edp).HasName("PK_Creditlogs");
 
 
             modelBuilder.Entity<dbNilaiSS>().HasKey(ug => ug.ScoreId).HasName("PK_ScoreTbl");

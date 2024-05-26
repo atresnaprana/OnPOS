@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using System;
+using System.Collections.Generic;
 
 namespace OnPOS.Models
 {
@@ -19,5 +20,14 @@ namespace OnPOS.Models
         public string ENTRY_USER { get; set; }
         public string UPDATE_USER { get; set; }
         public string FLAG_AKTIF { get; set; }
+        [NotMapped]
+        public List<dbItemMaster> itemList { get; set; }
+        [NotMapped]
+        public List<dbStoreList> StoreList { get; set; }
+        [NotMapped]
+        public List<string> itemidlist { get; set; }
+
+        [NotMapped]
+        public List<string> storeidlist { get; set; }
     }
 }

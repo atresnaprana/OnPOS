@@ -1,4 +1,5 @@
-﻿@{
+﻿@model OnPOS.Models.StockEnablerView
+@{
     ViewData["Title"] = "Form Pengaturan Barang";
 
 }
@@ -54,8 +55,161 @@
               
             </ul>
             <div class="tab-content" id="myTabContent">
-                <div class="tab-pane fade show active" id="bystore" role="tabpanel" aria-labelledby="bystore-tab">test1</div>
-                <div class="tab-pane fade" id="byitem" role="tabpanel" aria-labelledby="byitem-tab">test2</div>
+                <div class="tab-pane show active" id="bystore" role="tabpanel" aria-labelledby="bystore-tab" style="background-color:white;">
+                    <div class="row">
+                        <div class="col-sm">
+                            <div class="form-group">
+                                <table class="table table-striped" id="StoreTbl">
+                                    <thead>
+                                        <tr>
+                                            <th>Num.</th>
+                                            <th>
+                                                Store Code
+                                            </th>
+                                            <th>
+                                                Store Name
+                                            </th>
+                                            <th>
+                                                Store City
+                                            </th>
+                                            <th>
+                                                Store Province
+                                            </th>
+                                            <th>
+                                                Store Address
+                                            </th>
+
+                                            <th>
+                                                <label>Actions</label>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbodyid">
+                                        @{
+                                            var i = 1;
+                                        }
+                                        @foreach (var dt in Model.dataStore)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    @i
+                                                </td>
+
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => dt.id)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => dt.STORE_NAME)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => dt.STORE_CITY)
+                                                </td>
+                                                <td>
+
+                                                    @Html.DisplayFor(modelItem => dt.STORE_CITY)
+
+                                                </td>
+                                                <td>
+
+                                                    @Html.DisplayFor(modelItem => dt.STORE_ADDRESS)
+
+                                                </td>
+
+
+                                                <td>
+                                                    <div>
+                                                        <a asp-action="EditItem" asp-route-id="@dt.id" class="btn btn-sm btn-dark">Edit Items List</a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            i++;
+                                        }
+                                    </tbody>
+                                </table>
+
+                            </div>
+                          
+                        </div>
+                    </div>
+
+                </div>
+                <div class="tab-pane" id="byitem" role="tabpanel" aria-labelledby="byitem-tab" style="background-color:white;">
+                    <div class="row">
+                        <div class="col-sm">
+                            <div class="form-group">
+                                <table class="table table-striped" id="ItemTbl">
+                                    <thead>
+                                        <tr>
+                                            <th>Num.</th>
+                                            <th>
+                                                Item Id
+                                            </th>
+                                            <th>
+                                                Description
+                                            </th>
+                                            <th>
+                                                Category
+                                            </th>
+                                            <th>
+                                                Sub Category
+                                            </th>
+                                            <th>
+                                                Brand
+                                            </th>
+
+                                            <th>
+                                                <label>Actions</label>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbodyid">
+                                        @{
+                                            var x = 1;
+                                        }
+                                        @foreach (var dt in Model.dataItems)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    @x
+                                                </td>
+
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => dt.itemid)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => dt.itemdescription)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => dt.category)
+                                                </td>
+                                                <td>
+
+                                                    @Html.DisplayFor(modelItem => dt.subcategory)
+
+                                                </td>
+                                                <td>
+
+                                                    @Html.DisplayFor(modelItem => dt.brand)
+
+                                                </td>
+
+                                                <td>
+                                                    <div>
+                                                        <a asp-action="EditStore" asp-route-id="@dt.id" class="btn btn-sm btn-dark">Edit Store</a>
+
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            x++;
+                                        }
+                                    </tbody>
+                                </table>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -68,9 +222,11 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
     <script>
-        // $(document).ready(function () {
-        //     $('#IndexTbl').DataTable();
-        // });
+        $(document).ready(function () {
+            $('#ItemTbl').DataTable();
+            $('#StoreTbl').DataTable();
+
+        });
     </script>
 }
 

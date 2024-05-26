@@ -30,6 +30,8 @@
     <Compile Remove="Migrations\FormDB\20211008061450_fixingtblrd.Designer.cs" />
     <Compile Remove="Migrations\FormDB\20220408030516_addCustomerTbl.cs" />
     <Compile Remove="Migrations\FormDB\20220408030516_addCustomerTbl.Designer.cs" />
+    <Compile Remove="Migrations\FormDB\20240309093118_testmigrate.cs" />
+    <Compile Remove="Migrations\FormDB\20240309093118_testmigrate.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

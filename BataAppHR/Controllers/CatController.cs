@@ -26,6 +26,7 @@ using System.Net;
 using OnPOS.Models;
 using static System.Net.WebRequestMethods;
 using OfficeOpenXml;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.Engineering;
 
 namespace OnPOS.Controllers
 {
@@ -66,6 +67,7 @@ namespace OnPOS.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create([Bind] dbCategory objTrainer)
         {
+            string err = "";
             if (ModelState.IsValid)
             {
                 var data = db.CustomerTbl.Where(y => y.Email == User.Identity.Name).FirstOrDefault();
@@ -77,8 +79,22 @@ namespace OnPOS.Controllers
                 objTrainer.FLAG_AKTIF = "1";
                 try
                 {
-                    db.CategoryTbl.Add(objTrainer);
-                    db.SaveChanges();
+                    var validate = db.CategoryTbl.Where(y => y.Category == objTrainer.Category && y.COMPANY_ID == data.COMPANY_ID).ToList();
+                    if (validate.Count > 0)
+                    {
+
+                        err += " - Kode Kategori duplikat " + System.Environment.NewLine;
+                    }
+                    objTrainer.syserr = err;
+
+                    if (string.IsNullOrEmpty(objTrainer.syserr))
+                    {
+
+                        db.CategoryTbl.Add(objTrainer);
+                        db.SaveChanges();
+
+                    }
+                  
 
                 }
                 catch (Exception ex)
@@ -94,7 +110,16 @@ namespace OnPOS.Controllers
                     }
                 }
                 //apprDal.AddApproval(objApproval);
-                return RedirectToAction("Index");
+                if (string.IsNullOrEmpty(objTrainer.syserr))
+                {
+                    return RedirectToAction("Index");
+
+                }
+                else
+                {
+                    return View(objTrainer);
+
+                }
             }
             return View(objTrainer);
         }

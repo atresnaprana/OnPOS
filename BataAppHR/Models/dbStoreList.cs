@@ -59,5 +59,9 @@ namespace OnPOS.Models
         public string ConfirmPassword { get; set; }
         [NotMapped]
         public string errmsg { get; set; }
+        [NotMapped]
+        public List<dbItemMaster> itemList { get; set; }
+        [NotMapped]
+        public List<dbItemStore> itemSettings { get; set; }
     }
 }
