@@ -11,7 +11,6 @@ namespace BataAppHR.Models
         public string ToEmail { get; set; }
         public string UserName { get; set; }
         public List<IFormFile> Attachments { get; set; }
-        public dbSalesOrder salesorderTbl { get; set; }
         public decimal? custdisc { get; set; }
         public decimal? creditnoteval { get; set; }
         public string fileinvoice { get; set; }

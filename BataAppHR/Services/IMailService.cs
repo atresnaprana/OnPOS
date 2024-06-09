@@ -11,8 +11,6 @@ namespace BataAppHR.Services
         Task SendEmailAsync(MailRequest mailRequest);
         Task SendWelcomeEmailAsync(WelcomeRequest request);
         Task SendVerifyEmailAsync(WelcomeRequest request);
-        Task SendInvoiceEmailAsync(WelcomeRequest request);
-        Task SendOrderConfirm(WelcomeRequest request);
         
     }
 }
