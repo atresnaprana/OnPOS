@@ -1,0 +1,26 @@
+﻿@model OnPOS.Models.dbSubCategory
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1>Delete</h1>
+
+<div>
+    <h4>Sub Category Info</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            <label>Sub Category: </label> @Html.DisplayFor(model => model.SubCategory)
+        </dt>
+        <dt>
+            <label>desc: </label>@Html.DisplayFor(model => model.description)
+        </dt>
+
+    </dl>
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="id" />
+        <input type="submit" value="Delete" class="btn btn-danger" />
+        <a asp-action="Index" class="btn btn-primary">Back to list</a>
+    </form>
+</div>

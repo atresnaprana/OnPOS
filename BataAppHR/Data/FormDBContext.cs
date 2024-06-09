@@ -21,6 +21,7 @@ namespace BataAppHR.Data
         public DbSet<dbCategory> CategoryTbl { get; set; }
         public DbSet<dbSubCategory> SubCategoryTbl { get; set; }
         public DbSet<dbItemStore> ItemStoreTbl { get; set; }
+        public DbSet<dbSalesStaff> SalesStaffTbl { get; set; }
 
         public FormDBContext(DbContextOptions<FormDBContext> options) : base(options)
         {
@@ -45,15 +46,12 @@ namespace BataAppHR.Data
             modelBuilder.Entity<dbCategory>().ToTable("dbCategory");
             modelBuilder.Entity<dbSubCategory>().ToTable("dbSubCategory");
             modelBuilder.Entity<dbItemStore>().ToTable("dbItemStore");
-
-          
-
+            modelBuilder.Entity<dbSalesStaff>().ToTable("dbSalesStaff");
 
 
             modelBuilder.Entity<SystemTabModel>().HasKey(ug => ug.ID).HasName("PK_TAB_Seq");
             modelBuilder.Entity<SystemMenuModel>().HasKey(ug => ug.ID).HasName("PK_MENU_Seq");
             modelBuilder.Entity<dbCompanySeq>().HasKey(ug => ug.id).HasName("PK_Company_Seq");
-
 
             modelBuilder.Entity<dbSliderImg>().HasKey(ug => ug.ID).HasName("PK_SliderImg");
             modelBuilder.Entity<dbCustomer>().HasKey(ug => ug.id).HasName("PK_Customer");
@@ -63,6 +61,7 @@ namespace BataAppHR.Data
             modelBuilder.Entity<dbCategory>().HasKey(ug => ug.id).HasName("PK_Category");
             modelBuilder.Entity<dbSubCategory>().HasKey(ug => ug.id).HasName("PK_SubCategory");
             modelBuilder.Entity<dbItemStore>().HasKey(ug => ug.id).HasName("PK_ItemStore");
+            modelBuilder.Entity<dbSalesStaff>().HasKey(ug => ug.id).HasName("PK_SalesStaff");
 
             // Configure indexes  
             //modelBuilder.Entity<UserGroup>().HasIndex(p => p.Name).IsUnique().HasDatabaseName("Idx_Name");  
@@ -166,10 +165,6 @@ namespace BataAppHR.Data
             modelBuilder.Entity<dbCustomer>().Property(ug => ug.store_area).HasColumnType("varchar(50)");
             modelBuilder.Entity<dbCustomer>().Property(ug => ug.discount_customer).HasColumnType("varchar(50)");
 
-            
-         
-
-          
             #region onposmodel
             //Store list tables
             modelBuilder.Entity<dbStoreList>().Property(ug => ug.id).HasColumnType("int").UseMySqlIdentityColumn().IsRequired();
@@ -197,6 +192,26 @@ namespace BataAppHR.Data
             modelBuilder.Entity<dbStoreList>().Property(ug => ug.STORE_MANAGER_PHONE).HasColumnType("varchar(255)").IsRequired(false);
             modelBuilder.Entity<dbStoreList>().Property(ug => ug.STORE_EMAIL).HasColumnType("varchar(255)").IsRequired(false);
             modelBuilder.Entity<dbStoreList>().Property(ug => ug.STORE_MANAGER_KTP).HasColumnType("varchar(255)").IsRequired(false);
+
+
+            //Sales Staff tables
+            modelBuilder.Entity<dbSalesStaff>().Property(ug => ug.id).HasColumnType("int").UseMySqlIdentityColumn().IsRequired();
+            modelBuilder.Entity<dbSalesStaff>().Property(ug => ug.COMPANY_ID).HasColumnType("varchar(50)").IsRequired(false);
+            modelBuilder.Entity<dbSalesStaff>().Property(ug => ug.STORE_ID).HasColumnType("int");
+            modelBuilder.Entity<dbSalesStaff>().Property(ug => ug.SALES_NAME).HasColumnType("varchar(255)").IsRequired(false);
+            modelBuilder.Entity<dbSalesStaff>().Property(ug => ug.SALES_REG_DATE).HasColumnType("date");
+            modelBuilder.Entity<dbSalesStaff>().Property(ug => ug.ENTRY_DATE).HasColumnType("datetime");
+            modelBuilder.Entity<dbSalesStaff>().Property(ug => ug.UPDATE_DATE).HasColumnType("datetime");
+            modelBuilder.Entity<dbSalesStaff>().Property(ug => ug.ENTRY_USER).HasColumnType("varchar(255)").IsRequired(false);
+            modelBuilder.Entity<dbSalesStaff>().Property(ug => ug.UPDATE_USER).HasColumnType("varchar(255)").IsRequired(false);
+            modelBuilder.Entity<dbSalesStaff>().Property(ug => ug.FLAG_AKTIF).HasColumnType("varchar(1)").IsRequired(false);
+            modelBuilder.Entity<dbSalesStaff>().Property(ug => ug.FILE_PHOTO_NAME).HasColumnType("varchar(255)").IsRequired(false);
+            modelBuilder.Entity<dbSalesStaff>().Property(ug => ug.FILE_PHOTO).HasColumnType("MediumBlob").IsRequired(false);
+            modelBuilder.Entity<dbSalesStaff>().Property(ug => ug.SALES_PHONE).HasColumnType("varchar(255)").IsRequired(false);
+            modelBuilder.Entity<dbSalesStaff>().Property(ug => ug.SALES_EMAIL).HasColumnType("varchar(255)").IsRequired(false);
+            modelBuilder.Entity<dbSalesStaff>().Property(ug => ug.SALES_KTP).HasColumnType("varchar(255)").IsRequired(false);
+            modelBuilder.Entity<dbSalesStaff>().Property(ug => ug.SALES_BLACKLIST_FLAG).HasColumnType("varchar(1)").IsRequired(false);
+
 
 
             //dbItemMaster
