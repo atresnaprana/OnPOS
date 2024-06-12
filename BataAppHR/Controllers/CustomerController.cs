@@ -49,7 +49,7 @@ namespace BataAppHR.Controllers
             this.mailService = mailService;
 
         }
-        [Authorize(Roles = "SalesIndustrial,FinanceIndustrial,LegalIndustrial")]
+        [Authorize(Roles = "SuperAdmin")]
         public IActionResult Index()
         {
            
@@ -64,7 +64,7 @@ namespace BataAppHR.Controllers
 
             return View();
         }
-        [Authorize(Roles = "SalesIndustrial,FinanceIndustrial,LegalIndustrial")]
+        [Authorize(Roles = "SuperAdmin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create([Bind] dbCustomer objCust)
@@ -262,7 +262,7 @@ namespace BataAppHR.Controllers
             }
             return success;
         }
-        [Authorize(Roles = "SalesIndustrial,FinanceIndustrial,LegalIndustrial")]
+        [Authorize(Roles = "SuperAdmin")]
         public IActionResult Edit(int id)
         {
             //if (string.IsNullOrEmpty(id))

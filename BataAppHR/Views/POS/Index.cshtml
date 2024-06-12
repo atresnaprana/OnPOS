@@ -1,0 +1,439 @@
+﻿@model OnPOS.Models.dbSalesHdr
+@{
+    ViewData["Title"] = "POS";
+    var errmsg = "";
+    // if (!string.IsNullOrEmpty(Model.syserr))
+    // {
+    //     errmsg = Model.syserr;
+    // }
+}
+
+@* <h1>POS</h1>
+<h3>Sales Entry</h3> *@
+<hr />
+
+<form asp-action="Create" id="formcreate">
+    <div class="row">
+        <div class="col-sm">
+            <div class="row">
+                <div class="col-sm">
+                    <div class="form-group">
+                        <h3 class="control-label">TOTAL</h3>
+                    </div>
+
+                </div>
+                <div class="col-sm">
+                    <div class="form-group">
+                        <input asp-for="trans_amount" class="form-control" style="text-align:right;font-weight:bolder;font-size:x-large;" readonly/>
+                    </div>
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm">
+                    <table class="table table-striped" id="sizetbl">
+                        <thead>
+                            <tr>
+                                <th>
+                                    s33
+                                </th>
+                                <th>
+                                    s34
+                                </th>
+                                <th>
+                                    s35
+                                </th>
+                                <th>
+                                    s36
+                                </th>
+                                <th>
+                                    s37
+                                </th>
+                                <th>
+                                    s38
+                                </th>
+                                <th>
+                                    s39
+                                </th>
+                                <th>
+                                    s40
+                                </th>
+                                <th>
+                                    s41
+                                </th>
+                                <th>
+                                    s42
+                                </th>
+                                <th>
+                                    s43
+                                </th>
+                                <th>
+                                    s44
+                                </th>
+                                <th>
+                                    s45
+                                </th>
+                                <th>
+                                    s46
+                                </th>
+                                <th>
+                                    stock
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbodyid1">
+                            <tr>
+                                <td>
+                                    <input asp-for="s33" class="form-control" style="width:60px;font-size:x-small;font-weight:bolder" readonly/>
+                                </td>
+                                <td>
+                                    <input asp-for="s34" class="form-control" style="width:60px;font-size:x-small;font-weight:bolder" readonly />
+
+                                </td>
+                                <td>
+                                    <input asp-for="s35" class="form-control" style="width:60px;font-size:x-small;font-weight:bolder" readonly />
+
+                                </td>
+                                <td>
+                                    <input asp-for="s36" class="form-control" style="width:60px;font-size:x-small;font-weight:bolder" readonly />
+
+                                </td>
+                                <td>
+                                    <input asp-for="s37" class="form-control" style="width:60px;font-size:xx-small;font-weight:bolder" readonly />
+
+                                </td>
+                                <td>
+                                    <input asp-for="s38" class="form-control" style="width:60px;font-size:xx-small;font-weight:bolder" readonly />
+
+                                </td>
+                                <td>
+                                    <input asp-for="s39" class="form-control" style="width:60px;font-size:xx-small;font-weight:bolder" readonly />
+
+                                </td>
+                                <td>
+                                    <input asp-for="s40" class="form-control" style="width:60px;font-size:xx-small;font-weight:bolder" readonly />
+
+                                </td>
+                                <td>
+                                    <input asp-for="s41" class="form-control" style="width:60px;font-size:xx-small;font-weight:bolder" readonly />
+
+                                </td>
+                                <td>
+                                    <input asp-for="s42" class="form-control" style="width:60px;font-size:xx-small;font-weight:bolder" readonly />
+
+                                </td>
+                                <td>
+                                    <input asp-for="s43" class="form-control" style="width:60px;font-size:xx-small;font-weight:bolder" readonly />
+
+                                </td>
+                                <td>
+                                    <input asp-for="s44" class="form-control" style="width:60px;font-size:xx-small;font-weight:bolder" readonly />
+
+                                </td>
+                                <td>
+                                    <input asp-for="s45" class="form-control" style="width:60px;font-size:xx-small;font-weight:bolder" readonly />
+
+                                </td>
+                                <td>
+                                    <input asp-for="s46" class="form-control" style="width:60px;font-size:xx-small;font-weight:bolder" readonly />
+
+                                </td>
+                                <td>
+                                    <input asp-for="totalstock" class="form-control" style="width:60px;font-size:xx-small;font-weight:bolder" readonly />
+
+                                </td>
+                            </tr>
+                         
+                        </tbody>
+                    </table>
+
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-sm">
+                    <table class="table table-striped" id="POSTbl">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Pairs
+                                </th>
+                                <th>
+                                    Article
+                                </th>
+                                <th>
+                                    Size
+                                </th>
+                                <th>
+                                    Price
+                                </th>
+                                <th>
+                                    Discount
+                                </th>
+                                <th>
+                                    SubTotal
+                                </th>
+                                <th>
+                                    Action
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbodyid1">
+
+                        </tbody>
+                    </table>
+
+                </div>
+                <div class="col-sm">
+                    <div class="row">
+                        <div class="col-sm">
+                            <div class="form-group">
+                                <label class="control-label">User:</label>
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <div class="form-group">
+                                <input asp-for="username" class="form-control" readonly />
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="col-sm">
+                            <div class="form-group">
+                                <label class="control-label">Invoice</label>
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <div class="form-group">
+                                <input asp-for="invoice" class="form-control" readonly />
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="col-sm">
+                            <div class="form-group">
+                                <label class="control-label">SKU</label>
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <div class="form-group">
+                                <input asp-for="scanitem" class="form-control" maxlength="16" />
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="col-sm">
+                            <div class="form-group">
+                                <label class="control-label">Qty</label>
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <div class="form-group">
+                                <input asp-for="scanqty" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="col-sm">
+                            <div class="form-group">
+                                <label class="control-label">Price</label>
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <div class="form-group">
+                                <input asp-for="scanprice" class="form-control" readonly/>
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="col-sm">
+                            <div class="form-group">
+                                <label class="control-label">Discount</label>
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <div class="form-group">
+                                <input asp-for="scandiscount" class="form-control" readonly/>
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="col-sm">
+                            <div class="form-group">
+                                <label class="control-label">PaymentType</label>
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <div class="form-group">
+                                @Html.DropDownListFor(model => model.transtype, new List<SelectListItem>
+                                {
+                                new SelectListItem{ Text="Tunai", Value = "T" },
+                                new SelectListItem{ Text="Non Tunai", Value = "NT" },
+
+                                }, new { @class = "form-control" })
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="col-sm">
+                            <div class="form-group">
+                                <label class="control-label">Card No</label>
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <div class="form-group">
+                                <input asp-for="cardnum" class="form-control" />
+
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm">
+            <div class="form-group">
+                <a asp-action="Index" class="btn btn-dark">Exit</a>
+
+            </div>
+        </div>
+        <div class="col-sm">
+            <div class="form-group">
+                <input type="button" value="Recap" onclick="alertfirst()" class="btn btn-red" />
+
+            </div>
+        </div>
+        <div class="col-sm">
+            <div class="form-group">
+                <input type="button" value="BestS" onclick="alertfirst()" class="btn btn-red" />
+
+            </div>
+        </div>
+        <div class="col-sm">
+            <div class="form-group">
+                <input type="button" value="WorstS" onclick="alertfirst()" class="btn btn-red" />
+
+            </div>
+        </div>
+        <div class="col-sm">
+            <div class="form-group">
+                <input type="button" value="Payment" onclick="alertfirst()" class="btn btn-red" />
+
+            </div>
+        </div>
+    </div>
+
+    
+</form>
+
+
+@section Scripts{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        function Expand(obj) {
+            if (!obj.savesize) obj.savesize = obj.size;
+            obj.size = Math.max(obj.savesize, obj.value.length);
+        }
+        $(document).ready(function () {
+
+            $('#POSTbl').DataTable({
+                "bPaginate": false,
+                "bLengthChange": false,
+                "bFilter": false,
+                "bInfo": false,
+                "bAutoWidth": false
+            });
+            // $("#category").select2({
+            //     placeholder: "Select Category",
+            //     initSelection: function (element, callback) {
+            //     },
+            //     dropdownAutoWidth: true,
+            //     width: 'auto'
+            // });
+            // $("#category").val(null);
+            // $("#category").trigger('change');
+            // $("#subcategory").select2({
+            //     placeholder: "Select Sub Category",
+            //     initSelection: function (element, callback) {
+            //     },
+            //     dropdownAutoWidth: true,
+            //     width: 'auto'
+            // });
+            // $("#subcategory").val(null);
+            // $("#subcategory").trigger('change');
+            // $("#subcategory").prop('disabled', true);
+
+
+        });
+        // $('#category').on('change', function () {
+        //     var value = $("#category").val();
+        //     if (value != null) {
+        //         $("#subcategory").empty()
+        //         $.ajax({
+        //             url: '@Url.Action("getsubcatlist", "ItemMaster")',
+        //             type: "GET",
+        //             data: { cat: value },
+        //             //startDate: mFromDate, endDate: mToDate1
+        //             dataType: 'json',
+        //             success: function (data) {
+        //                 debugger;
+        //                 if (data.length != 0) {
+        //                     //$("#tbodyiddtl").empty();
+        //                     $("#subcategory").prop('disabled', false);
+
+        //                     var x = 1;
+        //                     data.forEach(function (item) { //insert rows
+        //                         console.log(item);
+        //                         var newOption = new Option(item.description, item.subCategory, true, true);
+        //                         // Append it to the select
+        //                         // $('#subcategory').append(newOption).trigger('change');
+        //                         $('#subcategory').append(newOption);
+
+        //                         // $("#subcategory").val(null);
+        //                         // $("#subcategory").trigger('change');
+        //                         x++
+        //                     })
+
+
+
+
+        //                 } else {
+        //                     $("#subcategory").prop('disabled', true);
+
+        //                 }
+
+        //             },
+        //             error: function () {
+
+        //             }
+        //         });
+
+
+        //     }
+        // });
+        function allowOnlyNumber(evt) {
+            var charCode = (evt.which) ? evt.which : event.keyCode
+            if (charCode > 31 && (charCode < 48 || charCode > 57))
+                return false;
+            return true;
+        }
+        function alertfirst() {
+            if (confirm("Are you sure saving data?")) {
+                $('#formcreate').submit();
+            } else {
+                return false;
+            }
+        }
+    </script>
+}
