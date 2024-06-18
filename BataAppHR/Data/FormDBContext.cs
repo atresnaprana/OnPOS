@@ -22,6 +22,8 @@ namespace BataAppHR.Data
         public DbSet<dbSubCategory> SubCategoryTbl { get; set; }
         public DbSet<dbItemStore> ItemStoreTbl { get; set; }
         public DbSet<dbSalesStaff> SalesStaffTbl { get; set; }
+        public DbSet<dbStoreStockModel> StockTbl { get; set; }
+
 
         public FormDBContext(DbContextOptions<FormDBContext> options) : base(options)
         {
@@ -47,6 +49,7 @@ namespace BataAppHR.Data
             modelBuilder.Entity<dbSubCategory>().ToTable("dbSubCategory");
             modelBuilder.Entity<dbItemStore>().ToTable("dbItemStore");
             modelBuilder.Entity<dbSalesStaff>().ToTable("dbSalesStaff");
+            modelBuilder.Entity<dbStoreStockModel>().ToTable("dbStoreStock");
 
 
             modelBuilder.Entity<SystemTabModel>().HasKey(ug => ug.ID).HasName("PK_TAB_Seq");
@@ -232,6 +235,14 @@ namespace BataAppHR.Data
             modelBuilder.Entity<dbItemMaster>().Property(ug => ug.UPDATE_USER).HasColumnType("varchar(10)").IsRequired();
             modelBuilder.Entity<dbItemMaster>().Property(ug => ug.ENTRY_DATE).HasColumnType("date");
             modelBuilder.Entity<dbItemMaster>().Property(ug => ug.UPDATE_DATE).HasColumnType("date");
+            modelBuilder.Entity<dbItemMaster>().Property(ug => ug.CY_amount).HasColumnType("int").IsRequired(false);
+            modelBuilder.Entity<dbItemMaster>().Property(ug => ug.CY_qty).HasColumnType("int").IsRequired(false);
+            modelBuilder.Entity<dbItemMaster>().Property(ug => ug.LY_amount).HasColumnType("int").IsRequired(false);
+            modelBuilder.Entity<dbItemMaster>().Property(ug => ug.LY_qty).HasColumnType("int").IsRequired(false);
+            modelBuilder.Entity<dbItemMaster>().Property(ug => ug.month_age).HasColumnType("int").IsRequired(false);
+            modelBuilder.Entity<dbItemMaster>().Property(ug => ug.month_amount).HasColumnType("int").IsRequired(false);
+            modelBuilder.Entity<dbItemMaster>().Property(ug => ug.month_qty).HasColumnType("int").IsRequired(false);
+            modelBuilder.Entity<dbItemMaster>().Property(ug => ug.year_age).HasColumnType("int").IsRequired(false);
 
 
             //dbCategory
@@ -269,6 +280,48 @@ namespace BataAppHR.Data
             modelBuilder.Entity<dbItemStore>().Property(ug => ug.UPDATE_USER).HasColumnType("varchar(10)").IsRequired();
             modelBuilder.Entity<dbItemStore>().Property(ug => ug.ENTRY_DATE).HasColumnType("date");
             modelBuilder.Entity<dbItemStore>().Property(ug => ug.UPDATE_DATE).HasColumnType("date");
+
+
+            //dbStoreStock
+            modelBuilder.Entity<dbStoreStockModel>().Property(ug => ug.stock_id).HasColumnType("int").UseMySqlIdentityColumn().IsRequired();
+            modelBuilder.Entity<dbStoreStockModel>().Property(ug => ug.storeid).HasColumnType("int");
+            modelBuilder.Entity<dbStoreStockModel>().Property(ug => ug.itemid).HasColumnType("varchar(50)");
+            modelBuilder.Entity<dbStoreStockModel>().Property(ug => ug.itmname).HasColumnType("varchar(255)");
+            modelBuilder.Entity<dbStoreStockModel>().Property(ug => ug.cat).HasColumnType("varchar(50)");
+            modelBuilder.Entity<dbStoreStockModel>().Property(ug => ug.subcat).HasColumnType("varchar(50)");
+            modelBuilder.Entity<dbStoreStockModel>().Property(ug => ug.area).HasColumnType("varchar(50)");
+            modelBuilder.Entity<dbStoreStockModel>().Property(ug => ug.row).HasColumnType("varchar(50)");
+            modelBuilder.Entity<dbStoreStockModel>().Property(ug => ug.rack).HasColumnType("varchar(50)");
+            modelBuilder.Entity<dbStoreStockModel>().Property(ug => ug.racklvl).HasColumnType("varchar(50)");
+            modelBuilder.Entity<dbStoreStockModel>().Property(ug => ug.bin_id).HasColumnType("varchar(50)");
+            modelBuilder.Entity<dbStoreStockModel>().Property(ug => ug.Past_stock).HasColumnType("int");
+            modelBuilder.Entity<dbStoreStockModel>().Property(ug => ug.dispatch_qty).HasColumnType("int");
+            modelBuilder.Entity<dbStoreStockModel>().Property(ug => ug.sales_qty).HasColumnType("int");
+            modelBuilder.Entity<dbStoreStockModel>().Property(ug => ug.receive_qty).HasColumnType("int");
+            modelBuilder.Entity<dbStoreStockModel>().Property(ug => ug.Current_stock).HasColumnType("int");
+            modelBuilder.Entity<dbStoreStockModel>().Property(ug => ug.s33).HasColumnType("int");
+            modelBuilder.Entity<dbStoreStockModel>().Property(ug => ug.s34).HasColumnType("int");
+            modelBuilder.Entity<dbStoreStockModel>().Property(ug => ug.s35).HasColumnType("int");
+            modelBuilder.Entity<dbStoreStockModel>().Property(ug => ug.s36).HasColumnType("int");
+            modelBuilder.Entity<dbStoreStockModel>().Property(ug => ug.s37).HasColumnType("int");
+            modelBuilder.Entity<dbStoreStockModel>().Property(ug => ug.s38).HasColumnType("int");
+            modelBuilder.Entity<dbStoreStockModel>().Property(ug => ug.s39).HasColumnType("int");
+            modelBuilder.Entity<dbStoreStockModel>().Property(ug => ug.s40).HasColumnType("int");
+            modelBuilder.Entity<dbStoreStockModel>().Property(ug => ug.s41).HasColumnType("int");
+            modelBuilder.Entity<dbStoreStockModel>().Property(ug => ug.s42).HasColumnType("int");
+            modelBuilder.Entity<dbStoreStockModel>().Property(ug => ug.s43).HasColumnType("int");
+            modelBuilder.Entity<dbStoreStockModel>().Property(ug => ug.s44).HasColumnType("int");
+            modelBuilder.Entity<dbStoreStockModel>().Property(ug => ug.s45).HasColumnType("int");
+            modelBuilder.Entity<dbStoreStockModel>().Property(ug => ug.s46).HasColumnType("int");
+            modelBuilder.Entity<dbStoreStockModel>().Property(ug => ug.standard_qty).HasColumnType("int");
+            modelBuilder.Entity<dbStoreStockModel>().Property(ug => ug.lastoutdate).HasColumnType("datetime");
+            modelBuilder.Entity<dbStoreStockModel>().Property(ug => ug.lastrcvdate).HasColumnType("datetime");
+            modelBuilder.Entity<dbStoreStockModel>().Property(ug => ug.bucket_id).HasColumnType("varchar(100)").IsRequired(false);
+
+            //modelBuilder.Entity<dbStoreStockModel>().Property(ug => ug.ENTRY_USER).HasColumnType("varchar(50)").IsRequired(false);
+            //modelBuilder.Entity<dbStoreStockModel>().Property(ug => ug.UPDATE_USER).HasColumnType("varchar(10)").IsRequired();
+            //modelBuilder.Entity<dbStoreStockModel>().Property(ug => ug.ENTRY_DATE).HasColumnType("date");
+            //modelBuilder.Entity<dbStoreStockModel>().Property(ug => ug.UPDATE_DATE).HasColumnType("date");
             #endregion onposmodel
 
 

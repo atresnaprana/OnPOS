@@ -30,6 +30,7 @@ using BataAppHR.Models;
 using MimeDetective.Storage.Xml.v2;
 using OfficeOpenXml.FormulaParsing.Excel.Functions.Engineering;
 using System.ComponentModel.DataAnnotations;
+using Syncfusion.Pdf.Security;
 
 namespace OnPOS.Controllers
 {
@@ -54,23 +55,9 @@ namespace OnPOS.Controllers
         public IActionResult Index()
         {
             dbSalesHdr fld = new dbSalesHdr();
-            fld.trans_amount = Convert.ToDecimal(149999);
-            fld.s33 = 100;
-            fld.s34 = 100;
-            fld.s35 = 100;
-            fld.s36 = 100;
-            fld.s37 = 100;
-            fld.s38 = 100;
-            fld.s39 = 100;
-            fld.s40 = 100;
-            fld.s41 = 100;
-            fld.s42 = 100;
-            fld.s43 = 100;
-            fld.s44 = 100;
-            fld.s45 = 100;
-            fld.s46 = 100;
-            fld.totalstock = 100;
-            fld.username = "salesuser1";
+            dbStoreList storedt = db.StoreListTbl.Where(y => y.STORE_EMAIL == User.Identity.Name).FirstOrDefault();
+            List<dbStoreStockModel> stocktbl = db.StockTbl.Where(y => y.storeid == storedt.id).ToList();
+            List<dbSalesStaff> stafftbl = db.SalesStaffTbl.Where(y=> y.STORE_ID == storedt.id).ToList();
 
             return View(fld);
         }

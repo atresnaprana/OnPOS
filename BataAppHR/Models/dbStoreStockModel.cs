@@ -1,11 +1,16 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
 namespace OnPOS.Models
 {
     public class dbStoreStockModel
     {
-        public string storeid { get; set; }
-        public string itmid { get; set; }
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int stock_id { get; set; }
+        public int storeid { get; set; }
+        public string itemid { get; set; }
         public string itmname { get; set; }
         public string cat { get; set; }
         public string subcat { get; set; }
@@ -34,6 +39,8 @@ namespace OnPOS.Models
         public int s45 { get; set; }
         public int s46 { get; set; }
         public int standard_qty { get; set; }
+        public string bucket_id { get; set; }
+
         public DateTime? lastrcvdate { get; set; }
         public DateTime? lastoutdate { get; set; }
     }

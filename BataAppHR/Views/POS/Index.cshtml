@@ -28,6 +28,21 @@
                     </div>
 
                 </div>
+                <div class="col-sm">
+                    <div class="row">
+                        <div class="col-sm">
+                            <div class="form-group">
+                                <h3 class="control-label">User:</h3>
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <div class="form-group">
+                                <input asp-for="username" class="form-control" readonly />
+                            </div>
+                        </div>
+                    </div>
+                  
+                </div>
             </div>
             <div class="row">
                 <div class="col-sm">
@@ -188,12 +203,12 @@
                     <div class="row">
                         <div class="col-sm">
                             <div class="form-group">
-                                <label class="control-label">User:</label>
+                                <label class="control-label">Crew:</label>
                             </div>
                         </div>
                         <div class="col-sm">
                             <div class="form-group">
-                                <input asp-for="username" class="form-control" readonly />
+                                <input asp-for="salesid" class="form-control" />
                             </div>
                         </div>
                     </div>
@@ -302,31 +317,31 @@
     <div class="row">
         <div class="col-sm">
             <div class="form-group">
-                <a asp-action="Index" class="btn btn-dark">Exit</a>
+                <a asp-action="Index" class="btn btn-dark">Exit - Esc</a>
 
             </div>
         </div>
         <div class="col-sm">
             <div class="form-group">
-                <input type="button" value="Recap" onclick="alertfirst()" class="btn btn-red" />
+                <input type="button" value="Recap - F2" class="btn btn-red" />
 
             </div>
         </div>
         <div class="col-sm">
             <div class="form-group">
-                <input type="button" value="BestS" onclick="alertfirst()" class="btn btn-red" />
+                <input type="button" value="BestS - F4" onclick="alertfirst()" class="btn btn-red" />
 
             </div>
         </div>
         <div class="col-sm">
             <div class="form-group">
-                <input type="button" value="WorstS" onclick="alertfirst()" class="btn btn-red" />
+                <input type="button" value="WorstS - F6" onclick="alertfirst()" class="btn btn-red" />
 
             </div>
         </div>
         <div class="col-sm">
             <div class="form-group">
-                <input type="button" value="Payment" onclick="alertfirst()" class="btn btn-red" />
+                <input type="button" value="Payment - F9" onclick="alertfirst()" class="btn btn-red" />
 
             </div>
         </div>
@@ -345,7 +360,18 @@
             if (!obj.savesize) obj.savesize = obj.size;
             obj.size = Math.max(obj.savesize, obj.value.length);
         }
+
+        function onKeyDown(e) {
+            var x = e.keyCode;
+            console.log(x);
+
+            // if (x == 118) {
+            //     console.log('Your pressed Fn+F7');
+            // }
+        }
+        
         $(document).ready(function () {
+            document.addEventListener("keydown", onKeyDown, false);
 
             $('#POSTbl').DataTable({
                 "bPaginate": false,

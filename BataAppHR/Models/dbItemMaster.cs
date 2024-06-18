@@ -31,14 +31,14 @@ namespace OnPOS.Models
         [DisplayFormat(DataFormatString = "{0:0}", ApplyFormatInEditMode = true)]
         public decimal price3 { get; set; }
 
-        public int month_age { get; set; }
-        public int year_age { get; set; }
-        public int month_qty { get; set; }
-        public int month_amount { get; set; }
-        public int CY_qty { get; set; }
-        public int CY_amount { get; set; }
-        public int LY_qty { get; set; }
-        public int LY_amount { get; set; }
+        public int? month_age { get; set; }
+        public int? year_age { get; set; }
+        public int? month_qty { get; set; }
+        public int? month_amount { get; set; }
+        public int? CY_qty { get; set; }
+        public int? CY_amount { get; set; }
+        public int? LY_qty { get; set; }
+        public int? LY_amount { get; set; }
 
         
         public string brand { get; set; }

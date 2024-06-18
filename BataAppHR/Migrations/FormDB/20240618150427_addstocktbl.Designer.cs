@@ -4,14 +4,16 @@ using BataAppHR.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BataAppHR.Migrations.FormDB
 {
     [DbContext(typeof(FormDBContext))]
-    partial class FormDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240618150427_addstocktbl")]
+    partial class addstocktbl
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -659,9 +661,6 @@ namespace BataAppHR.Migrations.FormDB
 
                     b.Property<string>("bin_id")
                         .HasColumnType("varchar(50)");
-
-                    b.Property<string>("bucket_id")
-                        .HasColumnType("varchar(100)");
 
                     b.Property<string>("cat")
                         .HasColumnType("varchar(50)");

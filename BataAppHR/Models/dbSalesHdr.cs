@@ -12,7 +12,7 @@ namespace OnPOS.Models
         public string Store_id { get; set; }
         public string staff_id { get; set; }
         public DateTime transdate { get; set; }
-        public decimal? trans_amount { get; set; }
+        public int trans_amount { get; set; }
         public int trans_qty { get; set; }
         public string approval_code { get; set; }
         public string cardnum { get; set; }
@@ -27,6 +27,8 @@ namespace OnPOS.Models
         public List<dbSalesDtl> salesDtl { get; set; }
         [NotMapped]
         public string syserr { get; set; }
+        [NotMapped]
+        public string salesid { get; set; }
         [NotMapped]
         public int scanqty { get; set; }
         [NotMapped]

@@ -32,6 +32,8 @@
     <Compile Remove="Migrations\FormDB\20220408030516_addCustomerTbl.Designer.cs" />
     <Compile Remove="Migrations\FormDB\20240309093118_testmigrate.cs" />
     <Compile Remove="Migrations\FormDB\20240309093118_testmigrate.Designer.cs" />
+    <Compile Remove="Migrations\FormDB\20240618145459_addstocktbl.cs" />
+    <Compile Remove="Migrations\FormDB\20240618145459_addstocktbl.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

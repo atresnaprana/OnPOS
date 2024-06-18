@@ -27,6 +27,7 @@ using System.Net;
 using BataAppHR.Services;
 using OnPOS.Models;
 using static System.Net.WebRequestMethods;
+using static MimeDetective.Definitions.Default.FileTypes;
 
 namespace OnPOS.Controllers
 {
@@ -88,123 +89,27 @@ namespace OnPOS.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create([Bind] dbCustomer objCust)
+        public async Task<IActionResult> Create([Bind] dbSalesStaff objCust)
         {
             if (ModelState.IsValid)
             {
+                if (User.IsInRole("CustomerOnPos"))
+                {
+                    var data = db.CustomerTbl.Where(y => y.Email == User.Identity.Name).FirstOrDefault();
+                    objCust.COMPANY_ID = data.COMPANY_ID;                    
+                }
+                else if (User.IsInRole("StoreOnPos"))
+                {
+                    var getStorelist = db.StoreListTbl.Where(y => y.STORE_EMAIL == User.Identity.Name).FirstOrDefault();
+                    objCust.COMPANY_ID = getStorelist.COMPANY_ID;
+                    objCust.STORE_ID = getStorelist.id;
+                }
                 int validate = 0;
                 objCust.ENTRY_DATE = DateTime.Now;
                 objCust.UPDATE_DATE = DateTime.Now;
                 objCust.ENTRY_USER = User.Identity.Name;
                 objCust.UPDATE_USER = User.Identity.Name;
-                if (objCust.fileKtp != null)
-                {
-                    objCust.FILE_KTP_NAME = objCust.fileKtp.FileName;
-                    using (var ms = new MemoryStream())
-                    {
-                        objCust.fileKtp.CopyTo(ms);
-                        var fileBytes = ms.ToArray();
-                        objCust.FILE_KTP = fileBytes;
-                        string s = Convert.ToBase64String(fileBytes);
-                        // act on the Base64 data
-                    }
-                }
-                if (objCust.fileAkta != null)
-                {
-                    objCust.FILE_AKTA_NAME = objCust.fileAkta.FileName;
-                    using (var ms = new MemoryStream())
-                    {
-                        objCust.fileAkta.CopyTo(ms);
-                        var fileBytes = ms.ToArray();
-                        objCust.FILE_AKTA = fileBytes;
-                        string s = Convert.ToBase64String(fileBytes);
-                        // act on the Base64 data
-                    }
-                }
-                if (objCust.fileRekening != null)
-                {
-                    objCust.FILE_REKENING_NAME = objCust.fileRekening.FileName;
-                    using (var ms = new MemoryStream())
-                    {
-                        objCust.fileRekening.CopyTo(ms);
-                        var fileBytes = ms.ToArray();
-                        objCust.FILE_REKENING = fileBytes;
-                        string s = Convert.ToBase64String(fileBytes);
-                        // act on the Base64 data
-                    }
-                }
-                if (objCust.fileNPWP != null)
-                {
-                    objCust.FILE_NPWP_NAME = objCust.fileNPWP.FileName;
-                    using (var ms = new MemoryStream())
-                    {
-                        objCust.fileNPWP.CopyTo(ms);
-                        var fileBytes = ms.ToArray();
-                        objCust.FILE_NPWP = fileBytes;
-                        string s = Convert.ToBase64String(fileBytes);
-                        // act on the Base64 data
-                    }
-                }
-                if (objCust.fileTdp != null)
-                {
-                    objCust.FILE_TDP_NAME = objCust.fileTdp.FileName;
-                    using (var ms = new MemoryStream())
-                    {
-                        objCust.fileTdp.CopyTo(ms);
-                        var fileBytes = ms.ToArray();
-                        objCust.FILE_TDP = fileBytes;
-                        string s = Convert.ToBase64String(fileBytes);
-                        // act on the Base64 data
-                    }
-                }
-                if (objCust.fileSIUP != null)
-                {
-                    objCust.FILE_SIUP_NAME = objCust.fileSIUP.FileName;
-                    using (var ms = new MemoryStream())
-                    {
-                        objCust.fileSIUP.CopyTo(ms);
-                        var fileBytes = ms.ToArray();
-                        objCust.FILE_SIUP = fileBytes;
-                        string s = Convert.ToBase64String(fileBytes);
-                        // act on the Base64 data
-                    }
-                }
-                if (objCust.fileNIB != null)
-                {
-                    objCust.FILE_NIB_NAME = objCust.fileNIB.FileName;
-                    using (var ms = new MemoryStream())
-                    {
-                        objCust.fileNIB.CopyTo(ms);
-                        var fileBytes = ms.ToArray();
-                        objCust.FILE_NIB = fileBytes;
-                        string s = Convert.ToBase64String(fileBytes);
-                        // act on the Base64 data
-                    }
-                }
-                if (objCust.fileSPPKP != null)
-                {
-                    objCust.FILE_SPPKP_NAME = objCust.fileSPPKP.FileName;
-                    using (var ms = new MemoryStream())
-                    {
-                        objCust.fileSPPKP.CopyTo(ms);
-                        var fileBytes = ms.ToArray();
-                        objCust.FILE_SPPKP = fileBytes;
-                        string s = Convert.ToBase64String(fileBytes);
-                        // act on the Base64 data
-                    }
-                }
-                if (objCust.fileSKT != null)
-                {
-                    objCust.FILE_SKT_NAME = objCust.fileSKT.FileName;
-                    using (var ms = new MemoryStream())
-                    {
-                        objCust.fileSKT.CopyTo(ms);
-                        var fileBytes = ms.ToArray();
-                        objCust.FILE_SKT = fileBytes;
-                        string s = Convert.ToBase64String(fileBytes);
-                        // act on the Base64 data
-                    }
-                }
+              
                 objCust.FLAG_AKTIF = "1";
 
 
@@ -212,15 +117,28 @@ namespace OnPOS.Controllers
                 {
                     //var user = new IdentityUser { UserName = objCust.Email.Trim(), Email = objCust.Email.Trim(), EmailConfirmed = true };
 
-                    var user = new IdentityUser { UserName = objCust.Email.Trim(), Email = objCust.Email.Trim() };
-                    var validateisexist = _userManager.FindByEmailAsync(objCust.Email.Trim());
+                    var user = new IdentityUser { UserName = objCust.SALES_EMAIL.Trim(), Email = objCust.SALES_EMAIL.Trim() };
+                    var validateisexist = _userManager.FindByEmailAsync(objCust.SALES_EMAIL.Trim());
 
                     if (validateisexist.Result == null)
                     {
-                        createuser(user, objCust.Password);
-                        db.CustomerTbl.Add(objCust);
+                        await createuser(user, objCust.Password, objCust.SALES_EMAIL.Trim());
+                        string mySqlConnectionStr = Configuration.GetConnectionString("DefaultConnection");
+
+                        using (MySqlConnection conn = new MySqlConnection(mySqlConnectionStr))
+                        {
+                            conn.Open();
+                            string query = @"update aspnetusers set EmailConfirmed = '1' where Email  = '" + objCust.SALES_EMAIL.Trim() + "'";
+
+                            MySqlCommand cmd = new MySqlCommand(query, conn);
+                            cmd.ExecuteNonQuery();
+                            conn.Close();
+                        }
+
+                        db.SalesStaffTbl.Add(objCust);
                         db.SaveChanges();
-                        SendVerifyEmail(objCust.Email.Trim());
+                        
+                        //SendVerifyEmail(objCust.SALES_EMAIL.Trim());
                         //if (result.Result )
                         //{
                         //    db.CustomerTbl.Add(objCust);
@@ -262,7 +180,7 @@ namespace OnPOS.Controllers
             }
             return View(objCust);
         }
-        public async Task<bool> createuser(IdentityUser user, string userpass)
+        public async Task<bool> createuser(IdentityUser user, string userpass, string mail)
         {
             var success = false;
             var result = await _userManager.CreateAsync(user, userpass);
@@ -270,13 +188,21 @@ namespace OnPOS.Controllers
             if (result.Succeeded)
             {
                 success = true;
+               
+                var getuser = _userManager.FindByEmailAsync(mail);
+                IdentityUser userdata = getuser.Result;
+                addrole(userdata);
+                SendWelcomeMail(mail);
             }
+            
+           
             return success;
         }
+        
         public async Task<bool> addrole(IdentityUser user)
         {
             var success = false;
-            var result1 = await _userManager.AddToRoleAsync(user, "CustomerIndustrial");
+            var result1 = await _userManager.AddToRoleAsync(user, "SalesStaffOnPOS");
             if (result1.Succeeded)
             {
                 success = true;
@@ -291,8 +217,8 @@ namespace OnPOS.Controllers
             //    return NotFound();
             //}
 
-            dbCustomer fld = db.CustomerTbl.Find(id);
-            if (fld.BL_FLAG == "1")
+            dbSalesStaff fld = db.SalesStaffTbl.Find(id);
+            if (fld.SALES_BLACKLIST_FLAG == "1")
             {
                 fld.isBlackList = true;
             }
@@ -301,22 +227,7 @@ namespace OnPOS.Controllers
                 fld.isBlackList = false;
 
             }
-            if (fld.isApproved == "1")
-            {
-                fld.isApproveBool = true;
-            }
-            else
-            {
-                fld.isApproveBool = false;
-            }
-            if (fld.isApproved2 == "1")
-            {
-                fld.isApproveBool2 = true;
-            }
-            else
-            {
-                fld.isApproveBool2 = false;
-            }
+           
             if (fld == null)
             {
                 return NotFound();
@@ -326,7 +237,7 @@ namespace OnPOS.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, [Bind] dbCustomer fld)
+        public IActionResult Edit(int id, [Bind] dbSalesStaff fld)
         {
             //if (id == null)
             //{
@@ -334,193 +245,29 @@ namespace OnPOS.Controllers
             //}
             if (ModelState.IsValid)
             {
-                var editFld = db.CustomerTbl.Find(id);
-                editFld.CUST_NAME = fld.CUST_NAME;
-                editFld.COMPANY = fld.COMPANY;
-                editFld.NPWP = fld.NPWP;
-                editFld.address = fld.address;
-                editFld.city = fld.city;
-                editFld.province = fld.province;
-                editFld.postal = fld.postal;
-                editFld.Email = fld.Email;
-                editFld.BANK_NAME = fld.BANK_NAME;
-                editFld.BANK_NUMBER = fld.BANK_NUMBER;
-                editFld.BANK_BRANCH = fld.BANK_BRANCH;
-                editFld.BANK_COUNTRY = fld.BANK_COUNTRY;
-                editFld.REG_DATE = fld.REG_DATE;
-                editFld.Email = fld.Email;
-                editFld.KTP = fld.KTP;
-                editFld.PHONE1 = fld.PHONE1;
-                editFld.PHONE2 = fld.PHONE2;
-                editFld.VA1 = fld.VA1;
-                editFld.VA2 = fld.VA2;
-                editFld.VA1NOTE = fld.VA1NOTE;
-                editFld.VA2NOTE = fld.VA2NOTE;
-                editFld.discount_customer = fld.discount_customer;
+                var editFld = db.SalesStaffTbl.Find(id);
+                editFld.SALES_NAME = fld.SALES_NAME;
+                editFld.STORE_ID = fld.STORE_ID;
+              
+                editFld.SALES_EMAIL = fld.SALES_EMAIL;
+                
+                editFld.SALES_REG_DATE = fld.SALES_REG_DATE;
+                editFld.SALES_KTP = fld.SALES_KTP;
+                editFld.SALES_PHONE = fld.SALES_PHONE;
+              
 
                 //editFld.FLAG_AKTIF = "0";
                 if (fld.isBlackList == true)
                 {
-                    editFld.BL_FLAG = "1";
+                    editFld.SALES_BLACKLIST_FLAG = "1";
                 }
                 else
                 {
-                    editFld.BL_FLAG = "0";
+                    editFld.SALES_BLACKLIST_FLAG = "0";
 
                 }
 
-                if (fld.fileKtp != null)
-                {
-                    editFld.FILE_KTP_NAME = fld.fileKtp.FileName;
-                    using (var ms = new MemoryStream())
-                    {
-                        fld.fileKtp.CopyTo(ms);
-                        var fileBytes = ms.ToArray();
-                        editFld.FILE_KTP = fileBytes;
-                        string s = Convert.ToBase64String(fileBytes);
-                        // act on the Base64 data
-                    }
-                }
-                if (fld.fileAkta != null)
-                {
-                    editFld.FILE_AKTA_NAME = fld.fileAkta.FileName;
-                    using (var ms = new MemoryStream())
-                    {
-                        fld.fileAkta.CopyTo(ms);
-                        var fileBytes = ms.ToArray();
-                        editFld.FILE_AKTA = fileBytes;
-                        string s = Convert.ToBase64String(fileBytes);
-                        // act on the Base64 data
-                    }
-                }
-                if (fld.fileRekening != null)
-                {
-                    editFld.FILE_REKENING_NAME = fld.fileRekening.FileName;
-                    using (var ms = new MemoryStream())
-                    {
-                        fld.fileRekening.CopyTo(ms);
-                        var fileBytes = ms.ToArray();
-                        editFld.FILE_REKENING = fileBytes;
-                        string s = Convert.ToBase64String(fileBytes);
-                        // act on the Base64 data
-                    }
-                }
-                if (fld.fileNPWP != null)
-                {
-                    editFld.FILE_NPWP_NAME = fld.fileNPWP.FileName;
-                    using (var ms = new MemoryStream())
-                    {
-                        fld.fileNPWP.CopyTo(ms);
-                        var fileBytes = ms.ToArray();
-                        editFld.FILE_NPWP = fileBytes;
-                        string s = Convert.ToBase64String(fileBytes);
-                        // act on the Base64 data
-                    }
-                }
-                if (fld.fileTdp != null)
-                {
-                    editFld.FILE_TDP_NAME = fld.fileTdp.FileName;
-                    using (var ms = new MemoryStream())
-                    {
-                        fld.fileTdp.CopyTo(ms);
-                        var fileBytes = ms.ToArray();
-                        editFld.FILE_TDP = fileBytes;
-                        string s = Convert.ToBase64String(fileBytes);
-                        // act on the Base64 data
-                    }
-                }
-                if (fld.fileSIUP != null)
-                {
-                    editFld.FILE_SIUP_NAME = fld.fileSIUP.FileName;
-                    using (var ms = new MemoryStream())
-                    {
-                        fld.fileSIUP.CopyTo(ms);
-                        var fileBytes = ms.ToArray();
-                        editFld.FILE_SIUP = fileBytes;
-                        string s = Convert.ToBase64String(fileBytes);
-                        // act on the Base64 data
-                    }
-                }
-                if (fld.fileNIB != null)
-                {
-                    editFld.FILE_NIB_NAME = fld.fileNIB.FileName;
-                    using (var ms = new MemoryStream())
-                    {
-                        fld.fileNIB.CopyTo(ms);
-                        var fileBytes = ms.ToArray();
-                        editFld.FILE_NIB = fileBytes;
-                        string s = Convert.ToBase64String(fileBytes);
-                        // act on the Base64 data
-                    }
-                }
-                if (fld.fileSPPKP != null)
-                {
-                    editFld.FILE_SPPKP_NAME = fld.fileSPPKP.FileName;
-                    using (var ms = new MemoryStream())
-                    {
-                        fld.fileSPPKP.CopyTo(ms);
-                        var fileBytes = ms.ToArray();
-                        editFld.FILE_SPPKP = fileBytes;
-                        string s = Convert.ToBase64String(fileBytes);
-                        // act on the Base64 data
-                    }
-                }
-                if (fld.fileSKT != null)
-                {
-                    editFld.FILE_SKT_NAME = fld.fileSKT.FileName;
-                    using (var ms = new MemoryStream())
-                    {
-                        fld.fileSKT.CopyTo(ms);
-                        var fileBytes = ms.ToArray();
-                        editFld.FILE_SKT = fileBytes;
-                        string s = Convert.ToBase64String(fileBytes);
-                        // act on the Base64 data
-                    }
-                }
-                if (fld.isApproveBool == true)
-                {
-                    editFld.isApproved = "1";
-                }
-                else
-                {
-                    editFld.isApproved = "0";
-                }
-                if (fld.isApproveBool2 == true)
-                {
-                    if (editFld.isApproved2 != "1")
-                    {
-                        editFld.isApproved2 = "1";
-
-                        string mySqlConnectionStr = Configuration.GetConnectionString("DefaultConnection");
-
-                        using (MySqlConnection conn = new MySqlConnection(mySqlConnectionStr))
-                        {
-                            conn.Open();
-                            string query = @"update aspnetusers set EmailConfirmed = '1' where Email  = '" + editFld.Email + "'";
-
-                            MySqlCommand cmd = new MySqlCommand(query, conn);
-
-                            using (var reader = cmd.ExecuteReader())
-                            {
-                                while (reader.Read())
-                                {
-                                    //pricedt.articleprice = Convert.ToInt32(reader["price"]);
-
-                                }
-                            }
-                            conn.Close();
-                        }
-                        var getuser = _userManager.FindByEmailAsync(editFld.Email.Trim());
-                        IdentityUser userdata = getuser.Result;
-                        addrole(userdata);
-                        SendWelcomeMail(editFld.Email.Trim());
-                    }
-                }
-                else
-                {
-                    editFld.isApproved2 = "0";
-
-                }
+               
 
                 editFld.UPDATE_DATE = DateTime.Now;
                 editFld.UPDATE_USER = User.Identity.Name;
@@ -703,7 +450,7 @@ namespace OnPOS.Controllers
             //{
             //    return NotFound();
             //}
-            dbCustomer fld = db.CustomerTbl.Find(id);
+            dbSalesStaff fld = db.SalesStaffTbl.Find(id);
             if (fld == null)
             {
                 return NotFound();
@@ -715,7 +462,7 @@ namespace OnPOS.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteCustomer(int id)
         {
-            dbCustomer fld = db.CustomerTbl.Find(id);
+            dbSalesStaff fld = db.SalesStaffTbl.Find(id);
 
             if (fld == null)
             {
