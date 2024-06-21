@@ -58,8 +58,43 @@ namespace OnPOS.Controllers
             dbStoreList storedt = db.StoreListTbl.Where(y => y.STORE_EMAIL == User.Identity.Name).FirstOrDefault();
             List<dbStoreStockModel> stocktbl = db.StockTbl.Where(y => y.storeid == storedt.id).ToList();
             List<dbSalesStaff> stafftbl = db.SalesStaffTbl.Where(y=> y.STORE_ID == storedt.id).ToList();
+            fld.username = storedt.STORE_MANAGER_NAME;
+            fld.invoice = "000001";
+            var dddata = stafftbl.Select(y => new DropDownModel()
+            {
+                id = y.id.ToString(),
+                name = y.id.ToString() + " - " + y.SALES_NAME,
+                
 
+            }).ToList();
+            fld.ddStaff = dddata;
+            fld.Store_id = storedt.id.ToString();
+            fld.storedata = storedt;
             return View(fld);
         }
+        public JsonResult getstockinfo(string scanitem, string Store_id)
+        {
+            string scanitemshort = scanitem.Substring(0, 14);
+
+            var getstockdata = db.StockTbl.Where(y => y.storeid == Convert.ToInt32(Store_id) && y.itemid == scanitemshort && y.bucket_id == "ON_HAND").FirstOrDefault();
+            return Json(getstockdata);
+        }
+        public JsonResult validateitems(string scanitem)
+        {
+            string scanitemshort = scanitem.Substring(0, 14);
+            var getdiscount = db.DiscTbl.Where(y => y.article == scanitemshort).FirstOrDefault();
+
+            var getstockdata = db.ItemMasterTbl.Where(y => y.itemid == scanitemshort).FirstOrDefault();
+            if(getdiscount != null)
+            {
+                getstockdata.disctype = getdiscount.type;
+                getstockdata.discamt = getdiscount.amount;
+                getstockdata.discperc = getdiscount.percentage;
+            }
+            
+
+            return Json(getstockdata);
+        }
+        
     }
 }

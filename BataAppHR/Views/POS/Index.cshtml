@@ -167,20 +167,28 @@
             </div>
             <div class="row">
                 <div class="col-sm">
+                    <input type="button" value="remove" id="removebtn" class="btn btn-red" />
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm">
                     <table class="table table-striped" id="POSTbl">
                         <thead>
                             <tr>
-                                <th>
-                                    Pairs
-                                </th>
+                                
                                 <th>
                                     Article
                                 </th>
                                 <th>
                                     Size
                                 </th>
+                             
                                 <th>
                                     Price
+                                </th>
+                                <th>
+                                    Pairs
                                 </th>
                                 <th>
                                     Discount
@@ -188,9 +196,7 @@
                                 <th>
                                     SubTotal
                                 </th>
-                                <th>
-                                    Action
-                                </th>
+                              
                             </tr>
                         </thead>
                         <tbody id="tbodyid1">
@@ -208,7 +214,7 @@
                         </div>
                         <div class="col-sm">
                             <div class="form-group">
-                                <input asp-for="salesid" class="form-control" />
+                                @Html.DropDownListFor(m => m.salesid, new SelectList(Model.ddStaff, "id", "name"), new { @class = "form-control" })
                             </div>
                         </div>
                     </div>
@@ -222,6 +228,8 @@
                         <div class="col-sm">
                             <div class="form-group">
                                 <input asp-for="invoice" class="form-control" readonly />
+                                <input asp-for="Store_id" class="form-control" type="hidden" />
+
                             </div>
                         </div>
                     </div>
@@ -229,7 +237,7 @@
                     <div class="row">
                         <div class="col-sm">
                             <div class="form-group">
-                                <label class="control-label">SKU</label>
+                                <label class="control-label">Article</label>
                             </div>
                         </div>
                         <div class="col-sm">
@@ -289,7 +297,9 @@
                                 @Html.DropDownListFor(model => model.transtype, new List<SelectListItem>
                                 {
                                 new SelectListItem{ Text="Tunai", Value = "T" },
-                                new SelectListItem{ Text="Non Tunai", Value = "NT" },
+                                new SelectListItem{ Text="Debit Card", Value = "DC" },
+                                new SelectListItem{ Text="Credit Card", Value = "CC" },
+                                new SelectListItem{ Text="QRIS", Value = "QR" }
 
                                 }, new { @class = "form-control" })
                             </div>
@@ -323,7 +333,7 @@
         </div>
         <div class="col-sm">
             <div class="form-group">
-                <input type="button" value="Recap - F2" class="btn btn-red" />
+                <input type="button" onclick="openrecap()" value="Recap - F2" class="btn btn-red" />
 
             </div>
         </div>
@@ -350,12 +360,107 @@
     
 </form>
 
+<div id="dialog" title="Recap">
+    <center>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm">
+                    <label class="form-control">Store Code:</label>
+                </div>
+                <div class="col-sm">
+                    <label class="form-control">@Model.storedata.id</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm">
+                    <label class="form-control">Address:</label>
+                </div>
+                <div class="col-sm">
+                    <label class="form-control">@Model.storedata.STORE_ADDRESS</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm">
+                    <label class="form-control">Date:</label>
+                </div>
+                <div class="col-sm">
+                    <label class="form-control">@DateTime.Now.ToString("dd/MM/yyyy") to @DateTime.Now.ToString("dd/MM/yyyy")</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm">
+                    <label class="form-control">Time:</label>
+                </div>
+                <div class="col-sm">
+                    <label class="form-control">08:00:00 to @DateTime.Now.ToString("HH:mm:ss")</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm">
+                    <table class="table table-striped" id="POSTbl">
+                        <thead>
+                            <tr>
+
+                                <th>
+                                    Category
+                                </th>
+                                <th>
+                                    Quantity
+                                </th>
+
+                                <th>
+                                    Amount
+                                </th>
+                               
+
+                            </tr>
+                        </thead>
+                        <tbody id="tbodyid1">
+                            <tr>
+                                <td> Footwear</td>
+                                <td> 100 </td>
+                                <td> 50.000.000</td>
+                            </tr>
+                            <tr>
+                                <td> Sandals</td>
+                                <td> 80 </td>
+                                <td> 20.000.000</td>
+                            </tr>
+                            <tr>
+                                <td> Apparel</td>
+                                <td> 100 </td>
+                                <td> 45.000.000</td>
+                            </tr>
+                            <tr>
+                                <td> Equipment</td>
+                                <td> 70 </td>
+                                <td> 30.000.000</td>
+                            </tr>
+                            <tr>
+                                <td> Shock</td>
+                                <td> 150 </td>
+                                <td> 50.000.000</td>
+                            </tr>
+                            <tr>
+                                <td> Total</td>
+                                <td> 500 </td>
+                                <td> 195.000.000</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </center>
+</div>
 
 @section Scripts{
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
     <script>
+        var POSTbl;
+
         function Expand(obj) {
             if (!obj.savesize) obj.savesize = obj.size;
             obj.size = Math.max(obj.savesize, obj.value.length);
@@ -363,91 +468,288 @@
 
         function onKeyDown(e) {
             var x = e.keyCode;
-            console.log(x);
+            if (x == 27) {
+          
+                window.location.href = '/Home/index';
+            }
+            if (x == 113) {
+                openrecap();
+            }
+            if (x == 115) {
 
+            }
+            if (x == 117) { 
+            }
+            if (x == 120) {
+
+            }
             // if (x == 118) {
             //     console.log('Your pressed Fn+F7');
             // }
         }
-        
+        function openrecap() {
+            $("#dialog").dialog("open");
+
+        }
         $(document).ready(function () {
             document.addEventListener("keydown", onKeyDown, false);
-
-            $('#POSTbl').DataTable({
+            $("#salesid").select2({
+                placeholder: "Select sales",
+                initSelection: function (element, callback) {
+                },
+                dropdownAutoWidth: true,
+                width: 'auto'
+            });
+            $("#salesid").val(null);
+            $("#salesid").trigger('change');
+            $("#dialog").dialog({
+                width: 1080,
+                height: 720,
+                modal: true,
+                resizable: false,
+                close: function () {
+                    //var audio = $("#player");
+                    //audio[0].pause();
+                }
+            });
+            $("#dialog").dialog("close");
+            POSTbl = $('#POSTbl').DataTable({
                 "bPaginate": false,
                 "bLengthChange": false,
                 "bFilter": false,
                 "bInfo": false,
                 "bAutoWidth": false
             });
-            // $("#category").select2({
-            //     placeholder: "Select Category",
-            //     initSelection: function (element, callback) {
-            //     },
-            //     dropdownAutoWidth: true,
-            //     width: 'auto'
-            // });
-            // $("#category").val(null);
-            // $("#category").trigger('change');
-            // $("#subcategory").select2({
-            //     placeholder: "Select Sub Category",
-            //     initSelection: function (element, callback) {
-            //     },
-            //     dropdownAutoWidth: true,
-            //     width: 'auto'
-            // });
-            // $("#subcategory").val(null);
-            // $("#subcategory").trigger('change');
-            // $("#subcategory").prop('disabled', true);
+            $("#scanitem").keyup(function () {
+                if ($("#scanitem").val().length == 16) {
+                    var itm = $("#scanitem").val();
+                    var store = $("#Store_id").val();
+                    $.ajax({
+                        url: '@Url.Action("getstockinfo", "POS")',
+                        type: "GET",
+                        data: { scanitem: itm, Store_id: store },
+                        //startDate: mFromDate, endDate: mToDate1
+                        dataType: 'json',
+                        success: function (data) {
+                            $("#s33").val(data.s33);
+                            $("#s34").val(data.s34);
+                            $("#s35").val(data.s35);
+                            $("#s36").val(data.s36);
+                            $("#s37").val(data.s37);
+                            $("#s38").val(data.s38);
+                            $("#s39").val(data.s39);
+                            $("#s40").val(data.s40);
+                            $("#s41").val(data.s41);
+                            $("#s42").val(data.s42);
+                            $("#s43").val(data.s43);
+                            $("#s44").val(data.s44);
+                            $("#s45").val(data.s45);
+                            $("#s46").val(data.s46);
+                            $("#totalstock").val(data.current_stock);
+
+                           
+                        },
+                        error: function () {
+
+                        }
+
+                    });
+
+                } else {
+                    $("#s33").val(0);
+                    $("#s34").val(0);
+                    $("#s35").val(0);
+                    $("#s36").val(0);
+                    $("#s37").val(0);
+                    $("#s38").val(0);
+                    $("#s39").val(0);
+                    $("#s40").val(0);
+                    $("#s41").val(0);
+                    $("#s42").val(0);
+                    $("#s43").val(0);
+                    $("#s44").val(0);
+                    $("#s45").val(0);
+                    $("#s46").val(0);
+                    $("#totalstock").val(0);
+                }
 
 
+            });
+            $("#scanqty").keypress(function (e) {
+                var code = e.keyCode || e.which;
+                if (code == 13) {
+                    var skucheck = $("#scanitem").val().trim();
+                    if (skucheck != null) {
+                        if (skucheck != "") {
+                            $.ajax({
+                                url: '@Url.Action("validateitems", "POS")',
+                                type: "GET",
+                                data: { scanitem: skucheck },
+                                //startDate: mFromDate, endDate: mToDate1
+                                dataType: 'json',
+                                success: function (data) {
+                                    console.log(data);
+                                    var article = skucheck.substring(0, 14);
+                                    var sz = skucheck.slice(-2);
+                                    var inputqty = $("#scanqty").val();
+                                    var id = "s" + sz;
+                                    var valdest = $("#" + id).val();
+                                    debugger;
+                                    if (data != null) {
+                                        if (parseInt(inputqty) <= parseInt(valdest)) {
+                                            var flagexist = 0;
+                                            var datas = POSTbl.rows().data();
+                                            var indexes = POSTbl
+                                                .rows()
+                                                .indexes()
+                                                .filter(function (value, index) {
+                                                    return $("#scanitem").val().trim() === POSTbl.row(value).data()[0] + POSTbl.row(value).data()[1];
+                                                });
+                                            if (indexes[0] != null) {
+                                                // Get the row for indexes[0]
+                                                var rows = POSTbl.row(indexes[0]);
+                                                var calculates = parseInt(data.price1) * parseInt(inputqty);
+
+                                                var disctype = data.disctype;
+                                                var discounttotal = 0;
+
+                                                if (disctype != null) {
+                                                    if (disctype == "percentage") {
+                                                        discounttotal = Math.round(((calculates * data.discperc) / 100));
+
+                                                        calculates = Math.round(calculates - discounttotal);
+                                                    } else {
+                                                        discounttotal = data.discamt;
+                                                        calculates = calculates - data.discamt;
+                                                    }
+                                                }
+                                                // Get the data for the row
+                                                var dts = rows.data();
+                                                var totalinv = parseInt($("#trans_amount").val());
+                                                var totalinvnew = (totalinv - parseInt(dts[5])) + calculates;
+                                                $("#trans_amount").val(totalinvnew);
+
+                                                // Change the position to `Engineer`
+                                                dts[3] = inputqty;
+                                                dts[4] = discounttotal;
+                                                dts[5] = calculates;
+                                                $("#scanprice").val(calculates);
+                                                $("#scandiscount").val(discounttotal);
+
+
+                                                // Update the table data and redraw the table
+                                                rows.data(dts).draw();
+                                               
+                                            } else {
+                                                // var EditDelete = '<a onclick="removerow('+skucheck+')" class="btn btn-sm btn-dark">Delete</a ></td>';
+                                                var totalinv = parseInt($("#trans_amount").val())
+                                                ;
+                                                var calculate = parseInt(data.price1) * parseInt(inputqty);
+
+                                                var disctype = data.disctype;
+                                                var discounttotal = 0;
+                                                if (disctype != null) {
+                                                    if (disctype == "percentage") {
+                                                        discounttotal = Math.round(((calculate * data.discperc) / 100));
+                                                        calculate = Math.round(calculate - discounttotal);
+                                                    } else {
+                                                        discounttotal = data.discamt;
+                                                        calculate = calculate - data.discamt;
+                                                    }
+                                                }
+                                                POSTbl.row.add([article, sz, data.price1, inputqty, discounttotal, calculate]);
+                                                POSTbl.draw();
+                                                $("#trans_amount").val(totalinv + calculate);
+                                                $("#scanprice").val(calculate);
+                                                $("#scandiscount").val(discounttotal);
+                                            }
+                                            
+
+
+                                        } else {
+                                            alert("not enough quantity");
+                                        }
+                                    } else {
+                                        alert("incorrect article");
+                                    }
+                                },
+                                error: function () {
+
+                                }
+
+                            });
+
+                        }else{
+                            alert("empty article");
+                        }
+                    } else {
+                        alert("empty article")
+                    }
+                }
+
+
+            });
+            $('#POSTbl tbody').on('click', 'tr', function () {
+                if ($(this).hasClass('selected')) {
+                    $(this).removeClass('selected');
+                } else {
+                    POSTbl.$('tr.selected').removeClass('selected');
+                    $(this).addClass('selected');
+                }
+            });
+            $('#removebtn').click(function () {                
+                var totalinv = parseInt($("#trans_amount").val());
+                var totalinvnew = (totalinv - parseInt(POSTbl.row('.selected').data()[5]));
+                $("#trans_amount").val(totalinvnew);
+                POSTbl.row('.selected').remove().draw(false);
+            });
         });
-        // $('#category').on('change', function () {
-        //     var value = $("#category").val();
-        //     if (value != null) {
-        //         $("#subcategory").empty()
-        //         $.ajax({
-        //             url: '@Url.Action("getsubcatlist", "ItemMaster")',
-        //             type: "GET",
-        //             data: { cat: value },
-        //             //startDate: mFromDate, endDate: mToDate1
-        //             dataType: 'json',
-        //             success: function (data) {
-        //                 debugger;
-        //                 if (data.length != 0) {
-        //                     //$("#tbodyiddtl").empty();
-        //                     $("#subcategory").prop('disabled', false);
+        $('#category').on('change', function () {
+            var value = $("#category").val();
+            if (value != null) {
+                $("#subcategory").empty()
+                $.ajax({
+                    url: '@Url.Action("getsubcatlist", "ItemMaster")',
+                    type: "GET",
+                    data: { cat: value },
+                    //startDate: mFromDate, endDate: mToDate1
+                    dataType: 'json',
+                    success: function (data) {
+                        debugger;
+                        if (data.length != 0) {
+                            //$("#tbodyiddtl").empty();
+                            $("#subcategory").prop('disabled', false);
 
-        //                     var x = 1;
-        //                     data.forEach(function (item) { //insert rows
-        //                         console.log(item);
-        //                         var newOption = new Option(item.description, item.subCategory, true, true);
-        //                         // Append it to the select
-        //                         // $('#subcategory').append(newOption).trigger('change');
-        //                         $('#subcategory').append(newOption);
+                            var x = 1;
+                            data.forEach(function (item) { //insert rows
+                                console.log(item);
+                                var newOption = new Option(item.description, item.subCategory, true, true);
+                                // Append it to the select
+                                // $('#subcategory').append(newOption).trigger('change');
+                                $('#subcategory').append(newOption);
 
-        //                         // $("#subcategory").val(null);
-        //                         // $("#subcategory").trigger('change');
-        //                         x++
-        //                     })
-
-
+                                // $("#subcategory").val(null);
+                                // $("#subcategory").trigger('change');
+                                x++
+                            })
 
 
-        //                 } else {
-        //                     $("#subcategory").prop('disabled', true);
-
-        //                 }
-
-        //             },
-        //             error: function () {
-
-        //             }
-        //         });
 
 
-        //     }
-        // });
+                        } else {
+                            $("#subcategory").prop('disabled', true);
+
+                        }
+
+                    },
+                    error: function () {
+
+                    }
+                });
+
+
+            }
+        });
         function allowOnlyNumber(evt) {
             var charCode = (evt.which) ? evt.which : event.keyCode
             if (charCode > 31 && (charCode < 48 || charCode > 57))
@@ -461,5 +763,23 @@
                 return false;
             }
         }
+        // function removerow(sku) {
+        //     if (confirm("remove item: "+sku+"?")) {
+        //         var indexes = POSTbl
+        //             .rows()
+        //             .indexes()
+        //             .filter(function (value, index) {
+        //                 return sku.trim() === POSTbl.row(value).data()[0] + POSTbl.row(value).data()[1];
+        //             });
+        //         var rows = POSTbl.row(indexes[0]);
+        //         // Get the data for the row
+        //         var dts = rows.data();
+
+        //         POSTbl.row(dts).remove().draw();
+        //     } else {
+        //         return false;
+        //     } 
+
+        // }
     </script>
 }

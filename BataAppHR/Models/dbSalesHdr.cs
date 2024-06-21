@@ -28,6 +28,7 @@ namespace OnPOS.Models
         [NotMapped]
         public string syserr { get; set; }
         [NotMapped]
+        [Required]
         public string salesid { get; set; }
         [NotMapped]
         public int scanqty { get; set; }
@@ -64,6 +65,14 @@ namespace OnPOS.Models
         public int s46 { get; set; }
         [NotMapped]
         public int totalstock { get; set; }
+        [NotMapped]
+        public List<dbSalesStaff> stafftbl { get; set; }
+        [NotMapped]
+        public List<dbStoreStockModel> stocktbl { get; set; }
+        [NotMapped]
+        public List<DropDownModel> ddStaff { get; set; }
+        [NotMapped]
+        public dbStoreList storedata { get;set; }
 
     }
 }

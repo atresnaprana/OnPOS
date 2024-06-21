@@ -50,6 +50,13 @@ namespace OnPOS.Models
         public string FLAG_AKTIF { get; set; }
 
         [NotMapped]
+        public int discperc { get; set; }
+        [NotMapped]
+        public int discamt { get; set; }
+        [NotMapped]
+        public string disctype { get; set; }
+
+        [NotMapped]
         public List<dbCategory> ddcat { get; set; }
         
         [NotMapped]
