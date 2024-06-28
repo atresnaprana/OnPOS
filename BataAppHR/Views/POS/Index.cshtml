@@ -50,46 +50,46 @@
                         <thead>
                             <tr>
                                 <th>
-                                    s33
+                                    33
                                 </th>
                                 <th>
-                                    s34
+                                    34
                                 </th>
                                 <th>
-                                    s35
+                                    35
                                 </th>
                                 <th>
-                                    s36
+                                    36
                                 </th>
                                 <th>
-                                    s37
+                                    37
                                 </th>
                                 <th>
-                                    s38
+                                    38
                                 </th>
                                 <th>
-                                    s39
+                                    39
                                 </th>
                                 <th>
-                                    s40
+                                    40
                                 </th>
                                 <th>
-                                    s41
+                                    41
                                 </th>
                                 <th>
-                                    s42
+                                    42
                                 </th>
                                 <th>
-                                    s43
+                                    43
                                 </th>
                                 <th>
-                                    s44
+                                    44
                                 </th>
                                 <th>
-                                    s45
+                                    45
                                 </th>
                                 <th>
-                                    s46
+                                    46
                                 </th>
                                 <th>
                                     stock
@@ -176,7 +176,9 @@
                     <table class="table table-striped" id="POSTbl">
                         <thead>
                             <tr>
-                                
+                                <th>
+                                    Crew
+                                </th>
                                 <th>
                                     Article
                                 </th>
@@ -206,19 +208,7 @@
 
                 </div>
                 <div class="col-sm">
-                    <div class="row">
-                        <div class="col-sm">
-                            <div class="form-group">
-                                <label class="control-label">Crew:</label>
-                            </div>
-                        </div>
-                        <div class="col-sm">
-                            <div class="form-group">
-                                @Html.DropDownListFor(m => m.salesid, new SelectList(Model.ddStaff, "id", "name"), new { @class = "form-control" })
-                            </div>
-                        </div>
-                    </div>
-                    <hr />
+                    
                     <div class="row">
                         <div class="col-sm">
                             <div class="form-group">
@@ -230,6 +220,20 @@
                                 <input asp-for="invoice" class="form-control" readonly />
                                 <input asp-for="Store_id" class="form-control" type="hidden" />
 
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="col-sm">
+                            <div class="form-group">
+                                <label class="control-label">Crew:</label>
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <div class="form-group">
+
+                                @Html.DropDownListFor(m => m.salesid, new SelectList(Model.ddStaff, "id", "name"), new { @class = "form-control" })
                             </div>
                         </div>
                     </div>
@@ -294,6 +298,8 @@
                         </div>
                         <div class="col-sm">
                             <div class="form-group">
+@*                                 <input asp-for="transtype" class="form-control" tabindex="4" />
+ *@
                                 @Html.DropDownListFor(model => model.transtype, new List<SelectListItem>
                                 {
                                 new SelectListItem{ Text="Tunai", Value = "T" },
@@ -314,7 +320,7 @@
                         </div>
                         <div class="col-sm">
                             <div class="form-group">
-                                <input asp-for="cardnum" class="form-control" />
+                                <input asp-for="cardnum" class="form-control"  />
 
                             </div>
                         </div>
@@ -460,14 +466,12 @@
     }
     <script>
         var POSTbl;
-
-        function Expand(obj) {
-            if (!obj.savesize) obj.savesize = obj.size;
-            obj.size = Math.max(obj.savesize, obj.value.length);
-        }
+        var valpress = 1;
+        
 
         function onKeyDown(e) {
             var x = e.keyCode;
+             console.log("x:" + x);
             if (x == 27) {
           
                 window.location.href = '/Home/index';
@@ -483,9 +487,50 @@
             if (x == 120) {
 
             }
+            if(x == 17){
+                changefocus();
+            }
             // if (x == 118) {
             //     console.log('Your pressed Fn+F7');
             // }
+        }
+        function changefocus(){
+            console.log("callfn");
+            var maxval = 6;
+            if (valpress == 1) {
+                $("#salesid").select2("open");
+                $("#transtype").select2("close");
+            }
+            else if (valpress == 2) {
+                document.getElementById("scanitem").focus();
+
+            }
+            else if (valpress == 3) {
+                document.getElementById("scanqty").focus();
+
+                // $("#salesid").select2("close");
+                // $("#transtype").select2("close");
+            }
+            else if (valpress == 4) {
+                 $("#salesid").select2("close");
+                $("#transtype").select2("open");
+            }
+            else if (valpress == 5) {
+                document.getElementById("cardnum").focus();
+                // $("#salesid").select2("close");
+                // $("#transtype").select2("close");
+            }
+            else if (valpress == 6) {
+                $("#salesid").select2("close");
+                $("#transtype").select2("close");
+                valpress = 0;
+
+            }
+          
+            
+            console.log("prs:" + valpress);
+            valpress = valpress + 1;
+
         }
         function openrecap() {
             $("#dialog").dialog("open");
@@ -500,8 +545,24 @@
                 dropdownAutoWidth: true,
                 width: 'auto'
             });
+            $("#trans_amount").each(function () {
+                console.log("loop");// To loop on each value
+                var amount = parseFloat($(this).html()); // Convert string into float number
+                var newamount = amount.toLocaleString('en-US'); // add comma
+                $(this).html(newamount); // replace old number with new number
+            });
             $("#salesid").val(null);
             $("#salesid").trigger('change');
+            $("#transtype").select2({
+                placeholder: "Select transtype",
+                initSelection: function (element, callback) {
+                },
+                dropdownAutoWidth: true,
+                width: 'auto'
+            });
+            $("#transtype").val(null);
+            $("#transtype").trigger('change');
+            
             $("#dialog").dialog({
                 width: 1080,
                 height: 720,
@@ -657,7 +718,8 @@
                                                         calculate = calculate - data.discamt;
                                                     }
                                                 }
-                                                POSTbl.row.add([article, sz, data.price1, inputqty, discounttotal, calculate]);
+                                                var crew = $("#salesid").val();
+                                                POSTbl.row.add([crew, article, sz, data.price1, inputqty, discounttotal, calculate]);
                                                 POSTbl.draw();
                                                 $("#trans_amount").val(totalinv + calculate);
                                                 $("#scanprice").val(calculate);

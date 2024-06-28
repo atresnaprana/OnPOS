@@ -12,6 +12,8 @@ namespace OnPOS.Models
         public string Store_id { get; set; }
         public string staff_id { get; set; }
         public DateTime transdate { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:N2}")]
         public int trans_amount { get; set; }
         public int trans_qty { get; set; }
         public string approval_code { get; set; }
@@ -33,6 +35,8 @@ namespace OnPOS.Models
         [NotMapped]
         public int scanqty { get; set; }
         [NotMapped]
+        [DisplayFormat(DataFormatString = "{0:N2}")]
+
         public decimal? scanprice { get; set; }
         [NotMapped]
         public decimal? scandiscount { get; set; }

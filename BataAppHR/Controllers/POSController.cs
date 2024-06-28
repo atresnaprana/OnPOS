@@ -59,7 +59,7 @@ namespace OnPOS.Controllers
             List<dbStoreStockModel> stocktbl = db.StockTbl.Where(y => y.storeid == storedt.id).ToList();
             List<dbSalesStaff> stafftbl = db.SalesStaffTbl.Where(y=> y.STORE_ID == storedt.id).ToList();
             fld.username = storedt.STORE_MANAGER_NAME;
-            fld.invoice = "000001";
+            fld.invoice = DateTime.Now.ToString("ddMMyy") + "0001";
             var dddata = stafftbl.Select(y => new DropDownModel()
             {
                 id = y.id.ToString(),
