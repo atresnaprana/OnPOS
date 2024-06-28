@@ -68,6 +68,7 @@ namespace OnPOS.Controllers
 
             }).ToList();
             fld.ddStaff = dddata;
+            fld.scanqty = 1;
             fld.Store_id = storedt.id.ToString();
             fld.storedata = storedt;
             return View(fld);
