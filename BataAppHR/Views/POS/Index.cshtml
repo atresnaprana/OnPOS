@@ -511,8 +511,11 @@
 
         }
         function openPayment() {
+            
             var slsid = $("#salesid").val();
             if (slsid != null) {
+                valpress = 1;
+                $("#salesid").select2("close");
                 $("#dialogpayment").dialog("open");
                 $("#confirmtotal").val($("#trans_amount").val());
             }else{
