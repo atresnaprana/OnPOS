@@ -824,13 +824,12 @@
                 if ($(this).hasClass('selected')) {
                     $(this).removeClass('selected');
                 } else {
-                    POSTbl.$('tr.selected').removeClass('selected');
                     $(this).addClass('selected');
                 }
             });
             $('#removebtn').click(function () {                
                 var totalinv = parseInt($("#trans_amount").val());
-                var totalinvnew = (totalinv - parseInt(POSTbl.row('.selected').data()[5]));
+                var totalinvnew = (totalinv - parseInt(POSTbl.row('.selected').data()[6]));
                 $("#trans_amount").val(totalinvnew);
                 POSTbl.row('.selected').remove().draw(false);
             });
