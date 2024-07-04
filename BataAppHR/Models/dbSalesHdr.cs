@@ -34,6 +34,11 @@ namespace OnPOS.Models
         public string salesid { get; set; }
         [NotMapped]
         public int scanqty { get; set; }
+
+        [NotMapped]
+        public int confirmtotal { get; set; }
+
+
         [NotMapped]
         [DisplayFormat(DataFormatString = "{0:N2}")]
 

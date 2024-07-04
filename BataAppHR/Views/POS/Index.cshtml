@@ -290,42 +290,7 @@
                         </div>
                     </div>
                     <hr />
-                    <div class="row">
-                        <div class="col-sm">
-                            <div class="form-group">
-                                <label class="control-label">PaymentType</label>
-                            </div>
-                        </div>
-                        <div class="col-sm">
-                            <div class="form-group">
-@*                                 <input asp-for="transtype" class="form-control" tabindex="4" />
- *@
-                                @Html.DropDownListFor(model => model.transtype, new List<SelectListItem>
-                                {
-                                new SelectListItem{ Text="Tunai", Value = "T" },
-                                new SelectListItem{ Text="Debit Card", Value = "DC" },
-                                new SelectListItem{ Text="Credit Card", Value = "CC" },
-                                new SelectListItem{ Text="QRIS", Value = "QR" }
-
-                                }, new { @class = "form-control" })
-                            </div>
-                        </div>
-                    </div>
-                    <hr />
-                    <div class="row">
-                        <div class="col-sm">
-                            <div class="form-group">
-                                <label class="control-label">Card No</label>
-                            </div>
-                        </div>
-                        <div class="col-sm">
-                            <div class="form-group">
-                                <input asp-for="cardnum" class="form-control"  />
-
-                            </div>
-                        </div>
-                    </div>
-                    <hr />
+                   
                 </div>
             </div>
         </div>
@@ -357,10 +322,82 @@
         </div>
         <div class="col-sm">
             <div class="form-group">
-                <input type="button" value="Payment - F9" onclick="alertfirst()" class="btn btn-red" />
+                <input type="button" value="Payment - F9" onclick="openPayment()" class="btn btn-red" />
 
             </div>
         </div>
+    </div>
+    <div id="dialogpayment" title="Payment">
+        <center>
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm">
+                        <div class="form-group">
+                            <label class="control-label">PaymentType</label>
+                        </div>
+                    </div>
+                    <div class="col-sm">
+                        <div class="form-group">
+                            @*                                 <input asp-for="transtype" class="form-control" tabindex="4" />
+                            *@
+                            @Html.DropDownListFor(model => model.transtype, new List<SelectListItem>
+                            {
+                            new SelectListItem{ Text="Tunai", Value = "T" },
+                            new SelectListItem{ Text="Debit Card", Value = "DC" },
+                            new SelectListItem{ Text="Credit Card", Value = "CC" },
+                            new SelectListItem{ Text="QRIS", Value = "QR" }
+
+                            }, new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+                <hr />
+                <div class="row">
+                    <div class="col-sm">
+                        <div class="form-group">
+                            <label class="control-label">Card No</label>
+                        </div>
+                    </div>
+                    <div class="col-sm">
+                        <div class="form-group">
+                            <input asp-for="cardnum" class="form-control" />
+
+                        </div>
+                    </div>
+                </div>
+                <hr />
+
+                <div class="row">
+                    <div class="col-sm">
+                        <div class="form-group">
+                            <label class="control-label">Confirm total</label>
+                        </div>
+                    </div>
+                    <div class="col-sm">
+                        <div class="form-group">
+                            <input asp-for="confirmtotal" class="form-control" readonly/>
+
+                        </div>
+                    </div>
+                </div>
+                <hr />
+                <div class="row">
+                    <div class="col-sm">
+                        <div class="form-group">
+                            <input type="button" value="Cancel" onclick="closePayment()" class="btn btn-red" />
+
+                        </div>
+                    </div>
+                    <div class="col-sm">
+                        <div class="form-group">
+                            <input type="button" value="Payment" onclick="alertfirst()" class="btn btn-red" />
+
+                        </div>
+                    </div>
+                </div>
+                <hr />
+            </div>
+        </center>
     </div>
 
     
@@ -468,7 +505,24 @@
         var POSTbl;
         var valpress = 1;
         
+        function closePayment() {
+            $("#dialogpayment").dialog("close");
+            $("#confirmtotal").val(0);
 
+        }
+        function openPayment() {
+            
+            var slsid = $("#salesid").val();
+            if (slsid != null) {
+                valpress = 1;
+                $("#salesid").select2("close");
+                $("#dialogpayment").dialog("open");
+                $("#confirmtotal").val($("#trans_amount").val());
+            }else{
+                alert("please set crew id");
+            }
+           
+        }
         function onKeyDown(e) {
             var x = e.keyCode;
              console.log("x:" + x);
@@ -485,7 +539,7 @@
             if (x == 117) { 
             }
             if (x == 120) {
-
+                openPayment();
             }
             if(x == 40){
                 changefocus();
@@ -496,7 +550,7 @@
         }
         function changefocus(){
             console.log("callfn");
-            var maxval = 6;
+            var maxval = 4;
             if (valpress == 1) {
                 $("#salesid").select2("open");
                 $("#transtype").select2("close");
@@ -512,20 +566,21 @@
                 // $("#transtype").select2("close");
             }
             else if (valpress == 4) {
-                 $("#salesid").select2("close");
-                $("#transtype").select2("open");
+                 $("#salesid").select2("open");
+                // $("#transtype").select2("open");
+                valpress = 1;
             }
-            else if (valpress == 5) {
-                document.getElementById("cardnum").focus();
-                // $("#salesid").select2("close");
-                // $("#transtype").select2("close");
-            }
-            else if (valpress == 6) {
-                $("#salesid").select2("close");
-                $("#transtype").select2("close");
-                valpress = 0;
+            // else if (valpress == 5) {
+            //     document.getElementById("cardnum").focus();
+            //     // $("#salesid").select2("close");
+            //     // $("#transtype").select2("close");
+            // }
+            // else if (valpress == 6) {
+            //     $("#salesid").select2("close");
+            //     $("#transtype").select2("close");
+            //     valpress = 0;
 
-            }
+            // }
           
             
             console.log("prs:" + valpress);
@@ -574,6 +629,17 @@
                 }
             });
             $("#dialog").dialog("close");
+            $("#dialogpayment").dialog({
+                width: 740,
+                height: 375,
+                modal: true,
+                resizable: false,
+                close: function () {
+                    //var audio = $("#player");
+                    //audio[0].pause();
+                }
+            });
+            $("#dialogpayment").dialog("close");
             POSTbl = $('#POSTbl').DataTable({
                 "bPaginate": false,
                 "bLengthChange": false,
@@ -697,7 +763,8 @@
                                                 $("#scanprice").val(calculates);
                                                 $("#scandiscount").val(discounttotal);
 
-
+                                                $("#salesid").select2("open");
+                                                valpress = 2;
                                                 // Update the table data and redraw the table
                                                 rows.data(dts).draw();
                                                
@@ -721,6 +788,8 @@
                                                 var crew = $("#salesid").val();
                                                 POSTbl.row.add([crew, article, sz, data.price1, inputqty, discounttotal, calculate]);
                                                 POSTbl.draw();
+                                                $("#salesid").select2("open");
+                                                valpress = 2;
                                                 $("#trans_amount").val(totalinv + calculate);
                                                 $("#scanprice").val(calculate);
                                                 $("#scandiscount").val(discounttotal);
@@ -755,13 +824,12 @@
                 if ($(this).hasClass('selected')) {
                     $(this).removeClass('selected');
                 } else {
-                    POSTbl.$('tr.selected').removeClass('selected');
                     $(this).addClass('selected');
                 }
             });
             $('#removebtn').click(function () {                
                 var totalinv = parseInt($("#trans_amount").val());
-                var totalinvnew = (totalinv - parseInt(POSTbl.row('.selected').data()[5]));
+                var totalinvnew = (totalinv - parseInt(POSTbl.row('.selected').data()[6]));
                 $("#trans_amount").val(totalinvnew);
                 POSTbl.row('.selected').remove().draw(false);
             });
