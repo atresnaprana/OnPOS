@@ -13,10 +13,16 @@ namespace OnPOS.Models
         public string type { get; set; }
         public int percentage { get; set; }
         public int amount { get; set; }
+        public DateTime validfrom { get; set; }
+        public DateTime validto { get; set; }
+        public string status { get; set; }
+
         public string entry_user { get; set; }
         public DateTime entry_date { get; set; }
         public string update_user { get; set; }
         public DateTime update_date { get; set; }
+        [NotMapped]
+        public bool isactive { get; set; }
        
     }
 }
