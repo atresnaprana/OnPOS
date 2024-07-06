@@ -259,7 +259,7 @@
                         </div>
                         <div class="col-sm">
                             <div class="form-group">
-                                <input asp-for="scanqty" class="form-control" min="1"/>
+                                <input asp-for="scanqty" class="form-control"/>
                             </div>
                         </div>
                     </div>
@@ -504,7 +504,7 @@
     <script>
         var POSTbl;
         var valpress = 1;
-        
+       
         function closePayment() {
             $("#dialogpayment").dialog("close");
             $("#confirmtotal").val(0);
@@ -702,6 +702,11 @@
 
 
             });
+            $("#scanqty").on("change paste keyup", function () {
+                if ($(this).val() < 1 ){
+                    $(this).val(1);
+                }
+            });
             $("#scanqty").keypress(function (e) {
                 var code = e.keyCode || e.which;
                 if (code == 13) {
@@ -730,7 +735,7 @@
                                                 .rows()
                                                 .indexes()
                                                 .filter(function (value, index) {
-                                                    return $("#scanitem").val().trim() === POSTbl.row(value).data()[0] + POSTbl.row(value).data()[1];
+                                                    return $("#scanitem").val().trim() === POSTbl.row(value).data()[1] + POSTbl.row(value).data()[2];
                                                 });
                                             if (indexes[0] != null) {
                                                 // Get the row for indexes[0]
@@ -757,9 +762,9 @@
                                                 $("#trans_amount").val(totalinvnew);
 
                                                 // Change the position to `Engineer`
-                                                dts[3] = inputqty;
-                                                dts[4] = discounttotal;
-                                                dts[5] = calculates;
+                                                dts[4] = inputqty;
+                                                dts[5] = discounttotal;
+                                                dts[6] = calculates;
                                                 $("#scanprice").val(calculates);
                                                 $("#scandiscount").val(discounttotal);
 
