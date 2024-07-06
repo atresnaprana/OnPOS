@@ -24,6 +24,8 @@ namespace BataAppHR.Data
         public DbSet<dbSalesStaff> SalesStaffTbl { get; set; }
         public DbSet<dbStoreStockModel> StockTbl { get; set; }
         public DbSet<dbDiscount> DiscTbl { get; set; }
+        public DbSet<dbSalesHdr> saleshdrtbl { get; set; }
+        public DbSet<dbSalesDtl> salesdtltbl { get; set; }
 
 
         public FormDBContext(DbContextOptions<FormDBContext> options) : base(options)
@@ -52,6 +54,8 @@ namespace BataAppHR.Data
             modelBuilder.Entity<dbSalesStaff>().ToTable("dbSalesStaff");
             modelBuilder.Entity<dbStoreStockModel>().ToTable("dbStoreStock");
             modelBuilder.Entity<dbDiscount>().ToTable("dbDiscount");
+            modelBuilder.Entity<dbSalesHdr>().ToTable("dbSalesHdr").HasNoKey();
+            modelBuilder.Entity<dbSalesDtl>().ToTable("dbSalesDtl").HasNoKey();
 
 
             modelBuilder.Entity<SystemTabModel>().HasKey(ug => ug.ID).HasName("PK_TAB_Seq");
@@ -329,9 +333,57 @@ namespace BataAppHR.Data
             modelBuilder.Entity<dbDiscount>().Property(ug => ug.amount).HasColumnType("int");
             modelBuilder.Entity<dbDiscount>().Property(ug => ug.entry_date).HasColumnType("datetime");
             modelBuilder.Entity<dbDiscount>().Property(ug => ug.update_date).HasColumnType("datetime");
+            modelBuilder.Entity<dbDiscount>().Property(ug => ug.validfrom).HasColumnType("date");
+            modelBuilder.Entity<dbDiscount>().Property(ug => ug.validto).HasColumnType("date");
+            modelBuilder.Entity<dbDiscount>().Property(ug => ug.status).HasColumnType("varchar(1)");
             modelBuilder.Entity<dbDiscount>().Property(ug => ug.entry_user).HasColumnType("varchar(255)").IsRequired(false);
             modelBuilder.Entity<dbDiscount>().Property(ug => ug.update_user).HasColumnType("varchar(255)").IsRequired(false);
-          
+
+            //saleshdr
+            modelBuilder.Entity<dbSalesHdr>().Property(ug => ug.invoice).HasColumnType("varchar(50)").IsRequired();
+            modelBuilder.Entity<dbSalesHdr>().Property(ug => ug.Store_id).HasColumnType("int");
+            modelBuilder.Entity<dbSalesHdr>().Property(ug => ug.staff_id).HasColumnType("int");
+            modelBuilder.Entity<dbSalesHdr>().Property(ug => ug.transdate).HasColumnType("datetime");
+            modelBuilder.Entity<dbSalesHdr>().Property(ug => ug.trans_amount).HasColumnType("int");
+            modelBuilder.Entity<dbSalesHdr>().Property(ug => ug.trans_qty).HasColumnType("int");
+            modelBuilder.Entity<dbSalesHdr>().Property(ug => ug.approval_code).HasColumnType("varchar(100)");
+            modelBuilder.Entity<dbSalesHdr>().Property(ug => ug.cardnum).HasColumnType("varchar(100)");
+            modelBuilder.Entity<dbSalesHdr>().Property(ug => ug.transtype).HasColumnType("varchar(100)");
+            modelBuilder.Entity<dbSalesHdr>().Property(ug => ug.update_date).HasColumnType("datetime");
+            modelBuilder.Entity<dbSalesHdr>().Property(ug => ug.update_user).HasColumnType("varchar(255)");
+
+            //salesdtl
+            modelBuilder.Entity<dbSalesDtl>().Property(ug => ug.invoice).HasColumnType("varchar(50)").IsRequired();
+            modelBuilder.Entity<dbSalesDtl>().Property(ug => ug.store_id).HasColumnType("int");
+            modelBuilder.Entity<dbSalesDtl>().Property(ug => ug.transdate).HasColumnType("datetime");
+            modelBuilder.Entity<dbSalesDtl>().Property(ug => ug.article).HasColumnType("varchar(50)").IsRequired();
+            modelBuilder.Entity<dbSalesDtl>().Property(ug => ug.cat).HasColumnType("varchar(50)");
+            modelBuilder.Entity<dbSalesDtl>().Property(ug => ug.subcat).HasColumnType("varchar(50)");
+            modelBuilder.Entity<dbSalesDtl>().Property(ug => ug.price).HasColumnType("int");
+            modelBuilder.Entity<dbSalesDtl>().Property(ug => ug.discountcode).HasColumnType("int");
+            modelBuilder.Entity<dbSalesDtl>().Property(ug => ug.disc_amount).HasColumnType("int");
+
+            modelBuilder.Entity<dbSalesDtl>().Property(ug => ug.disc_amount).HasColumnType("int");
+            modelBuilder.Entity<dbSalesDtl>().Property(ug => ug.disc_prc).HasColumnType("int");
+            modelBuilder.Entity<dbSalesDtl>().Property(ug => ug.qty).HasColumnType("int");
+            modelBuilder.Entity<dbSalesDtl>().Property(ug => ug.s33).HasColumnType("int");
+            modelBuilder.Entity<dbSalesDtl>().Property(ug => ug.s34).HasColumnType("int");
+            modelBuilder.Entity<dbSalesDtl>().Property(ug => ug.s35).HasColumnType("int");
+            modelBuilder.Entity<dbSalesDtl>().Property(ug => ug.s36).HasColumnType("int");
+            modelBuilder.Entity<dbSalesDtl>().Property(ug => ug.s37).HasColumnType("int");
+            modelBuilder.Entity<dbSalesDtl>().Property(ug => ug.s38).HasColumnType("int");
+            modelBuilder.Entity<dbSalesDtl>().Property(ug => ug.s39).HasColumnType("int");
+            modelBuilder.Entity<dbSalesDtl>().Property(ug => ug.s40).HasColumnType("int");
+            modelBuilder.Entity<dbSalesDtl>().Property(ug => ug.s41).HasColumnType("int");
+            modelBuilder.Entity<dbSalesDtl>().Property(ug => ug.s42).HasColumnType("int");
+            modelBuilder.Entity<dbSalesDtl>().Property(ug => ug.s43).HasColumnType("int");
+            modelBuilder.Entity<dbSalesDtl>().Property(ug => ug.s44).HasColumnType("int");
+            modelBuilder.Entity<dbSalesDtl>().Property(ug => ug.s45).HasColumnType("int");
+            modelBuilder.Entity<dbSalesDtl>().Property(ug => ug.s46).HasColumnType("int");
+            modelBuilder.Entity<dbSalesDtl>().Property(ug => ug.update_date).HasColumnType("datetime");
+            modelBuilder.Entity<dbSalesDtl>().Property(ug => ug.update_user).HasColumnType("varchar(255)");
+
+
             //modelBuilder.Entity<dbStoreStockModel>().Property(ug => ug.ENTRY_USER).HasColumnType("varchar(50)").IsRequired(false);
             //modelBuilder.Entity<dbStoreStockModel>().Property(ug => ug.UPDATE_USER).HasColumnType("varchar(10)").IsRequired();
             //modelBuilder.Entity<dbStoreStockModel>().Property(ug => ug.ENTRY_DATE).HasColumnType("date");

@@ -9,8 +9,8 @@ namespace OnPOS.Models
     public class dbSalesHdr
     {
         public string invoice { get; set; }
-        public string Store_id { get; set; }
-        public string staff_id { get; set; }
+        public int Store_id { get; set; }
+        public int staff_id { get; set; }
         public DateTime transdate { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:N2}")]

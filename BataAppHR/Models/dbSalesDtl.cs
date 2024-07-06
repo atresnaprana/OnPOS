@@ -7,15 +7,16 @@ namespace OnPOS.Models
     public class dbSalesDtl
     {
        
-        public int trans_id { get; set; }
+        public int store_id { get; set; }
         public string invoice { get; set; }
         public DateTime transdate { get; set; }
-        public string item_id { get; set; }
+        public string article { get; set; }
         public string cat { get; set; }
         public string subcat { get; set; }
-        public string price { get; set; }
-        public decimal? disc_per { get; set; }
-        public decimal? disc_prc { get; set; }
+        public int price { get; set; }
+        public int discountcode { get; set; }
+        public int disc_amount { get; set; }
+        public int disc_prc { get; set; }
         public int qty { get; set; }
         public int s33 { get; set; }
         public int s34 { get; set; }
