@@ -24,6 +24,8 @@ namespace BataAppHR.Data
         public DbSet<dbSalesStaff> SalesStaffTbl { get; set; }
         public DbSet<dbStoreStockModel> StockTbl { get; set; }
         public DbSet<dbDiscount> DiscTbl { get; set; }
+        public DbSet<dbDiscountStoreList> StoreDiscTbl { get; set; }
+
         public DbSet<dbSalesHdr> saleshdrtbl { get; set; }
         public DbSet<dbSalesDtl> salesdtltbl { get; set; }
 
@@ -56,6 +58,7 @@ namespace BataAppHR.Data
             modelBuilder.Entity<dbDiscount>().ToTable("dbDiscount");
             modelBuilder.Entity<dbSalesHdr>().ToTable("dbSalesHdr").HasNoKey();
             modelBuilder.Entity<dbSalesDtl>().ToTable("dbSalesDtl").HasNoKey();
+            modelBuilder.Entity<dbDiscountStoreList>().ToTable("dbDiscountStoreList").HasNoKey();
 
 
             modelBuilder.Entity<SystemTabModel>().HasKey(ug => ug.ID).HasName("PK_TAB_Seq");
@@ -327,7 +330,6 @@ namespace BataAppHR.Data
 
             //Discount tables
             modelBuilder.Entity<dbDiscount>().Property(ug => ug.id).HasColumnType("int").UseMySqlIdentityColumn().IsRequired();
-            modelBuilder.Entity<dbDiscount>().Property(ug => ug.storeid).HasColumnType("int").IsRequired();
             modelBuilder.Entity<dbDiscount>().Property(ug => ug.article).HasColumnType("varchar(50)").IsRequired();
             modelBuilder.Entity<dbDiscount>().Property(ug => ug.type).HasColumnType("varchar(255)");
             modelBuilder.Entity<dbDiscount>().Property(ug => ug.isallstore).HasColumnType("varchar(1)");
@@ -342,6 +344,11 @@ namespace BataAppHR.Data
             modelBuilder.Entity<dbDiscount>().Property(ug => ug.status).HasColumnType("varchar(1)");
             modelBuilder.Entity<dbDiscount>().Property(ug => ug.entry_user).HasColumnType("varchar(255)").IsRequired(false);
             modelBuilder.Entity<dbDiscount>().Property(ug => ug.update_user).HasColumnType("varchar(255)").IsRequired(false);
+
+            //Store Discount Tables
+            modelBuilder.Entity<dbDiscountStoreList>().Property(ug => ug.storeid).HasColumnType("int");
+            modelBuilder.Entity<dbDiscountStoreList>().Property(ug => ug.COMPANY_ID).HasColumnType("varchar(100)");
+            modelBuilder.Entity<dbDiscountStoreList>().Property(ug => ug.promoid).HasColumnType("int").IsRequired();
 
             //saleshdr
             modelBuilder.Entity<dbSalesHdr>().Property(ug => ug.invoice).HasColumnType("varchar(50)").IsRequired();
