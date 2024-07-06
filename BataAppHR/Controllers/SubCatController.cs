@@ -46,6 +46,7 @@ namespace OnPOS.Controllers
             Configuration = configuration;
 
         }
+        [Authorize(Roles = "CustomerOnPos")]
         public IActionResult Index()
         {
             var data = db.CustomerTbl.Where(y => y.Email == User.Identity.Name).FirstOrDefault();

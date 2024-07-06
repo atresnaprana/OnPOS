@@ -4,14 +4,16 @@ using BataAppHR.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BataAppHR.Migrations.FormDB
 {
     [DbContext(typeof(FormDBContext))]
-    partial class FormDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240704142842_addstoreid")]
+    partial class addstoreid
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -375,9 +377,6 @@ namespace BataAppHR.Migrations.FormDB
                         .HasColumnType("int")
                         .HasAnnotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("COMPANY_ID")
-                        .HasColumnType("varchar(100)");
-
                     b.Property<int>("amount")
                         .HasColumnType("int");
 
@@ -390,9 +389,6 @@ namespace BataAppHR.Migrations.FormDB
 
                     b.Property<string>("entry_user")
                         .HasColumnType("varchar(255)");
-
-                    b.Property<string>("isallstore")
-                        .HasColumnType("varchar(1)");
 
                     b.Property<int>("percentage")
                         .HasColumnType("int");

@@ -327,8 +327,12 @@ namespace BataAppHR.Data
 
             //Discount tables
             modelBuilder.Entity<dbDiscount>().Property(ug => ug.id).HasColumnType("int").UseMySqlIdentityColumn().IsRequired();
+            modelBuilder.Entity<dbDiscount>().Property(ug => ug.storeid).HasColumnType("int").IsRequired();
             modelBuilder.Entity<dbDiscount>().Property(ug => ug.article).HasColumnType("varchar(50)").IsRequired();
             modelBuilder.Entity<dbDiscount>().Property(ug => ug.type).HasColumnType("varchar(255)");
+            modelBuilder.Entity<dbDiscount>().Property(ug => ug.isallstore).HasColumnType("varchar(1)");
+            modelBuilder.Entity<dbDiscount>().Property(ug => ug.COMPANY_ID).HasColumnType("varchar(100)");
+
             modelBuilder.Entity<dbDiscount>().Property(ug => ug.percentage).HasColumnType("int");
             modelBuilder.Entity<dbDiscount>().Property(ug => ug.amount).HasColumnType("int");
             modelBuilder.Entity<dbDiscount>().Property(ug => ug.entry_date).HasColumnType("datetime");
