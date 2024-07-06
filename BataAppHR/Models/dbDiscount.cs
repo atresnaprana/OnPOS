@@ -9,7 +9,6 @@ namespace OnPOS.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int id { get; set; }
-        public int storeid { get; set; }
         public string isallstore { get; set; }
         public string COMPANY_ID { get; set; }
 
