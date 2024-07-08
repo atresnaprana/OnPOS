@@ -334,13 +334,14 @@ namespace BataAppHR.Data
             modelBuilder.Entity<dbDiscount>().Property(ug => ug.type).HasColumnType("varchar(255)");
             modelBuilder.Entity<dbDiscount>().Property(ug => ug.isallstore).HasColumnType("varchar(1)");
             modelBuilder.Entity<dbDiscount>().Property(ug => ug.COMPANY_ID).HasColumnType("varchar(100)");
+            modelBuilder.Entity<dbDiscount>().Property(ug => ug.promo_name).HasColumnType("varchar(255)");
 
             modelBuilder.Entity<dbDiscount>().Property(ug => ug.percentage).HasColumnType("int");
             modelBuilder.Entity<dbDiscount>().Property(ug => ug.amount).HasColumnType("int");
             modelBuilder.Entity<dbDiscount>().Property(ug => ug.entry_date).HasColumnType("datetime");
             modelBuilder.Entity<dbDiscount>().Property(ug => ug.update_date).HasColumnType("datetime");
-            modelBuilder.Entity<dbDiscount>().Property(ug => ug.validfrom).HasColumnType("date");
-            modelBuilder.Entity<dbDiscount>().Property(ug => ug.validto).HasColumnType("date");
+            modelBuilder.Entity<dbDiscount>().Property(ug => ug.validfrom).HasColumnType("datetime");
+            modelBuilder.Entity<dbDiscount>().Property(ug => ug.validto).HasColumnType("datetime");
             modelBuilder.Entity<dbDiscount>().Property(ug => ug.status).HasColumnType("varchar(1)");
             modelBuilder.Entity<dbDiscount>().Property(ug => ug.entry_user).HasColumnType("varchar(255)").IsRequired(false);
             modelBuilder.Entity<dbDiscount>().Property(ug => ug.update_user).HasColumnType("varchar(255)").IsRequired(false);
