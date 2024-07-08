@@ -4,14 +4,16 @@ using BataAppHR.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BataAppHR.Migrations.FormDB
 {
     [DbContext(typeof(FormDBContext))]
-    partial class FormDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240706074104_addedpromoname")]
+    partial class addedpromoname
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -413,10 +415,10 @@ namespace BataAppHR.Migrations.FormDB
                         .HasColumnType("varchar(255)");
 
                     b.Property<DateTime>("validfrom")
-                        .HasColumnType("datetime");
+                        .HasColumnType("date");
 
                     b.Property<DateTime>("validto")
-                        .HasColumnType("datetime");
+                        .HasColumnType("date");
 
                     b.HasKey("id")
                         .HasName("PK_Discount");
