@@ -83,14 +83,30 @@ namespace OnPOS.Controllers
         public JsonResult validateitems(string scanitem)
         {
             string scanitemshort = scanitem.Substring(0, 14);
-            var getdiscount = db.DiscTbl.Where(y => y.article == scanitemshort).FirstOrDefault();
+            var getdiscount = db.DiscTbl.Where(y => y.article == scanitemshort && y.status == "1" && DateTime.Now >= y.validfrom && DateTime.Now < y.validto).FirstOrDefault();
 
             var getstockdata = db.ItemMasterTbl.Where(y => y.itemid == scanitemshort).FirstOrDefault();
             if(getdiscount != null)
             {
-                getstockdata.disctype = getdiscount.type;
-                getstockdata.discamt = getdiscount.amount;
-                getstockdata.discperc = getdiscount.percentage;
+                if(getdiscount.isallstore == "Y")
+                {
+                    getstockdata.disctype = getdiscount.type;
+                    getstockdata.discamt = getdiscount.amount;
+                    getstockdata.discperc = getdiscount.percentage;
+                }
+                else
+                {
+                    dbStoreList storedt = db.StoreListTbl.Where(y => y.STORE_EMAIL == User.Identity.Name).FirstOrDefault();
+
+                    var checkstoreislist = db.StoreDiscTbl.Where(y => y.storeid == storedt.id && y.COMPANY_ID == storedt.COMPANY_ID && y.promoid == getdiscount.id).FirstOrDefault();
+                    if(checkstoreislist != null)
+                    {
+                        getstockdata.disctype = getdiscount.type;
+                        getstockdata.discamt = getdiscount.amount;
+                        getstockdata.discperc = getdiscount.percentage;
+                    }
+                }
+               
             }
             
 
