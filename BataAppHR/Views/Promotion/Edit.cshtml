@@ -1,6 +1,8 @@
 ﻿@model OnPOS.Models.dbDiscount
 @{
     ViewData["Title"] = "Create";
+    string errmsg = Model.errormessage;
+
 }
 <style>
     input.largerCheckbox {
@@ -98,6 +100,10 @@
     }
     <script>
         $(document).ready(function () {
+            var msg = '@errmsg';
+            if (msg != '') {
+                alert("error:" + msg);
+            }
             $("#amount").on("change paste keyup", function () {
                 if ($(this).val() < 1) {
                     $(this).val(1);

@@ -141,7 +141,22 @@ namespace OnPOS.Controllers
                     }
                     else
                     {
-                        objTrainer.errormessage = "Duplicate Data";
+                        objTrainer.errormessage = "This article's promo is exist during this period";
+                        dbDiscount fld = new dbDiscount();
+                        objTrainer.liststore = db.StoreListTbl.Where(y => y.COMPANY_ID == data.COMPANY_ID && y.FLAG_AKTIF == "1").Select(y => new DropDownModel()
+                        {
+                            id = y.id.ToString(),
+                            name = y.id.ToString() + " - " + y.STORE_NAME,
+
+
+                        }).ToList();
+                        objTrainer.listitems = db.ItemMasterTbl.Where(y => y.COMPANY_ID == data.COMPANY_ID && y.FLAG_AKTIF == "1").Select(y => new DropDownModel()
+                        {
+                            id = y.itemid.ToString(),
+                            name = y.itemid.ToString() + " - " + y.itemdescription,
+
+
+                        }).ToList();
                     }
                    
 
@@ -167,7 +182,7 @@ namespace OnPOS.Controllers
         public bool checkvalidate(string article, DateTime from, DateTime to)
         {
             bool isok = true;
-            var chkdbdiscount = db.DiscTbl.Where(y => y.article == article && from <= y.validfrom && y.validto <= to).FirstOrDefault();
+            var chkdbdiscount = db.DiscTbl.Where(y => y.article == article && y.status == "1" && from < y.validto && y.validfrom < to).FirstOrDefault();
             if(chkdbdiscount != null)
             {
                 isok = false;
@@ -250,72 +265,95 @@ namespace OnPOS.Controllers
 
                 try
                 {
-                    List<dbDiscountStoreList> newtbl = new List<dbDiscountStoreList>();
-                    foreach(var flds in fld.storeidlist)
+                    var validate = checkvalidate(editFld.article, editFld.validfrom, editFld.validto);
+                    if (validate)
                     {
-                        dbDiscountStoreList newdt = new dbDiscountStoreList();
-                        newdt.promoid = editFld.id;
-                        newdt.storeid = flds;
-                        newdt.COMPANY_ID = editFld.COMPANY_ID;
-                        newtbl.Add(newdt);
-                    }
-                     //Processing UserData
-                  
-                    List<int> listtrans = new List<int>();
-                    List<int> listExistingtrans = new List<int>();
-
-                    var idToRemovetrans = new List<int>();
-                    var idToAddtrans = new List<int>();
-
-                    var ExistingTransDt = db.StoreDiscTbl.Where(y => y.COMPANY_ID == editFld.COMPANY_ID && y.promoid == editFld.id).ToList();
-                    for (int i = 0; i < newtbl.Count(); i++)
-                    {
-                        var idDtl = newtbl[i].storeid;
-                        listtrans.Add(idDtl);
-                        idToAddtrans.Add(idDtl);
-                    }
-
-                    foreach (var exist in ExistingTransDt)
-                    {
-                        var transExist = exist.storeid;
-                        listExistingtrans.Add(transExist);
-                        idToRemovetrans.Add(transExist);
-
-                    }
-
-                    //removing logic 
-                    for (int i = 0; i < listExistingtrans.Count(); i++)
-                    {
-                        var nopekExist = listExistingtrans[i];
-                        for (int y = 0; y < listtrans.Count(); y++)
+                        List<dbDiscountStoreList> newtbl = new List<dbDiscountStoreList>();
+                        foreach (var flds in fld.storeidlist)
                         {
-                            var nopekNew = listtrans[y];
-                            if (nopekExist == nopekNew)
+                            dbDiscountStoreList newdt = new dbDiscountStoreList();
+                            newdt.promoid = editFld.id;
+                            newdt.storeid = flds;
+                            newdt.COMPANY_ID = editFld.COMPANY_ID;
+                            newtbl.Add(newdt);
+                        }
+                        //Processing UserData
+
+                        List<int> listtrans = new List<int>();
+                        List<int> listExistingtrans = new List<int>();
+
+                        var idToRemovetrans = new List<int>();
+                        var idToAddtrans = new List<int>();
+
+                        var ExistingTransDt = db.StoreDiscTbl.Where(y => y.COMPANY_ID == editFld.COMPANY_ID && y.promoid == editFld.id).ToList();
+                        for (int i = 0; i < newtbl.Count(); i++)
+                        {
+                            var idDtl = newtbl[i].storeid;
+                            listtrans.Add(idDtl);
+                            idToAddtrans.Add(idDtl);
+                        }
+
+                        foreach (var exist in ExistingTransDt)
+                        {
+                            var transExist = exist.storeid;
+                            listExistingtrans.Add(transExist);
+                            idToRemovetrans.Add(transExist);
+
+                        }
+
+                        //removing logic 
+                        for (int i = 0; i < listExistingtrans.Count(); i++)
+                        {
+                            var nopekExist = listExistingtrans[i];
+                            for (int y = 0; y < listtrans.Count(); y++)
                             {
-                                idToRemovetrans.Remove(nopekExist);
+                                var nopekNew = listtrans[y];
+                                if (nopekExist == nopekNew)
+                                {
+                                    idToRemovetrans.Remove(nopekExist);
+                                }
                             }
                         }
+
+                        var empDt = ExistingTransDt.Where(y => idToRemovetrans.Contains(y.storeid)).ToList<dbDiscountStoreList>();
+                        foreach (var dtlemp in empDt)
+                        {
+                            var formEmp = dtlemp;
+
+                            db.StoreDiscTbl.Remove(formEmp);
+                            //foreach (var idtoremove in idToRemovetrans)
+                            //{
+
+                            //}
+                        }
+                        //adding logic
+                        for (int i = 0; i < newtbl.Count(); i++)
+                        {
+                            var dts = newtbl[i];
+
+                            db.StoreDiscTbl.Add(dts);
+                            db.SaveChanges();
+                        }
+                    }
+                    else
+                    {
+                        fld.errormessage = "This article's promo is exist during this period";
+                        fld.liststore = db.StoreListTbl.Where(y => y.COMPANY_ID == editFld.COMPANY_ID && y.FLAG_AKTIF == "1").Select(y => new DropDownModel()
+                        {
+                            id = y.id.ToString(),
+                            name = y.id.ToString() + " - " + y.STORE_NAME,
+
+
+                        }).ToList();
+                        fld.listitems = db.ItemMasterTbl.Where(y => y.COMPANY_ID == editFld.COMPANY_ID && y.FLAG_AKTIF == "1").Select(y => new DropDownModel()
+                        {
+                            id = y.itemid.ToString(),
+                            name = y.itemid.ToString() + " - " + y.itemdescription,
+
+
+                        }).ToList();
                     }
                   
-                    var empDt = ExistingTransDt.Where(y => idToRemovetrans.Contains(y.storeid)).ToList<dbDiscountStoreList>();
-                    foreach (var dtlemp in empDt)
-                    {
-                        var formEmp = dtlemp;
-
-                        db.StoreDiscTbl.Remove(formEmp);
-                        //foreach (var idtoremove in idToRemovetrans)
-                        //{
-
-                        //}
-                    }
-                    //adding logic
-                    for (int i = 0; i < newtbl.Count(); i++)
-                    {
-                        var dts = newtbl[i];
-
-                        db.StoreDiscTbl.Add(dts);
-                        db.SaveChanges();
-                    }
 
                 }
                 catch (Exception ex)
