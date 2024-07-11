@@ -6,7 +6,7 @@ namespace OnPOS.Models
 {
     public class dbSalesDtl
     {
-       
+        public int staff_id {  get; set; }
         public int store_id { get; set; }
         public string invoice { get; set; }
         public DateTime transdate { get; set; }
@@ -35,6 +35,21 @@ namespace OnPOS.Models
         
         public string update_user { get;set; }
         public DateTime update_date { get; set; }
+        [NotMapped]
+        public string Crew { get; set; }
+        [NotMapped]
+        public string Article { get; set; }
+        [NotMapped]
+        public string size { get; set; }
+        [NotMapped]
+        public int pairs { get; set; }
+        [NotMapped]
+        public int disc {  get; set; }
+        [NotMapped]
+        public string disctype {  get; set; }
+        [NotMapped]
+        public int subtotal { get; set; }
+
 
 
     }

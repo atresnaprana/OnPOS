@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System;
 using OnPOS.Models;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Razor.Language.Extensions;
 
 namespace OnPOS.Models
 {
@@ -10,7 +11,6 @@ namespace OnPOS.Models
     {
         public string invoice { get; set; }
         public int Store_id { get; set; }
-        public int staff_id { get; set; }
         public DateTime transdate { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:N2}")]
@@ -23,6 +23,12 @@ namespace OnPOS.Models
         public DateTime update_date { get; set; }
         [NotMapped]
         public string scanitem { get; set; }
+        [NotMapped]
+        public string transtypehidden { get; set; }
+        [NotMapped]
+        public string cardnumhidden { get; set; }
+        [NotMapped]
+        public string approvalhidden { get; set; }
         [NotMapped]
         public string username { get; set; }
         [NotMapped]
@@ -82,6 +88,10 @@ namespace OnPOS.Models
         public List<DropDownModel> ddStaff { get; set; }
         [NotMapped]
         public dbStoreList storedata { get;set; }
-
+        [NotMapped]
+        public int lastinvoice { get; set; }
+        [NotMapped]
+        public string invshort { get; set; }
+        
     }
 }

@@ -6,6 +6,7 @@ using BataAppHR.Models;
 using OnPOS.Models;
 
 using Microsoft.EntityFrameworkCore;
+using System.Security.Policy;
 
 namespace BataAppHR.Data
 {
@@ -56,8 +57,8 @@ namespace BataAppHR.Data
             modelBuilder.Entity<dbSalesStaff>().ToTable("dbSalesStaff");
             modelBuilder.Entity<dbStoreStockModel>().ToTable("dbStoreStock");
             modelBuilder.Entity<dbDiscount>().ToTable("dbDiscount");
-            modelBuilder.Entity<dbSalesHdr>().ToTable("dbSalesHdr").HasNoKey();
-            modelBuilder.Entity<dbSalesDtl>().ToTable("dbSalesDtl").HasNoKey();
+            modelBuilder.Entity<dbSalesHdr>().ToTable("dbSalesHdr");
+            modelBuilder.Entity<dbSalesDtl>().ToTable("dbSalesDtl");
             modelBuilder.Entity<dbDiscountStoreList>().ToTable("dbDiscountStoreList").HasNoKey();
 
 
@@ -75,6 +76,9 @@ namespace BataAppHR.Data
             modelBuilder.Entity<dbItemStore>().HasKey(ug => ug.id).HasName("PK_ItemStore");
             modelBuilder.Entity<dbSalesStaff>().HasKey(ug => ug.id).HasName("PK_SalesStaff");
             modelBuilder.Entity<dbDiscount>().HasKey(ug => ug.id).HasName("PK_Discount");
+            modelBuilder.Entity<dbSalesHdr>().HasKey(ug => new { ug.Store_id, ug.invoice, ug.transdate }).HasName("PKSaleshdr");
+            modelBuilder.Entity<dbSalesDtl>().HasKey(ug => new { ug.store_id, ug.invoice, ug.transdate, ug.article, ug.size }).HasName("PKSalesdtl");
+
 
             // Configure indexes  
             //modelBuilder.Entity<UserGroup>().HasIndex(p => p.Name).IsUnique().HasDatabaseName("Idx_Name");  
@@ -353,7 +357,6 @@ namespace BataAppHR.Data
             //saleshdr
             modelBuilder.Entity<dbSalesHdr>().Property(ug => ug.invoice).HasColumnType("varchar(50)").IsRequired();
             modelBuilder.Entity<dbSalesHdr>().Property(ug => ug.Store_id).HasColumnType("int");
-            modelBuilder.Entity<dbSalesHdr>().Property(ug => ug.staff_id).HasColumnType("int");
             modelBuilder.Entity<dbSalesHdr>().Property(ug => ug.transdate).HasColumnType("datetime");
             modelBuilder.Entity<dbSalesHdr>().Property(ug => ug.trans_amount).HasColumnType("int");
             modelBuilder.Entity<dbSalesHdr>().Property(ug => ug.trans_qty).HasColumnType("int");
@@ -365,6 +368,8 @@ namespace BataAppHR.Data
 
             //salesdtl
             modelBuilder.Entity<dbSalesDtl>().Property(ug => ug.invoice).HasColumnType("varchar(50)").IsRequired();
+            modelBuilder.Entity<dbSalesDtl>().Property(ug => ug.staff_id).HasColumnType("int");
+
             modelBuilder.Entity<dbSalesDtl>().Property(ug => ug.store_id).HasColumnType("int");
             modelBuilder.Entity<dbSalesDtl>().Property(ug => ug.transdate).HasColumnType("datetime");
             modelBuilder.Entity<dbSalesDtl>().Property(ug => ug.article).HasColumnType("varchar(50)").IsRequired();
