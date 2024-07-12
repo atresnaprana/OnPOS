@@ -36,6 +36,14 @@
     <Compile Remove="Migrations\FormDB\20240618145459_addstocktbl.Designer.cs" />
     <Compile Remove="Migrations\FormDB\20240712042536_addeddepartmenttbl.cs" />
     <Compile Remove="Migrations\FormDB\20240712042536_addeddepartmenttbl.Designer.cs" />
+    <Compile Remove="Migrations\FormDB\20240712153341_addedsubtotal.cs" />
+    <Compile Remove="Migrations\FormDB\20240712153341_addedsubtotal.Designer.cs" />
+    <Compile Remove="Migrations\FormDB\20240712153450_addedsubtotal.cs" />
+    <Compile Remove="Migrations\FormDB\20240712153450_addedsubtotal.Designer.cs" />
+    <Compile Remove="Migrations\FormDB\20240712153830_addedsubtotal.cs" />
+    <Compile Remove="Migrations\FormDB\20240712153830_addedsubtotal.Designer.cs" />
+    <Compile Remove="Migrations\FormDB\20240712154105_addedsubtotal.cs" />
+    <Compile Remove="Migrations\FormDB\20240712154105_addedsubtotal.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

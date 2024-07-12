@@ -52,6 +52,8 @@ namespace OnPOS.Models
         [NotMapped]
         public decimal? scandiscount { get; set; }
         [NotMapped]
+        public int scanpricefull { get; set; }
+        [NotMapped]
         public int s33 { get; set; }
         [NotMapped]
         public int s34 { get; set; }
@@ -67,6 +69,7 @@ namespace OnPOS.Models
         public int s39 { get; set; }
         [NotMapped]
         public int s40 { get; set; }
+        [NotMapped]
         public int s41 { get; set; }
         [NotMapped]
         public int s42 { get; set; }
@@ -92,6 +95,7 @@ namespace OnPOS.Models
         public int lastinvoice { get; set; }
         [NotMapped]
         public string invshort { get; set; }
+      
         
     }
 }

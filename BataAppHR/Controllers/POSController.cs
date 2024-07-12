@@ -35,6 +35,8 @@ using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 using Syncfusion.Pdf.Graphics;
 using Syncfusion.Pdf.Grid;
 using Syncfusion.Pdf;
+using System.Security.Cryptography.X509Certificates;
+using System.Xml.Linq;
 
 namespace OnPOS.Controllers
 {
@@ -155,7 +157,7 @@ namespace OnPOS.Controllers
 
             return Json(getstockdata);
         }
-        public JsonResult SaveTemp(string salesid, string item, string total, string discount, string subtotal)
+        public JsonResult SaveTemp(string salesid, string item, string total, string discount, string subtotal, string price)
         {
 
             string stat = "ok";
@@ -177,6 +179,8 @@ namespace OnPOS.Controllers
                 fld.qty = Convert.ToInt32(total);
                 fld.cat = getstockdata.category;
                 fld.subcat = getstockdata.subcategory;
+                fld.price = Convert.ToInt32(price);
+                fld.finalprice = Convert.ToInt32(subtotal);
                 var getdiscount = db.DiscTbl.Where(y => y.article == article && y.status == "1" && DateTime.Now >= y.validfrom && DateTime.Now < y.validto).FirstOrDefault();
                 if (getdiscount != null)
                 {
@@ -201,7 +205,6 @@ namespace OnPOS.Controllers
                     }
 
                 }
-                fld.price = Convert.ToInt32(subtotal);
                 if (size == "33")
                 {
                     fld.s33 = Convert.ToInt32(total);
@@ -293,6 +296,8 @@ namespace OnPOS.Controllers
                 fld.qty = Convert.ToInt32(total);
                 fld.cat = getstockdata.category;
                 fld.subcat = getstockdata.subcategory;
+                fld.price = Convert.ToInt32(price);
+                fld.finalprice = Convert.ToInt32(subtotal);
                 var getdiscount = db.DiscTbl.Where(y => y.article == article && y.status == "1" && DateTime.Now >= y.validfrom && DateTime.Now < y.validto).FirstOrDefault();
                 if (getdiscount != null)
                 {
@@ -317,7 +322,6 @@ namespace OnPOS.Controllers
                     }
 
                 }
-                fld.price = Convert.ToInt32(subtotal);
                 if (size == "33")
                 {
                     fld.s33 = Convert.ToInt32(total);
@@ -438,6 +442,7 @@ namespace OnPOS.Controllers
                     flds.invoice = objSales.invoice;
                     flds.update_date = DateTime.Now;
                     flds.update_user = User.Identity.Name;
+                    flds.transdate = objSales.transdate;
                 }
                 try
                 {
@@ -685,5 +690,123 @@ namespace OnPOS.Controllers
             fileStream.Dispose();
             return filename;
         }
+
+        public JsonResult getRecap()
+        {
+            dbStoreList storedt = db.StoreListTbl.Where(y => y.STORE_EMAIL == User.Identity.Name).FirstOrDefault();
+            List<SalesRecap> salesrecap = new List<SalesRecap>();
+
+            string mySqlConnectionStr = Configuration.GetConnectionString("DefaultConnection");
+
+            using (MySqlConnection conn = new MySqlConnection(mySqlConnectionStr))
+            {
+                conn.Open();
+                string query = @"select
+	                d2.codedivisi,
+	                d3.DivisiName,
+	                 sum(d.qty) as qty,
+                   sum(d.finalprice) as price
+                from
+	                onposdb.dbsalesdtl d
+	                left join dbstorelist db on d.store_id = db.id 
+	                left join onposdb.dbitemmaster d2 on d.article = d2.itemid and d2.COMPANY_ID = db.COMPANY_ID 
+	                left join onposdb.dbdepartment d3 on d3.CodeDivisi = d2.codedivisi and  d3.COMPANY_ID = db.COMPANY_ID
+                where date_format(d.transdate, '%Y-%m-%d') = date_format(now(), '%Y-%m-%d')
+                and d.Store_id = " + storedt.id + "";
+                
+                query+= @" group by d2.codedivisi,
+	                d3.DivisiName";
+
+                MySqlCommand cmd = new MySqlCommand(query, conn);
+
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        SalesRecap fld = new SalesRecap();
+                        fld.department = reader["DivisiName"].ToString();
+                        fld.qty = Convert.ToInt32(reader["qty"].ToString());
+                        fld.amount = Convert.ToInt32(reader["price"].ToString());
+                        
+                       
+
+                        salesrecap.Add(fld);
+                    }
+                }
+                conn.Close();
+            }
+
+            return Json(salesrecap);
+        }
+        public JsonResult getrecapdtl()
+        {
+            dbStoreList storedt = db.StoreListTbl.Where(y => y.STORE_EMAIL == User.Identity.Name).FirstOrDefault();
+            List<SalesRecap> salesrecap = new List<SalesRecap>();
+
+            string mySqlConnectionStr = Configuration.GetConnectionString("DefaultConnection");
+
+            using (MySqlConnection conn = new MySqlConnection(mySqlConnectionStr))
+            {
+                conn.Open();
+                string query = @"select
+	                            d.store_id,
+                                d.invoice,
+	                            date_format(d.transdate, '%d/%m/%Y') as TransDate,
+	                            d.article,
+	                            d2.itemdescription,
+	                            d2.category ,
+	                            d4.`type` as discounttype,
+	                            case when d4.`type` = 'percentage' then d.disc_prc else sum(d.disc_amount) end as Discount,
+	                            d.price,
+	                            sum(d.qty) as qty,
+	                            sum(d.finalprice) as amount  
+                            from
+	                            onposdb.dbsalesdtl d
+	                            left join dbstorelist db on d.store_id = db.id 
+	                            left join onposdb.dbitemmaster d2 on d.article = d2.itemid and d2.COMPANY_ID = db.COMPANY_ID 
+	                            left join onposdb.dbdepartment d3 on d3.CodeDivisi = d2.codedivisi and  d3.COMPANY_ID = db.COMPANY_ID
+	                            left join onposdb.dbdiscount d4 on d4.id = d.discountcode and d4.article = d.article
+                            where date_format(d.transdate, '%Y-%m-%d') = date_format(now(), '%Y-%m-%d')
+                            and d.Store_id = " + storedt.id + "";
+
+                            query += @" group by d.store_id,
+	                                    date_format(d.transdate, '%d/%m/%Y'),
+	                                    d.article,
+	                                    d2.itemdescription,
+	                                    d2.category,
+	                                    d4.`type` ,
+	                                    d.price ";
+
+                MySqlCommand cmd = new MySqlCommand(query, conn);
+
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        SalesRecap fld = new SalesRecap();
+                        fld.store_id = Convert.ToInt32(reader["store_id"].ToString());
+                        fld.transdate = reader["TransDate"].ToString();
+                        fld.article = reader["article"].ToString();
+                        fld.itemdescription = reader["itemdescription"].ToString();
+                        fld.category = reader["category"].ToString();
+                        fld.invoice = reader["invoice"].ToString();
+                        fld.discounttype = reader["discounttype"].ToString();
+                        fld.discount = Convert.ToInt32(reader["Discount"].ToString());
+                        fld.articleprice = Convert.ToInt32(reader["price"].ToString());
+                        fld.qty = Convert.ToInt32(reader["qty"].ToString());
+                        fld.amount = Convert.ToInt32(reader["amount"].ToString());
+
+
+
+                        salesrecap.Add(fld);
+                    }
+                }
+                conn.Close();
+            }
+
+            return Json(salesrecap);
+        }
+
+
     }
 }
