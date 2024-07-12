@@ -12,7 +12,7 @@
 <h3>Sales Entry</h3> *@
 <hr />
 
-<form asp-action="Create" id="formcreate">
+<form asp-action="SavePOS" id="formcreate">
     <div class="row">
         <div class="col-sm">
             <div class="row">
@@ -191,7 +191,9 @@
                                 </th>
                                 <th>
                                     Pairs
+
                                 </th>
+                                <th>Disc type</th>
                                 <th>
                                     Discount
                                 </th>
@@ -219,6 +221,9 @@
                             <div class="form-group">
                                 <input asp-for="invoice" class="form-control" readonly />
                                 <input asp-for="Store_id" class="form-control" type="hidden" />
+                                <input asp-for="transtypehidden" class="form-control" type="hidden" />
+                                <input asp-for="cardnumhidden" class="form-control" type="hidden" />
+                                <input asp-for="approvalhidden" class="form-control" type="hidden" />
 
                             </div>
                         </div>
@@ -286,6 +291,7 @@
                         <div class="col-sm">
                             <div class="form-group">
                                 <input asp-for="scandiscount" class="form-control" readonly/>
+
                             </div>
                         </div>
                     </div>
@@ -361,6 +367,20 @@
                     <div class="col-sm">
                         <div class="form-group">
                             <input asp-for="cardnum" class="form-control" />
+
+                        </div>
+                    </div>
+                </div>
+                <hr />
+                <div class="row">
+                    <div class="col-sm">
+                        <div class="form-group">
+                            <label class="control-label">Approvalcode</label>
+                        </div>
+                    </div>
+                    <div class="col-sm">
+                        <div class="form-group">
+                            <input asp-for="approval_code" class="form-control" />
 
                         </div>
                     </div>
@@ -631,7 +651,7 @@
             $("#dialog").dialog("close");
             $("#dialogpayment").dialog({
                 width: 740,
-                height: 375,
+                height: 450,
                 modal: true,
                 resizable: false,
                 close: function () {
@@ -711,6 +731,8 @@
                 var code = e.keyCode || e.which;
                 if (code == 13) {
                     var skucheck = $("#scanitem").val().trim();
+                    var discountval = 0;
+                    var subtotalval = 0;
                     if (skucheck != null) {
                         if (skucheck != "") {
                             $.ajax({
@@ -726,6 +748,7 @@
                                     var inputqty = $("#scanqty").val();
                                     var id = "s" + sz;
                                     var valdest = $("#" + id).val();
+                                    
                                     debugger;
                                     if (data != null) {
                                         if (parseInt(inputqty) <= parseInt(valdest)) {
@@ -763,15 +786,24 @@
 
                                                 // Change the position to `Engineer`
                                                 dts[4] = inputqty;
-                                                dts[5] = discounttotal;
-                                                dts[6] = calculates;
+                                                if (disctype == "percentage") {
+                                                    dts[5] = data.discperc;
+
+                                                } else {
+                                                    dts[5] = discounttotal;
+
+                                                }
+                                                dts[6] = disctype;
+                                                dts[7] = calculates;
                                                 $("#scanprice").val(calculates);
                                                 $("#scandiscount").val(discounttotal);
-
+                                                discountval = discounttotal;
+                                                subtotalval = calculates;
                                                 $("#salesid").select2("open");
                                                 valpress = 2;
                                                 // Update the table data and redraw the table
                                                 rows.data(dts).draw();
+                                              
                                                
                                             } else {
                                                 // var EditDelete = '<a onclick="removerow('+skucheck+')" class="btn btn-sm btn-dark">Delete</a ></td>';
@@ -791,13 +823,22 @@
                                                     }
                                                 }
                                                 var crew = $("#salesid").val();
-                                                POSTbl.row.add([crew, article, sz, data.price1, inputqty, discounttotal, calculate]);
+                                                var discval = 0;
+                                                if (disctype == "percentage") {
+                                                    discval = data.discperc;
+                                                } else {
+                                                    discval = discounttotal;
+                                                }
+                                                POSTbl.row.add([crew, article, sz, data.price1, inputqty, discval, disctype, calculate]);
                                                 POSTbl.draw();
                                                 $("#salesid").select2("open");
                                                 valpress = 2;
+                                                discountval = discounttotal;
+                                                subtotalval = calculates;
                                                 $("#trans_amount").val(totalinv + calculate);
                                                 $("#scanprice").val(calculate);
                                                 $("#scandiscount").val(discounttotal);
+                                                
                                             }
                                             
 
@@ -808,6 +849,36 @@
                                     } else {
                                         alert("incorrect article");
                                     }
+                                },
+                                complete: function (data) {
+                                    var crew = $("#salesid").val();
+                                    var itm = $("#scanitem").val();
+                                    var qty = $("#scanqty").val();
+                                    var article = skucheck.substring(0, 14);
+                                    var sz = skucheck.slice(-2);
+                                    var inputqty = $("#scanqty").val();
+                                    var id = "s" + sz;
+                                    var valdest = $("#" + id).val();
+                                    if (parseInt(inputqty) <= parseInt(valdest)) {
+                                        $.ajax({
+                                            url: '@Url.Action("SaveTemp", "POS")',
+                                            type: "GET",
+                                            data: { salesid: crew, item: itm, total: qty, discount: discountval, subtotal: subtotalval },
+                                            //startDate: mFromDate, endDate: mToDate1
+                                            dataType: 'json',
+                                            success: function (data) {
+                                                $("#scanitem").val(null);
+                                                $("#scanqty").val(1);
+
+
+                                            },
+                                            error: function () {
+
+                                            }
+                                        });
+
+                                    }
+
                                 },
                                 error: function () {
 
@@ -832,59 +903,89 @@
                     $(this).addClass('selected');
                 }
             });
-            $('#removebtn').click(function () {                
+            $('#removebtn').click(function () {
+                var itemid = POSTbl.row('.selected').data()[1] + POSTbl.row('.selected').data()[2];               
                 var totalinv = parseInt($("#trans_amount").val());
                 var totalinvnew = (totalinv - parseInt(POSTbl.row('.selected').data()[6]));
                 $("#trans_amount").val(totalinvnew);
                 POSTbl.row('.selected').remove().draw(false);
-            });
-        });
-        $('#category').on('change', function () {
-            var value = $("#category").val();
-            if (value != null) {
-                $("#subcategory").empty()
                 $.ajax({
-                    url: '@Url.Action("getsubcatlist", "ItemMaster")',
+                    url: '@Url.Action("RemoveTemp", "POS")',
                     type: "GET",
-                    data: { cat: value },
+                    data: { item: itemid },
                     //startDate: mFromDate, endDate: mToDate1
                     dataType: 'json',
                     success: function (data) {
-                        debugger;
-                        if (data.length != 0) {
-                            //$("#tbodyiddtl").empty();
-                            $("#subcategory").prop('disabled', false);
+                      
 
-                            var x = 1;
-                            data.forEach(function (item) { //insert rows
-                                console.log(item);
-                                var newOption = new Option(item.description, item.subCategory, true, true);
-                                // Append it to the select
-                                // $('#subcategory').append(newOption).trigger('change');
-                                $('#subcategory').append(newOption);
-
-                                // $("#subcategory").val(null);
-                                // $("#subcategory").trigger('change');
-                                x++
-                            })
-
-
-
-
-                        } else {
-                            $("#subcategory").prop('disabled', true);
-
-                        }
 
                     },
                     error: function () {
 
                     }
                 });
+            });
+            $('#category').on('change', function () {
+                var value = $("#category").val();
+                if (value != null) {
+                    $("#subcategory").empty()
+                    $.ajax({
+                        url: '@Url.Action("getsubcatlist", "ItemMaster")',
+                        type: "GET",
+                        data: { cat: value },
+                        //startDate: mFromDate, endDate: mToDate1
+                        dataType: 'json',
+                        success: function (data) {
+                            debugger;
+                            if (data.length != 0) {
+                                //$("#tbodyiddtl").empty();
+                                $("#subcategory").prop('disabled', false);
+
+                                var x = 1;
+                                data.forEach(function (item) { //insert rows
+                                    console.log(item);
+                                    var newOption = new Option(item.description, item.subCategory, true, true);
+                                    // Append it to the select
+                                    // $('#subcategory').append(newOption).trigger('change');
+                                    $('#subcategory').append(newOption);
+
+                                    // $("#subcategory").val(null);
+                                    // $("#subcategory").trigger('change');
+                                    x++
+                                })
 
 
-            }
+
+
+                            } else {
+                                $("#subcategory").prop('disabled', true);
+
+                            }
+
+                        },
+                        error: function () {
+
+                        }
+                    });
+
+
+                }
+            });
+            $('#transtype').on('change', function () {
+                var value = $("#transtype").val();
+                $("#transtypehidden").val(value);
+            });
+            $('#cardnum').on('change', function () {
+                var value = $("#cardnum").val();
+                $("#cardnumhidden").val(value);
+            });
+            $('#approval_code').on('change', function () {
+                var value = $("#approval_code").val();
+                $("#approvalhidden").val(value);
+            });
+
         });
+       
         function allowOnlyNumber(evt) {
             var charCode = (evt.which) ? evt.which : event.keyCode
             if (charCode > 31 && (charCode < 48 || charCode > 57))

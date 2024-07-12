@@ -6,6 +6,7 @@ using BataAppHR.Models;
 using OnPOS.Models;
 
 using Microsoft.EntityFrameworkCore;
+using System.Security.Policy;
 
 namespace BataAppHR.Data
 {
@@ -360,7 +361,6 @@ namespace BataAppHR.Data
             //saleshdr
             modelBuilder.Entity<dbSalesHdr>().Property(ug => ug.invoice).HasColumnType("varchar(50)").IsRequired();
             modelBuilder.Entity<dbSalesHdr>().Property(ug => ug.Store_id).HasColumnType("int");
-            modelBuilder.Entity<dbSalesHdr>().Property(ug => ug.staff_id).HasColumnType("int");
             modelBuilder.Entity<dbSalesHdr>().Property(ug => ug.transdate).HasColumnType("datetime");
             modelBuilder.Entity<dbSalesHdr>().Property(ug => ug.trans_amount).HasColumnType("int");
             modelBuilder.Entity<dbSalesHdr>().Property(ug => ug.trans_qty).HasColumnType("int");
@@ -372,6 +372,8 @@ namespace BataAppHR.Data
 
             //salesdtl
             modelBuilder.Entity<dbSalesDtl>().Property(ug => ug.invoice).HasColumnType("varchar(50)").IsRequired();
+            modelBuilder.Entity<dbSalesDtl>().Property(ug => ug.staff_id).HasColumnType("int");
+
             modelBuilder.Entity<dbSalesDtl>().Property(ug => ug.store_id).HasColumnType("int");
             modelBuilder.Entity<dbSalesDtl>().Property(ug => ug.transdate).HasColumnType("datetime");
             modelBuilder.Entity<dbSalesDtl>().Property(ug => ug.article).HasColumnType("varchar(50)").IsRequired();
