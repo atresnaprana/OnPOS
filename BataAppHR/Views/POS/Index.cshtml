@@ -224,6 +224,7 @@
                                 <input asp-for="transtypehidden" class="form-control" type="hidden" />
                                 <input asp-for="cardnumhidden" class="form-control" type="hidden" />
                                 <input asp-for="approvalhidden" class="form-control" type="hidden" />
+                                <input asp-for="scanpricefull" class="form-control" type="hidden" />
 
                             </div>
                         </div>
@@ -322,7 +323,8 @@
         </div>
         <div class="col-sm">
             <div class="form-group">
-                <input type="button" value="WorstS - F6" onclick="alertfirst()" class="btn btn-red" />
+                @* <input type="button" value="WorstS - F8" onclick="alertfirst()" class="btn btn-red" /> *@
+                <input type="button" value="Detail Recap - F8" onclick="alertfirst()" class="btn btn-red" />
 
             </div>
         </div>
@@ -487,6 +489,90 @@
         </div>
     </center>
 </div>
+<div id="dialogrecap2" title="Recap Detail">
+    <center>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm">
+                    <label class="form-control">Store Code:</label>
+                </div>
+                <div class="col-sm">
+                    <label class="form-control">@Model.storedata.id</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm">
+                    <label class="form-control">Address:</label>
+                </div>
+                <div class="col-sm">
+                    <label class="form-control">@Model.storedata.STORE_ADDRESS</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm">
+                    <label class="form-control">Date:</label>
+                </div>
+                <div class="col-sm">
+                    <label class="form-control">@DateTime.Now.ToString("dd/MM/yyyy") to @DateTime.Now.ToString("dd/MM/yyyy")</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm">
+                    <label class="form-control">Time:</label>
+                </div>
+                <div class="col-sm">
+                    <label class="form-control">08:00:00 to @DateTime.Now.ToString("HH:mm:ss")</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm">
+                    <table class="table table-striped" id="tblRecDtl">
+                        <thead>
+                            <tr>
+
+                                <th>
+                                    date
+                                </th>
+                                <th>
+                                    Invoice
+                                </th>
+
+                                <th>
+                                    article
+                                </th>
+                                <th>
+                                    article name
+                                </th>
+                                <th>
+                                    article price
+                                </th>
+                                <th>
+                                    cat
+                                </th>
+                                <th>
+                                    Discount Type
+                                </th>
+                                <th>
+                                    Discount 
+                                </th>
+                                <th>
+                                    qty
+                                </th>
+
+                                <th>
+                                    Amount
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbodyrecdtl">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </center>
+</div>
 
 @section Scripts{
     @{
@@ -495,7 +581,7 @@
     <script>
         var POSTbl;
         var valpress = 1;
-       
+        var recapdtltbl;
         function closePayment() {
             $("#dialogpayment").dialog("close");
             $("#confirmtotal").val(0);
@@ -527,7 +613,8 @@
             if (x == 115) {
 
             }
-            if (x == 117) { 
+            if (x == 119) {
+                openrecapdtl()
             }
             if (x == 120) {
                 openPayment();
@@ -538,6 +625,33 @@
             // if (x == 118) {
             //     console.log('Your pressed Fn+F7');
             // }
+        }
+        function openrecapdtl(){
+            recapdtltbl.clear().draw();
+            $.ajax({
+                url: '@Url.Action("getrecapdtl", "POS")',
+                type: "GET",
+                dataType: 'json',
+                success: function (data) {
+                    debugger;
+                    console.log(data)
+                    var tr;
+                    //Append each row to html table
+                    for (var i = 0; i < data.length; i++) {
+                        debugger;
+
+                        recapdtltbl.row.add([data[i].transdate, data[i].invoice, data[i].article, data[i].itemdescription, data[i].articleprice, data[i].category, data[i].discounttype, data[i].discount, data[i].qty, data[i].amount]);
+                        recapdtltbl.draw();
+                        /* location.reload();*/
+                    }
+                },
+                error: function () {
+
+                }
+
+            });
+
+            $("#dialogrecap2").dialog("open");
         }
         function changefocus(){
             console.log("callfn");
@@ -591,10 +705,9 @@
                     for (var i = 0; i < data.length; i++) {
                         debugger;
                         tr = $('<tr/>');
-                        // tr.append("<td>" + data[i].sS_CODE + "</td>");
-                        // tr.append("<td>" + data[i].namA_SS + "</td>");
-                        // tr.append("<td>" + data[i].ktp + "</td>");
-                        // tr.append("<td>" + data[i].hP_SS + "</td>");
+                        tr.append("<td>" + data[i].department + "</td>");
+                        tr.append("<td>" + data[i].qty + "</td>");
+                        tr.append("<td>" + data[i].amount + "</td>");
 
 
 
@@ -649,9 +762,20 @@
                 }
             });
             $("#dialog").dialog("close");
+            $("#dialogrecap2").dialog({
+                width: 1080,
+                height: 720,
+                modal: true,
+                resizable: false,
+                close: function () {
+                    //var audio = $("#player");
+                    //audio[0].pause();
+                }
+            });
+            $("#dialogrecap2").dialog("close");
             $("#dialogpayment").dialog({
                 width: 740,
-                height: 450,
+                height: 500,
                 modal: true,
                 resizable: false,
                 close: function () {
@@ -667,6 +791,7 @@
                 "bInfo": false,
                 "bAutoWidth": false
             });
+            recapdtltbl = $('#tblRecDtl').DataTable();
             $("#scanitem").keyup(function () {
                 if ($("#scanitem").val().length == 16) {
                     var itm = $("#scanitem").val();
@@ -748,8 +873,7 @@
                                     var inputqty = $("#scanqty").val();
                                     var id = "s" + sz;
                                     var valdest = $("#" + id).val();
-                                    
-                                    debugger;
+                                    $("#scanpricefull").val(parseInt(data.price1));
                                     if (data != null) {
                                         if (parseInt(inputqty) <= parseInt(valdest)) {
                                             var flagexist = 0;
@@ -851,6 +975,7 @@
                                     }
                                 },
                                 complete: function (data) {
+                                    debugger;
                                     var crew = $("#salesid").val();
                                     var itm = $("#scanitem").val();
                                     var qty = $("#scanqty").val();
@@ -863,7 +988,7 @@
                                         $.ajax({
                                             url: '@Url.Action("SaveTemp", "POS")',
                                             type: "GET",
-                                            data: { salesid: crew, item: itm, total: qty, discount: discountval, subtotal: subtotalval },
+                                            data: { salesid: crew, item: itm, total: qty, discount: discountval, subtotal: $("#scanprice").val(), price: $("#scanpricefull").val() },
                                             //startDate: mFromDate, endDate: mToDate1
                                             dataType: 'json',
                                             success: function (data) {
@@ -1000,23 +1125,6 @@
             }
         }
      
-        // function removerow(sku) {
-        //     if (confirm("remove item: "+sku+"?")) {
-        //         var indexes = POSTbl
-        //             .rows()
-        //             .indexes()
-        //             .filter(function (value, index) {
-        //                 return sku.trim() === POSTbl.row(value).data()[0] + POSTbl.row(value).data()[1];
-        //             });
-        //         var rows = POSTbl.row(indexes[0]);
-        //         // Get the data for the row
-        //         var dts = rows.data();
-
-        //         POSTbl.row(dts).remove().draw();
-        //     } else {
-        //         return false;
-        //     } 
-
-        // }
+       
     </script>
 }

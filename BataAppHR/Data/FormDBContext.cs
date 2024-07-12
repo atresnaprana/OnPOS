@@ -60,6 +60,8 @@ namespace BataAppHR.Data
             modelBuilder.Entity<dbDiscount>().ToTable("dbDiscount");
             modelBuilder.Entity<dbSalesHdr>().ToTable("dbSalesHdr");
             modelBuilder.Entity<dbSalesDtl>().ToTable("dbSalesDtl");
+            modelBuilder.Entity<dbDepartment>().ToTable("dbDepartment");
+
             modelBuilder.Entity<dbDiscountStoreList>().ToTable("dbDiscountStoreList").HasNoKey();
 
 
@@ -78,8 +80,10 @@ namespace BataAppHR.Data
             modelBuilder.Entity<dbSalesStaff>().HasKey(ug => ug.id).HasName("PK_SalesStaff");
             modelBuilder.Entity<dbDiscount>().HasKey(ug => ug.id).HasName("PK_Discount");
             modelBuilder.Entity<dbDepartment>().HasKey(ug => ug.Id).HasName("PK_Department");
+            modelBuilder.Entity<dbSalesDtl>().HasKey(ug => ug.id).HasName("PK_Salesdtl");
+
             modelBuilder.Entity<dbSalesHdr>().HasKey(ug => new { ug.Store_id, ug.invoice, ug.transdate }).HasName("PKSaleshdr");
-            modelBuilder.Entity<dbSalesDtl>().HasKey(ug => new { ug.store_id, ug.invoice, ug.transdate, ug.article, ug.size }).HasName("PKSalesdtl");
+            //modelBuilder.Entity<dbSalesDtl>().HasKey(ug => new { ug.store_id, ug.invoice, ug.transdate, ug.article }).HasName("PKSalesdtl");
 
 
             // Configure indexes  
@@ -372,6 +376,8 @@ namespace BataAppHR.Data
             modelBuilder.Entity<dbSalesHdr>().Property(ug => ug.update_user).HasColumnType("varchar(255)");
 
             //salesdtl
+            modelBuilder.Entity<dbSalesDtl>().Property(ug => ug.id).HasColumnType("int").UseMySqlIdentityColumn().IsRequired();
+
             modelBuilder.Entity<dbSalesDtl>().Property(ug => ug.invoice).HasColumnType("varchar(50)").IsRequired();
             modelBuilder.Entity<dbSalesDtl>().Property(ug => ug.staff_id).HasColumnType("int");
 
@@ -381,6 +387,8 @@ namespace BataAppHR.Data
             modelBuilder.Entity<dbSalesDtl>().Property(ug => ug.cat).HasColumnType("varchar(50)");
             modelBuilder.Entity<dbSalesDtl>().Property(ug => ug.subcat).HasColumnType("varchar(50)");
             modelBuilder.Entity<dbSalesDtl>().Property(ug => ug.price).HasColumnType("int");
+            modelBuilder.Entity<dbSalesDtl>().Property(ug => ug.finalprice).HasColumnType("int");
+
             modelBuilder.Entity<dbSalesDtl>().Property(ug => ug.discountcode).HasColumnType("int");
             modelBuilder.Entity<dbSalesDtl>().Property(ug => ug.disc_amount).HasColumnType("int");
 
