@@ -48,6 +48,7 @@ namespace OnPOS.Models
         public string ENTRY_USER { get; set; }
         public string UPDATE_USER { get; set; }
         public string FLAG_AKTIF { get; set; }
+        public string codedivisi { get; set; }
 
         [NotMapped]
         public int discperc { get; set; }
@@ -68,6 +69,8 @@ namespace OnPOS.Models
         public List<dbStoreList> StoreList { get; set; }
         [NotMapped]
         public List<dbItemStore> itemSettings { get; set; }
+        [NotMapped]
+        public List<DropDownModel> ddDepartment { get; set; }
 
     }
 }

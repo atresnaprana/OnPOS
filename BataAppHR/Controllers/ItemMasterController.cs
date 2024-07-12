@@ -66,6 +66,13 @@ namespace OnPOS.Controllers
             var data = db.CustomerTbl.Where(y => y.Email == User.Identity.Name).FirstOrDefault();
             fld.ddcat = db.CategoryTbl.Where(y => y.COMPANY_ID == data.COMPANY_ID && y.FLAG_AKTIF == "1").ToList();
             fld.ddsubcat = db.SubCategoryTbl.Where(y => y.COMPANY_ID == data.COMPANY_ID && y.FLAG_AKTIF == "1").ToList();
+            fld.ddDepartment = db.DepartmentTbl.Where(y => y.COMPANY_ID == data.COMPANY_ID && y.FLAG_AKTIF == "1").ToList().Select(y => new DropDownModel()
+            {
+                id = y.CodeDivisi,
+                name = y.DivisiName
+
+
+            }).ToList();
             return View(fld);
         }
         [Authorize]
@@ -145,6 +152,13 @@ namespace OnPOS.Controllers
             var data = db.CustomerTbl.Where(y => y.Email == User.Identity.Name).FirstOrDefault();
             fld.ddcat = db.CategoryTbl.Where(y => y.COMPANY_ID == data.COMPANY_ID && y.FLAG_AKTIF == "1").ToList();
             fld.ddsubcat = db.SubCategoryTbl.Where(y => y.COMPANY_ID == data.COMPANY_ID && y.FLAG_AKTIF == "1").ToList();
+            fld.ddDepartment = db.DepartmentTbl.Where(y => y.COMPANY_ID == data.COMPANY_ID && y.FLAG_AKTIF == "1").ToList().Select(y => new DropDownModel()
+            {
+                id = y.CodeDivisi,
+                name = y.DivisiName
+
+
+            }).ToList();
             if (fld == null)
             {
                 return NotFound();
@@ -177,7 +191,7 @@ namespace OnPOS.Controllers
                 editFld.price2 = fld.price2;
                 editFld.price3 = fld.price3;
                 editFld.brand = fld.brand;
-
+                editFld.codedivisi = fld.codedivisi;
                 editFld.UPDATE_DATE = DateTime.Now;
                 editFld.UPDATE_USER = User.Identity.Name;
 
