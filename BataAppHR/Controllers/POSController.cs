@@ -32,6 +32,9 @@ using OfficeOpenXml.FormulaParsing.Excel.Functions.Engineering;
 using System.ComponentModel.DataAnnotations;
 using Syncfusion.Pdf.Security;
 using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
+using Syncfusion.Pdf.Graphics;
+using Syncfusion.Pdf.Grid;
+using Syncfusion.Pdf;
 
 namespace OnPOS.Controllers
 {
@@ -489,7 +492,8 @@ namespace OnPOS.Controllers
                         db.salesdtltbl.Add(dtl);
                     }
                     db.SaveChanges();
-
+                    var newsalesdtl = new List<dbSalesDtl>();
+                    SessionHelper.SetObjectAsJson(HttpContext.Session, "FormList", newsalesdtl);
 
                 }
                 catch (Exception ex)
@@ -509,6 +513,177 @@ namespace OnPOS.Controllers
 
             }
             return View(objSales);
+        }
+
+        public void callinvoice()
+        {
+            PrintInvoice(new List<dbSalesHdr>(), 9, "1107240001");
+        }
+        public string PrintInvoice(List<dbSalesHdr> data, int storeid, string invoice)
+        {
+            string filename = "";
+
+
+            //Creates a new PDF document
+            PdfDocument document = new PdfDocument();
+            //Adds page settings
+            document.PageSettings.Orientation = PdfPageOrientation.Landscape;
+            document.PageSettings.Margins.All = 25;
+            document.PageSettings.Size = new Syncfusion.Drawing.SizeF(58,40);
+            //Adds a page to the document
+            PdfPage page = document.Pages.Add();
+            PdfGraphics graphics = page.Graphics;
+
+            var fileUrl = Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot\images");
+
+            var files = Path.Combine(fileUrl, "Bata_red_small.png");
+            FileStream imageStream = new FileStream(files, FileMode.Open, FileAccess.Read);
+            Syncfusion.Drawing.RectangleF bounds = new Syncfusion.Drawing.RectangleF(400, 0, 250, 60);
+            PdfImage image = PdfImage.FromStream(imageStream);
+            PdfFont fonts = new PdfStandardFont(PdfFontFamily.TimesRoman, 15);
+
+            //Draw the text.
+
+            //Draws the image to the PDF page
+            page.Graphics.DrawImage(image, bounds);
+
+            PdfBrush solidBrush = new PdfSolidBrush(new PdfColor(232, 4, 20));
+            bounds = new Syncfusion.Drawing.RectangleF(0, bounds.Bottom + 10, graphics.ClientSize.Width, 30);
+            //Draws a rectangle to place the heading in that region.
+            graphics.DrawRectangle(solidBrush, bounds);
+            //Creates a font for adding the heading in the page
+            PdfFont subHeadingFont = new PdfStandardFont(PdfFontFamily.TimesRoman, 14);
+            //Creates a text element to add the invoice number
+
+            PdfTextElement element = new PdfTextElement("StoreID: " + data[0].Store_id, subHeadingFont);
+            PdfTextElement element2 = new PdfTextElement("Invoice: " + data[0].invoice, subHeadingFont);
+
+            element.Brush = PdfBrushes.White;
+            element2.Brush = PdfBrushes.Black;
+
+            //Draws the heading on the page
+            PdfLayoutResult result = element.Draw(page, new Syncfusion.Drawing.PointF(10, bounds.Top + 8));
+
+            string currentDate = "DATE " + DateTime.Now.ToString("MM/dd/yyyy");
+            //Measures the width of the text to place it in the correct location
+            Syncfusion.Drawing.SizeF textSize = subHeadingFont.MeasureString(currentDate);
+            Syncfusion.Drawing.PointF textPosition = new Syncfusion.Drawing.PointF(graphics.ClientSize.Width - textSize.Width - 10, result.Bounds.Y);
+            //Draws the date by using DrawString method
+            graphics.DrawString(currentDate, subHeadingFont, element.Brush, textPosition);
+
+            PdfFont timesRoman = new PdfStandardFont(PdfFontFamily.TimesRoman, 12);
+            //Creates text elements to add the address and draw it to the page.
+            element.Brush = new PdfSolidBrush(new PdfColor(0, 0, 0));
+            result = element2.Draw(page, new Syncfusion.Drawing.PointF(10, result.Bounds.Bottom + 20));
+            PdfPen linePen = new PdfPen(new PdfColor(126, 151, 173), 0.70f);
+            Syncfusion.Drawing.PointF startPoint = new Syncfusion.Drawing.PointF(0, result.Bounds.Bottom + 3);
+            Syncfusion.Drawing.PointF endPoint = new Syncfusion.Drawing.PointF(graphics.ClientSize.Width, result.Bounds.Bottom + 3);
+            //Draws a line at the bottom of the address
+            graphics.DrawLine(linePen, startPoint, endPoint);
+
+
+            ////Creates a PDF grid
+            //PdfGrid grid = new PdfGrid();
+            ////Adds the data source
+            //grid.DataSource = data.Select(y => new LedgerTbl()
+            //{
+            //    id = y.id,
+            //    docnum = y.docnum,
+            //    periode = y.periode,
+            //    open_balance = y.open_balance,
+            //    debit = y.debit,
+            //    credit = y.credit,
+            //    close_balance = y.close_balance,
+            //    deskripsi = y.deskripsi,
+            //    tgl_doc = y.tgl_doc,
+            //    reference = y.reference
+            //}).ToList();
+            ////Creates the grid cell styles
+            //PdfGridCellStyle cellStyle = new PdfGridCellStyle();
+            //cellStyle.Borders.All = PdfPens.White;
+            //PdfGridRow header = grid.Headers[0];
+            ////Creates the header style
+            //PdfGridCellStyle headerStyle = new PdfGridCellStyle();
+            //headerStyle.Borders.All = new PdfPen(new PdfColor(126, 151, 173));
+            //headerStyle.BackgroundBrush = new PdfSolidBrush(new PdfColor(232, 4, 20));
+            //headerStyle.TextBrush = PdfBrushes.White;
+            //headerStyle.Font = new PdfStandardFont(PdfFontFamily.TimesRoman, 14f, PdfFontStyle.Regular);
+            //PdfGridCellStyle rowstyle = new PdfGridCellStyle();
+            //rowstyle.TextBrush = PdfBrushes.Black;
+            //rowstyle.Font = new PdfStandardFont(PdfFontFamily.TimesRoman, 11, PdfFontStyle.Regular);
+            //var test = grid.Rows.Count();
+            //int maxrow = 0;
+            //for (int i = 0; i < grid.Rows.Count; i++)
+            //{
+            //    var cellcount = grid.Rows[i].Cells.Count;
+            //    for (int x = 0; x < cellcount; x++)
+            //    {
+
+            //        grid.Rows[i].Cells[x].StringFormat = new PdfStringFormat(PdfTextAlignment.Center, PdfVerticalAlignment.Middle);
+            //        grid.Rows[i].Cells[x].Style = rowstyle;
+            //    }
+            //    maxrow++;
+            //}
+            //var lastrow = grid.Rows[maxrow - 1];
+            //PdfGridCellStyle rowstyletotal = new PdfGridCellStyle();
+            //rowstyletotal.TextBrush = PdfBrushes.Black;
+            //rowstyletotal.Font = new PdfStandardFont(PdfFontFamily.TimesRoman, 11, PdfFontStyle.Bold);
+            //var cellcounttotal = lastrow.Cells.Count;
+            //for (int x = 0; x < cellcounttotal; x++)
+            //{
+
+            //    lastrow.Cells[x].StringFormat = new PdfStringFormat(PdfTextAlignment.Center, PdfVerticalAlignment.Middle);
+            //    lastrow.Cells[x].Style = rowstyletotal;
+            //}
+
+            ////Adds cell customizations
+            //for (int i = 0; i < header.Cells.Count; i++)
+            //{
+            //    if (i == 0 || i == 1)
+            //        header.Cells[i].StringFormat = new PdfStringFormat(PdfTextAlignment.Center, PdfVerticalAlignment.Middle);
+            //    else
+            //        header.Cells[i].StringFormat = new PdfStringFormat(PdfTextAlignment.Center, PdfVerticalAlignment.Middle);
+            //}
+
+            ////Applies the header style
+            //header.ApplyStyle(headerStyle);
+            //cellStyle.Borders.Bottom = new PdfPen(new PdfColor(217, 217, 217), 0.70f);
+            //cellStyle.Font = new PdfStandardFont(PdfFontFamily.TimesRoman, 12f);
+            //cellStyle.TextBrush = new PdfSolidBrush(new PdfColor(131, 130, 136));
+            ////Creates the layout format for grid
+            //PdfGridLayoutFormat layoutFormat = new PdfGridLayoutFormat();
+            //// Creates layout format settings to allow the table pagination
+            //layoutFormat.Layout = PdfLayoutType.Paginate;
+            ////Draws the grid to the PDF page.
+            //PdfGridLayoutResult gridResult = grid.Draw(page, new Syncfusion.Drawing.RectangleF(new Syncfusion.Drawing.PointF(0, result.Bounds.Bottom + 20), new Syncfusion.Drawing.SizeF(graphics.ClientSize.Width, graphics.ClientSize.Height - 100)), layoutFormat);
+
+            ////Creates text elements to add the address and draw it to the page.
+            //string footer = " " + "\r\n";
+
+
+
+            //PdfFont fontFoot = new PdfStandardFont(PdfFontFamily.TimesRoman, 15);
+
+            ////Draw the text.
+
+            //graphics.DrawString(footer, fontFoot, PdfBrushes.Black, new Syncfusion.Drawing.PointF(1450, 170));
+
+
+            var fileUrlInv = Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot\InvoiceData");
+            filename = "Invoice_" + storeid + "_" + invoice + ".pdf";
+            var filesInv = Path.Combine(fileUrlInv, filename);
+
+            var filePathInv = Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot\InvoiceData");
+            if (!Directory.Exists(filePathInv))
+            {
+                Directory.CreateDirectory(filePathInv);
+            }
+            FileStream fileStream = new FileStream(filesInv, FileMode.CreateNew, FileAccess.ReadWrite);
+            //Save and close the PDF document 
+            document.Save(fileStream);
+            document.Close(true);
+            fileStream.Dispose();
+            return filename;
         }
     }
 }
