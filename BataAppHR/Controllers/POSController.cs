@@ -685,5 +685,13 @@ namespace OnPOS.Controllers
             fileStream.Dispose();
             return filename;
         }
+
+        public JsonResult getRecap()
+        {
+            dbStoreList storedt = db.StoreListTbl.Where(y => y.STORE_EMAIL == User.Identity.Name).FirstOrDefault();
+            var getsalesdtl = db.salesdtltbl.Where(y => y.store_id == storedt.id).ToList();
+            List<SalesRecap> recaps = new List<SalesRecap>();
+            return Json(recaps);
+        }
     }
 }

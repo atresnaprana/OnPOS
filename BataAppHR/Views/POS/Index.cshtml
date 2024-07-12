@@ -460,7 +460,7 @@
             </div>
             <div class="row">
                 <div class="col-sm">
-                    <table class="table table-striped" id="POSTbl">
+                    <table class="table table-striped" id="tblRecap">
                         <thead>
                             <tr>
 
@@ -478,37 +478,8 @@
 
                             </tr>
                         </thead>
-                        <tbody id="tbodyid1">
-                            <tr>
-                                <td> Footwear</td>
-                                <td> 100 </td>
-                                <td> 50.000.000</td>
-                            </tr>
-                            <tr>
-                                <td> Sandals</td>
-                                <td> 80 </td>
-                                <td> 20.000.000</td>
-                            </tr>
-                            <tr>
-                                <td> Apparel</td>
-                                <td> 100 </td>
-                                <td> 45.000.000</td>
-                            </tr>
-                            <tr>
-                                <td> Equipment</td>
-                                <td> 70 </td>
-                                <td> 30.000.000</td>
-                            </tr>
-                            <tr>
-                                <td> Shock</td>
-                                <td> 150 </td>
-                                <td> 50.000.000</td>
-                            </tr>
-                            <tr>
-                                <td> Total</td>
-                                <td> 500 </td>
-                                <td> 195.000.000</td>
-                            </tr>
+                        <tbody id="tbodyrecap">
+                           
                         </tbody>
                     </table>
                 </div>
@@ -608,6 +579,35 @@
 
         }
         function openrecap() {
+            $("#tbodyrecap").empty();
+            $.ajax({
+                url: '@Url.Action("getRecap", "POS")',
+                type: "GET",
+                dataType: 'json',
+                success: function (data) {
+                    debugger;
+                    var tr;
+                    //Append each row to html table
+                    for (var i = 0; i < data.length; i++) {
+                        debugger;
+                        tr = $('<tr/>');
+                        // tr.append("<td>" + data[i].sS_CODE + "</td>");
+                        // tr.append("<td>" + data[i].namA_SS + "</td>");
+                        // tr.append("<td>" + data[i].ktp + "</td>");
+                        // tr.append("<td>" + data[i].hP_SS + "</td>");
+
+
+
+                        $('#tblRecap').append(tr);
+                        /* location.reload();*/
+                    }
+                },
+                error: function () {
+
+                }
+
+            });
+
             $("#dialog").dialog("open");
 
         }
@@ -999,6 +999,7 @@
                 return false;
             }
         }
+     
         // function removerow(sku) {
         //     if (confirm("remove item: "+sku+"?")) {
         //         var indexes = POSTbl
