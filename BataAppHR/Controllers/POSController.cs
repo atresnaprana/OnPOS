@@ -775,7 +775,8 @@ namespace OnPOS.Controllers
 	                                    d2.itemdescription,
 	                                    d2.category,
 	                                    d4.`type` ,
-	                                    d.price ";
+	                                    d.price,
+                                        d.invoice";
 
                 MySqlCommand cmd = new MySqlCommand(query, conn);
 
