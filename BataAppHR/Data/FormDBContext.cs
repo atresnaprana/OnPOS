@@ -98,7 +98,7 @@ namespace BataAppHR.Data
             modelBuilder.Entity<SystemTabModel>().Property(ug => ug.TAB_TXT).HasColumnType("varchar(255)").IsRequired(false);
             modelBuilder.Entity<SystemTabModel>().Property(ug => ug.FLAG_AKTIF).HasColumnType("varchar(1)").IsRequired(false);
             modelBuilder.Entity<SystemTabModel>().Property(ug => ug.ENTRY_USER).HasColumnType("varchar(50)").IsRequired(false);
-            modelBuilder.Entity<SystemTabModel>().Property(ug => ug.UPDATE_USER).HasColumnType("varchar(10)").IsRequired();
+            modelBuilder.Entity<SystemTabModel>().Property(ug => ug.UPDATE_USER).HasColumnType("varchar(60)").IsRequired();
             modelBuilder.Entity<SystemTabModel>().Property(ug => ug.ENTRY_DATE).HasColumnType("date");
             modelBuilder.Entity<SystemTabModel>().Property(ug => ug.UPDATE_DATE).HasColumnType("date");
 
@@ -110,7 +110,7 @@ namespace BataAppHR.Data
             modelBuilder.Entity<SystemMenuModel>().Property(ug => ug.MENU_TXT).HasColumnType("varchar(255)").IsRequired(false);
             modelBuilder.Entity<SystemMenuModel>().Property(ug => ug.FLAG_AKTIF).HasColumnType("varchar(1)").IsRequired(false);
             modelBuilder.Entity<SystemMenuModel>().Property(ug => ug.ENTRY_USER).HasColumnType("varchar(50)").IsRequired(false);
-            modelBuilder.Entity<SystemMenuModel>().Property(ug => ug.UPDATE_USER).HasColumnType("varchar(10)").IsRequired();
+            modelBuilder.Entity<SystemMenuModel>().Property(ug => ug.UPDATE_USER).HasColumnType("varchar(60)").IsRequired();
             modelBuilder.Entity<SystemMenuModel>().Property(ug => ug.ENTRY_DATE).HasColumnType("date");
             modelBuilder.Entity<SystemMenuModel>().Property(ug => ug.UPDATE_DATE).HasColumnType("date");
 
@@ -124,7 +124,7 @@ namespace BataAppHR.Data
             modelBuilder.Entity<dbSliderImg>().Property(ug => ug.IMG_DESC).HasColumnType("MediumBlob").IsRequired(false);
             modelBuilder.Entity<dbSliderImg>().Property(ug => ug.FLAG_AKTIF).HasColumnType("varchar(1)").IsRequired(false);
             modelBuilder.Entity<dbSliderImg>().Property(ug => ug.ENTRY_USER).HasColumnType("varchar(50)").IsRequired(false);
-            modelBuilder.Entity<dbSliderImg>().Property(ug => ug.UPDATE_USER).HasColumnType("varchar(10)").IsRequired();
+            modelBuilder.Entity<dbSliderImg>().Property(ug => ug.UPDATE_USER).HasColumnType("varchar(60)").IsRequired();
             modelBuilder.Entity<dbSliderImg>().Property(ug => ug.ENTRY_DATE).HasColumnType("date");
             modelBuilder.Entity<dbSliderImg>().Property(ug => ug.UPDATE_DATE).HasColumnType("date");
 
