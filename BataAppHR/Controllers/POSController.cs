@@ -707,10 +707,10 @@ namespace OnPOS.Controllers
 	                 sum(d.qty) as qty,
                    sum(d.finalprice) as price
                 from
-	                onposdb.dbsalesdtl d
-	                left join dbstorelist db on d.store_id = db.id 
-	                left join onposdb.dbitemmaster d2 on d.article = d2.itemid and d2.COMPANY_ID = db.COMPANY_ID 
-	                left join onposdb.dbdepartment d3 on d3.CodeDivisi = d2.codedivisi and  d3.COMPANY_ID = db.COMPANY_ID
+	                onposdb.dbSalesDtl d
+	                left join dbStoreList db on d.store_id = db.id 
+	                left join onposdb.dbItemMaster d2 on d.article = d2.itemid and d2.COMPANY_ID = db.COMPANY_ID 
+	                left join onposdb.dbDepartment d3 on d3.CodeDivisi = d2.codedivisi and  d3.COMPANY_ID = db.COMPANY_ID
                 where date_format(d.transdate, '%Y-%m-%d') = date_format(now(), '%Y-%m-%d')
                 and d.Store_id = " + storedt.id + "";
                 
@@ -761,11 +761,11 @@ namespace OnPOS.Controllers
 	                            sum(d.qty) as qty,
 	                            sum(d.finalprice) as amount  
                             from
-	                            onposdb.dbsalesdtl d
-	                            left join dbstorelist db on d.store_id = db.id 
-	                            left join onposdb.dbitemmaster d2 on d.article = d2.itemid and d2.COMPANY_ID = db.COMPANY_ID 
-	                            left join onposdb.dbdepartment d3 on d3.CodeDivisi = d2.codedivisi and  d3.COMPANY_ID = db.COMPANY_ID
-	                            left join onposdb.dbdiscount d4 on d4.id = d.discountcode and d4.article = d.article
+	                            onposdb.dbSalesDtl d
+	                            left join dbStoreList db on d.store_id = db.id 
+	                            left join onposdb.dbItemMaster d2 on d.article = d2.itemid and d2.COMPANY_ID = db.COMPANY_ID 
+	                            left join onposdb.dbDepartment d3 on d3.CodeDivisi = d2.codedivisi and  d3.COMPANY_ID = db.COMPANY_ID
+	                            left join onposdb.dbDiscount d4 on d4.id = d.discountcode and d4.article = d.article
                             where date_format(d.transdate, '%Y-%m-%d') = date_format(now(), '%Y-%m-%d')
                             and d.Store_id = " + storedt.id + "";
 

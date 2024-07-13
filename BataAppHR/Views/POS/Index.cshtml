@@ -24,7 +24,9 @@
                 </div>
                 <div class="col-sm">
                     <div class="form-group">
-                        <input asp-for="trans_amount" class="form-control" style="text-align:right;font-weight:bolder;font-size:x-large;" readonly/>
+                        <input asp-for="transamtstr" class="form-control" style="text-align:right;font-weight:bolder;font-size:x-large;" readonly/>
+                        <input asp-for="trans_amount" class="form-control" type="hidden" />
+
                     </div>
 
                 </div>
@@ -278,7 +280,9 @@
                         </div>
                         <div class="col-sm">
                             <div class="form-group">
-                                <input asp-for="scanprice" class="form-control" readonly/>
+                                <input asp-for="scanpricestr" class="form-control" readonly />
+                                <input asp-for="scanprice" class="form-control" type="hidden" />
+
                             </div>
                         </div>
                     </div>
@@ -291,7 +295,8 @@
                         </div>
                         <div class="col-sm">
                             <div class="form-group">
-                                <input asp-for="scandiscount" class="form-control" readonly/>
+                                <input asp-for="scandiscountstr" class="form-control" readonly/>
+                                <input asp-for="scandiscount" class="form-control" type="hidden" />
 
                             </div>
                         </div>
@@ -626,6 +631,17 @@
             //     console.log('Your pressed Fn+F7');
             // }
         }
+        function addCommas(nStr) {
+            nStr += '';
+            var x = nStr.split(',');
+            var x1 = x[0];
+            var x2 = x.length > 1 ? ',' + x[1] : '';
+            var rgx = /(\d+)(\d{3})/;
+            while (rgx.test(x1)) {
+                x1 = x1.replace(rgx, '$1' + '.' + '$2');
+            }
+            return x1 + x2;
+        }
         function openrecapdtl(){
             recapdtltbl.clear().draw();
             $.ajax({
@@ -640,7 +656,7 @@
                     for (var i = 0; i < data.length; i++) {
                         debugger;
 
-                        recapdtltbl.row.add([data[i].transdate, data[i].invoice, data[i].article, data[i].itemdescription, data[i].articleprice, data[i].category, data[i].discounttype, data[i].discount, data[i].qty, data[i].amount]);
+                        recapdtltbl.row.add([data[i].transdate, data[i].invoice, data[i].article, data[i].itemdescription, addCommas(data[i].articleprice), data[i].category, data[i].discounttype, addCommas(data[i].discount), data[i].qty, addCommas(data[i].amount)]);
                         recapdtltbl.draw();
                         /* location.reload();*/
                     }
@@ -707,7 +723,7 @@
                         tr = $('<tr/>');
                         tr.append("<td>" + data[i].department + "</td>");
                         tr.append("<td>" + data[i].qty + "</td>");
-                        tr.append("<td>" + data[i].amount + "</td>");
+                        tr.append("<td>" + addCommas(data[i].amount) + "</td>");
 
 
 
@@ -725,6 +741,7 @@
 
         }
         $(document).ready(function () {
+           
             document.addEventListener("keydown", onKeyDown, false);
             $("#salesid").select2({
                 placeholder: "Select sales",
@@ -907,7 +924,7 @@
                                                 var totalinv = parseInt($("#trans_amount").val());
                                                 var totalinvnew = (totalinv - parseInt(dts[5])) + calculates;
                                                 $("#trans_amount").val(totalinvnew);
-
+                                                $("#transamtstr").val(addCommas(totalinvnew));
                                                 // Change the position to `Engineer`
                                                 dts[4] = inputqty;
                                                 if (disctype == "percentage") {
@@ -920,7 +937,11 @@
                                                 dts[6] = disctype;
                                                 dts[7] = calculates;
                                                 $("#scanprice").val(calculates);
+                                                $("#scanpricestr").val(addCommas(calculates));
+
                                                 $("#scandiscount").val(discounttotal);
+                                                $("#scandiscountstr").val(addCommas(discounttotal));
+
                                                 discountval = discounttotal;
                                                 subtotalval = calculates;
                                                 $("#salesid").select2("open");
@@ -959,9 +980,16 @@
                                                 valpress = 2;
                                                 discountval = discounttotal;
                                                 subtotalval = calculates;
+                                                console.log(addCommas(totalinv + calculate))
                                                 $("#trans_amount").val(totalinv + calculate);
+                                                $("#transamtstr").val(addCommas(totalinv + calculate));
+
                                                 $("#scanprice").val(calculate);
+                                                $("#scanpricestr").val(addCommas(calculate));
+
                                                 $("#scandiscount").val(discounttotal);
+                                                $("#scandiscountstr").val(addCommas(discounttotal));
+
                                                 
                                             }
                                             

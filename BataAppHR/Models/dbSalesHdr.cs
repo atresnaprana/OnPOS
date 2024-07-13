@@ -95,7 +95,11 @@ namespace OnPOS.Models
         public int lastinvoice { get; set; }
         [NotMapped]
         public string invshort { get; set; }
-      
-        
+        [NotMapped]
+        public string transamtstr { get; set; }
+        [NotMapped]
+        public string scanpricestr { get; set; }
+        [NotMapped]
+        public string scandiscountstr { get; set; }
     }
 }
