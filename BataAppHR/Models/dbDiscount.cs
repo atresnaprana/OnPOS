@@ -18,8 +18,8 @@ namespace OnPOS.Models
         public string type { get; set; }
         public int percentage { get; set; }
         public int amount { get; set; }
-        public DateTime validfrom { get; set; } = Convert.ToDateTime(DateTime.Now.ToString("dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture));
-        public DateTime validto { get; set; } = Convert.ToDateTime(DateTime.Now.ToString("dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture));
+        public DateTime validfrom { get; set; }
+        public DateTime validto { get; set; }
         public string status { get; set; }
         public string isallstore { get; set; }
 
