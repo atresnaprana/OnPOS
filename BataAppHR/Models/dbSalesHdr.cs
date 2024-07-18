@@ -4,6 +4,7 @@ using System;
 using OnPOS.Models;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Razor.Language.Extensions;
+using System.Diagnostics.Contracts;
 
 namespace OnPOS.Models
 {
@@ -101,5 +102,10 @@ namespace OnPOS.Models
         public string scanpricestr { get; set; }
         [NotMapped]
         public string scandiscountstr { get; set; }
+        [NotMapped]
+        public int storeidpass {  get; set; }
+        [NotMapped]
+        public string invoiceidpass { get; set; }
+
     }
 }

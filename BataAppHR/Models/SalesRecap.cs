@@ -14,6 +14,7 @@
         public string department { get; set; }
         public int qty { get; set; }
         public int amount { get; set; }
+        public string sz { get; set; }
 
     }
 }
