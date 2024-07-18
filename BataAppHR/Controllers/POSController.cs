@@ -593,7 +593,7 @@ namespace OnPOS.Controllers
             string filename = storeno.ToString() +"_" + invoiceno + "_Sales.pdf";
             float width = 320;
             float height = 880;
-            var fileUrlInv = Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot\InvoiceData");
+            var fileUrlInv = Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot/InvoiceData");
             var filesInv = Path.Combine(fileUrlInv, filename);
             string pdfPath = filesInv;
             var pageSize = new iText.Kernel.Geom.PageSize(width, height);
