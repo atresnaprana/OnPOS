@@ -2,6 +2,10 @@
 @{
     ViewData["Title"] = "POS";
     var errmsg = "";
+    var storeidpass = Model.storeidpass;
+    var invoiceidpass = Model.invoiceidpass;
+    var invoiceidori = Model.invoice;
+    var stringemp = "";
     // if (!string.IsNullOrEmpty(Model.syserr))
     // {
     //     errmsg = Model.syserr;
@@ -322,14 +326,14 @@
         </div>
         <div class="col-sm">
             <div class="form-group">
-                <input type="button" value="BestS - F4" onclick="alertfirst()" class="btn btn-red" />
+                <input type="button" value="BestS - F4" class="btn btn-red" />
 
             </div>
         </div>
         <div class="col-sm">
             <div class="form-group">
                 @* <input type="button" value="WorstS - F8" onclick="alertfirst()" class="btn btn-red" /> *@
-                <input type="button" value="Detail Recap - F8" onclick="alertfirst()" class="btn btn-red" />
+                <input type="button" value="Detail Recap - F8" onclick="openrecapdtl()" class="btn btn-red" />
 
             </div>
         </div>
@@ -543,6 +547,7 @@
                                 <th>
                                     article
                                 </th>
+                                <th>size</th>
                                 <th>
                                     article name
                                 </th>
@@ -597,7 +602,7 @@
                 valpress = 1;
                 $("#salesid").select2("close");
                 $("#dialogpayment").dialog("open");
-                $("#confirmtotal").val($("#trans_amount").val());
+                $("#confirmtotal").val(addCommas($("#trans_amount").val()));
             }else{
                 alert("please set crew id");
             }
@@ -654,7 +659,7 @@
                     for (var i = 0; i < data.length; i++) {
                         debugger;
 
-                        recapdtltbl.row.add([ data[i].invoice, data[i].article, data[i].itemdescription, addCommas(data[i].articleprice), data[i].category, data[i].discounttype, addCommas(data[i].discount), data[i].qty, addCommas(data[i].amount)]);
+                        recapdtltbl.row.add([data[i].invoice, data[i].article, data[i].sz, data[i].itemdescription, addCommas(data[i].articleprice), data[i].category, data[i].discounttype, addCommas(data[i].discount), data[i].qty, addCommas(data[i].amount)]);
                         recapdtltbl.draw();
                         /* location.reload();*/
                     }
@@ -738,8 +743,23 @@
             $("#dialog").dialog("open");
 
         }
+        function Base64ToBytes(base64) {
+            var s = window.atob(base64);
+            var bytes = new Uint8Array(s.length);
+            for (var i = 0; i < s.length; i++) {
+                bytes[i] = s.charCodeAt(i);
+            }
+            return bytes;
+        };
         $(document).ready(function () {
-           
+            var storeidpass = '@storeidpass';
+            var invoiceidpass = '@invoiceidpass';
+            var invoiceidori = '@invoiceidori';
+
+            if(storeidpass != '0' && invoiceidpass != ''){
+                window.location = "/POS/DownloadReceipt?invoiceno=" + invoiceidpass + "&storeno=" + storeidpass;
+                $("#invoice").val(invoiceidori);
+            }
             document.addEventListener("keydown", onKeyDown, false);
             $("#salesid").select2({
                 placeholder: "Select sales",
@@ -951,6 +971,7 @@
                                         var valdest = $("#" + id).val();
                                         $("#scanpricefull").val(parseInt(data.price1));
                                         if (data != null) {
+                                            debugger;
                                             if (parseInt(inputqty) <= parseInt(valdest)) {
                                                 var flagexist = 0;
                                                 var datas = POSTbl.rows().data();
@@ -981,7 +1002,7 @@
                                                     // Get the data for the row
                                                     var dts = rows.data();
                                                     var totalinv = parseInt($("#trans_amount").val());
-                                                    var totalinvnew = (totalinv - parseInt(dts[5])) + calculates;
+                                                    var totalinvnew = (totalinv - parseInt(dts[7].split('.').join(""))) + calculates;
                                                     $("#trans_amount").val(totalinvnew);
                                                     $("#transamtstr").val(addCommas(totalinvnew));
                                                     // Change the position to `Engineer`
@@ -990,11 +1011,11 @@
                                                         dts[5] = data.discperc;
 
                                                     } else {
-                                                        dts[5] = discounttotal;
+                                                        dts[5] = addCommas(discounttotal);
 
                                                     }
                                                     dts[6] = disctype;
-                                                    dts[7] = calculates;
+                                                    dts[7] = addCommas(calculates);
                                                     $("#scanprice").val(calculates);
                                                     $("#scanpricestr").val(addCommas(calculates));
 
@@ -1031,9 +1052,9 @@
                                                     if (disctype == "percentage") {
                                                         discval = data.discperc;
                                                     } else {
-                                                        discval = discounttotal;
+                                                        discval = addCommas(discounttotal);
                                                     }
-                                                    POSTbl.row.add([crew, article, sz, data.price1, inputqty, discval, disctype, calculate]);
+                                                    POSTbl.row.add([crew, article, sz, addCommas(data.price1), inputqty, discval, disctype, addCommas(calculate)]);
                                                     POSTbl.draw();
                                                     $("#salesid").select2("open");
                                                     valpress = 2;
@@ -1118,10 +1139,12 @@
                 }
             });
             $('#removebtn').click(function () {
+                debugger;
                 var itemid = POSTbl.row('.selected').data()[1] + POSTbl.row('.selected').data()[2];               
                 var totalinv = parseInt($("#trans_amount").val());
-                var totalinvnew = (totalinv - parseInt(POSTbl.row('.selected').data()[6]));
+                var totalinvnew = (totalinv - parseInt(POSTbl.row('.selected').data()[7].split('.').join("")));
                 $("#trans_amount").val(totalinvnew);
+                $("#transamtstr").val(addCommas(totalinvnew));
                 POSTbl.row('.selected').remove().draw(false);
                 $.ajax({
                     url: '@Url.Action("RemoveTemp", "POS")',
