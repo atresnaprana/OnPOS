@@ -596,18 +596,28 @@
 
         }
         function openPayment() {
-            
+
             var slsid = $("#salesid").val();
-            if (slsid != null) {
+            var counttbl = POSTbl.rows().count();
+            if (slsid != null && counttbl != 0) {
                 valpress = 1;
                 $("#salesid").select2("close");
                 $("#dialogpayment").dialog("open");
                 $("#confirmtotal").val(addCommas($("#trans_amount").val()));
-            }else{
-                alert("please set crew id");
+            } else {
+                var errmsg = "";
+                if (slsid == null) {
+                    errmsg += "- please set crew id\n"
+                }
+                if (counttbl == 0) {
+                    errmsg += "- no items selected\n"
+
+                }
+                alert(errmsg);
             }
-           
+
         }
+
         function onKeyDown(e) {
             var x = e.keyCode;
              console.log("x:" + x);
