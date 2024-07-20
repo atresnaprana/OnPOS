@@ -195,7 +195,7 @@ namespace OnPOS.Controllers
                     if (getdiscount.isallstore == "Y")
                     {
                         fld.discountcode = getdiscount.id;
-                        fld.disc_amount = getdiscount.amount;
+                        fld.disc_amount = getdiscount.amount * Convert.ToInt32(total);
                         fld.disc_prc = getdiscount.percentage;
 
                     }
@@ -206,7 +206,7 @@ namespace OnPOS.Controllers
                         if (checkstoreislist != null)
                         {
                             fld.discountcode = getdiscount.id;
-                            fld.disc_amount = getdiscount.amount;
+                            fld.disc_amount = getdiscount.amount * Convert.ToInt32(total);
                             fld.disc_prc = getdiscount.percentage;
 
                         }
