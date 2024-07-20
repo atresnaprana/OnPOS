@@ -10,6 +10,8 @@
         public string invoice { get; set; }
         public string discounttype { get; set; }
         public int discount { get; set; }
+        public string discountstr { get; set; }
+
         public int articleprice { get; set; }
         public string department { get; set; }
         public int qty { get; set; }
