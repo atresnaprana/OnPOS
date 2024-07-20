@@ -609,6 +609,8 @@ namespace OnPOS.Controllers
                 document.Add(new Paragraph("Phone: " + storedt.STORE_MANAGER_PHONE).SetFontSize(11));
                 document.Add(new Paragraph("Date: " + datahdr.transdate.ToString("dd/MM/yyyy")).SetFontSize(11));
                 document.Add(new Paragraph("Time: " + datahdr.transdate.ToString("HH:mm:ss")).SetFontSize(11));
+                document.Add(new Paragraph("Invoice: " + invoiceno).SetFontSize(11));
+
                 document.Add(new Paragraph("=================================").SetFontSize(12));
 
                 // Add receipt items

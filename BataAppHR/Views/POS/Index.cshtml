@@ -1018,13 +1018,13 @@
                                                     // Change the position to `Engineer`
                                                     dts[4] = inputqty;
                                                     if (disctype == "percentage") {
-                                                        dts[5] = data.discperc;
+                                                        dts[6] = data.discperc;
 
                                                     } else {
-                                                        dts[5] = addCommas(discounttotal);
+                                                        dts[6] = addCommas(discounttotal);
 
                                                     }
-                                                    dts[6] = disctype;
+                                                    dts[5] = disctype;
                                                     dts[7] = addCommas(calculates);
                                                     $("#scanprice").val(calculates);
                                                     $("#scanpricestr").val(addCommas(calculates));
@@ -1064,7 +1064,7 @@
                                                     } else {
                                                         discval = addCommas(discounttotal);
                                                     }
-                                                    POSTbl.row.add([crew, article, sz, addCommas(data.price1), inputqty, discval, disctype, addCommas(calculate)]);
+                                                    POSTbl.row.add([crew, article, sz, addCommas(data.price1), inputqty, disctype, discval, addCommas(calculate)]);
                                                     POSTbl.draw();
                                                     $("#salesid").select2("open");
                                                     valpress = 2;
