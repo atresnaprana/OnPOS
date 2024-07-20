@@ -951,6 +951,16 @@ namespace OnPOS.Controllers
                         fld.invoice = reader["invoice"].ToString();
                         fld.discounttype = reader["discounttype"].ToString();
                         fld.discount = Convert.ToInt32(reader["Discount"].ToString());
+
+                        if (fld.discounttype == "percentage")
+                        {
+                            fld.discountstr = fld.discount.ToString() + "%";
+                        }
+                        else
+                        {
+                            fld.discountstr = fld.discount.ToString();
+                        }
+
                         fld.articleprice = Convert.ToInt32(reader["price"].ToString());
                         fld.qty = Convert.ToInt32(reader["qty"].ToString());
                         fld.amount = Convert.ToInt32(reader["amount"].ToString());

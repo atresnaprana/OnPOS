@@ -668,8 +668,13 @@
                     //Append each row to html table
                     for (var i = 0; i < data.length; i++) {
                         debugger;
+                        if (data[i].discounttype == "percentage") {
+                            recapdtltbl.row.add([data[i].invoice, data[i].article, data[i].sz, data[i].itemdescription, addCommas(data[i].articleprice), data[i].category, data[i].discounttype, data[i].discountstr, data[i].qty, addCommas(data[i].amount)]);
 
-                        recapdtltbl.row.add([data[i].invoice, data[i].article, data[i].sz, data[i].itemdescription, addCommas(data[i].articleprice), data[i].category, data[i].discounttype, addCommas(data[i].discount), data[i].qty, addCommas(data[i].amount)]);
+                        } else {
+                            recapdtltbl.row.add([data[i].invoice, data[i].article, data[i].sz, data[i].itemdescription, addCommas(data[i].articleprice), data[i].category, data[i].discounttype, addCommas(data[i].discountstr), data[i].qty, addCommas(data[i].amount)]);
+
+                        }
                         recapdtltbl.draw();
                         /* location.reload();*/
                     }
@@ -1018,7 +1023,7 @@
                                                     // Change the position to `Engineer`
                                                     dts[4] = inputqty;
                                                     if (disctype == "percentage") {
-                                                        dts[6] = data.discperc;
+                                                        dts[6] = data.discperc + "%";
 
                                                     } else {
                                                         dts[6] = addCommas(discounttotal);
@@ -1060,7 +1065,7 @@
                                                     var crew = $("#salesid").val();
                                                     var discval = 0;
                                                     if (disctype == "percentage") {
-                                                        discval = data.discperc;
+                                                        discval = data.discperc + "%";
                                                     } else {
                                                         discval = addCommas(discounttotal);
                                                     }
