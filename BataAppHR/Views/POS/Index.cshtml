@@ -1005,8 +1005,8 @@
 
                                                             calculates = Math.round(calculates - discounttotal);
                                                         } else {
-                                                            discounttotal = data.discamt;
-                                                            calculates = calculates - data.discamt;
+                                                            discounttotal = data.discamt * parseInt(inputqty);
+                                                            calculates = calculates - (data.discamt * parseInt(inputqty));
                                                         }
                                                     }
                                                     // Get the data for the row
@@ -1053,8 +1053,8 @@
                                                             discounttotal = Math.round(((calculate * data.discperc) / 100));
                                                             calculate = Math.round(calculate - discounttotal);
                                                         } else {
-                                                            discounttotal = data.discamt;
-                                                            calculate = calculate - data.discamt;
+                                                            discounttotal = data.discamt * parseInt(inputqty);
+                                                            calculate = calculate - (data.discamt * parseInt(inputqty));
                                                         }
                                                     }
                                                     var crew = $("#salesid").val();
