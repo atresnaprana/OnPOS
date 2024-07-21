@@ -4,14 +4,16 @@ using BataAppHR.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BataAppHR.Migrations.FormDB
 {
     [DbContext(typeof(FormDBContext))]
-    partial class FormDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240720135647_fixupdateuserlen")]
+    partial class fixupdateuserlen
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -549,9 +551,6 @@ namespace BataAppHR.Migrations.FormDB
 
                     b.Property<string>("color")
                         .HasColumnType("varchar(50)");
-
-                    b.Property<string>("gender")
-                        .HasColumnType("varchar(100)");
 
                     b.Property<string>("itemdescription")
                         .HasColumnType("varchar(255)");

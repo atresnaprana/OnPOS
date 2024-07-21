@@ -39,8 +39,9 @@ namespace OnPOS.Models
         public int? CY_amount { get; set; }
         public int? LY_qty { get; set; }
         public int? LY_amount { get; set; }
+        public string gender { get; set; }
 
-        
+
         public string brand { get; set; }
 
         public DateTime ENTRY_DATE { get; set; }
