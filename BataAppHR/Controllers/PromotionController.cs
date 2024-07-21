@@ -230,7 +230,16 @@ namespace OnPOS.Controllers
                     storeintlist.Add(lst.storeid);
                 }
                 fld.storeidlist = storeintlist;
-            }   
+            }
+            if(fld.status == "1")
+            {
+                fld.isactive = true;
+
+            }
+            else
+            {
+                fld.isactive = false;
+            }
             if (fld == null)
             {
                 return NotFound();
