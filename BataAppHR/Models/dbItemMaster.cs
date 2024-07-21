@@ -21,6 +21,7 @@ namespace OnPOS.Models
         public string category { get; set; }
         public string subcategory { get; set; }
         public string itemdescription { get; set; }
+        
 
         [DisplayFormat(DataFormatString = "{0:0}", ApplyFormatInEditMode = true)]
         public decimal price1 { get; set; }
@@ -51,6 +52,8 @@ namespace OnPOS.Models
         public string FLAG_AKTIF { get; set; }
         public string codedivisi { get; set; }
 
+        [NotMapped]
+        public List<DropDownModel> ddgender { get; set; }
         [NotMapped]
         public int discperc { get; set; }
         [NotMapped]

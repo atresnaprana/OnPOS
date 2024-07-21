@@ -56,6 +56,7 @@ namespace OnPOS.Controllers
         {
             var data = db.CustomerTbl.Where(y => y.Email == User.Identity.Name).FirstOrDefault();
             var getItemList = db.ItemMasterTbl.Where(y => y.COMPANY_ID == data.COMPANY_ID).ToList();
+           
             return View(getItemList);
         }
         [HttpGet]
@@ -70,6 +71,13 @@ namespace OnPOS.Controllers
             {
                 id = y.CodeDivisi,
                 name = y.DivisiName
+
+
+            }).ToList();
+            fld.ddgender = db.DepartmentTbl.Where(y => y.COMPANY_ID == data.COMPANY_ID && y.FLAG_AKTIF == "1").ToList().Select(y => new DropDownModel()
+            {
+                id = y.gendercode,
+                name = y.gender
 
 
             }).ToList();
@@ -156,6 +164,13 @@ namespace OnPOS.Controllers
             {
                 id = y.CodeDivisi,
                 name = y.DivisiName
+
+
+            }).ToList();
+            fld.ddgender = db.DepartmentTbl.Where(y => y.COMPANY_ID == data.COMPANY_ID && y.FLAG_AKTIF == "1").ToList().Select(y => new DropDownModel()
+            {
+                id = y.gendercode,
+                name = y.gender
 
 
             }).ToList();
