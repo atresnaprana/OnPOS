@@ -596,14 +596,14 @@
 
         }
         function openPayment() {
-
+            debugger;
             var slsid = $("#salesid").val();
             var counttbl = POSTbl.rows().count();
             if (slsid != null && counttbl != 0) {
                 valpress = 1;
                 $("#salesid").select2("close");
                 $("#dialogpayment").dialog("open");
-                $("#confirmtotal").val(addCommas($("#trans_amount").val()));
+                $("#confirmtotal").val($("#transamtstr").val());
             } else {
                 var errmsg = "";
                 if (slsid == null) {
