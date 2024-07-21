@@ -53,6 +53,12 @@
                 <span asp-validation-for="codedivisi" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label class="control-label">Gender</label>
+                <br />
+                @Html.DropDownListFor(m => m.gender, new SelectList(Model.ddgender, "id", "name"), new { @class = "form-control" })
+                <span asp-validation-for="gender" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="size" class="control-label"></label>
                 <input asp-for="size" class="form-control" />
                 <span asp-validation-for="size" class="text-danger"></span>
@@ -126,7 +132,15 @@
             $("#subcategory").val(null);
             $("#subcategory").trigger('change');
             $("#subcategory").prop('disabled', true);
-
+            $("#gender").select2({
+                placeholder: "Select gender",
+                initSelection: function (element, callback) {
+                },
+                dropdownAutoWidth: true,
+                width: 'auto'
+            });
+            $("#gender").val(null);
+            $("#gender").trigger('change');
          
         });
         $('#category').on('change', function () {

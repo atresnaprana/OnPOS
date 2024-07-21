@@ -265,6 +265,7 @@ namespace BataAppHR.Data
             modelBuilder.Entity<dbItemMaster>().Property(ug => ug.month_amount).HasColumnType("int").IsRequired(false);
             modelBuilder.Entity<dbItemMaster>().Property(ug => ug.month_qty).HasColumnType("int").IsRequired(false);
             modelBuilder.Entity<dbItemMaster>().Property(ug => ug.year_age).HasColumnType("int").IsRequired(false);
+            modelBuilder.Entity<dbItemMaster>().Property(ug => ug.gender).HasColumnType("varchar(100)");
 
 
             //dbCategory
@@ -274,7 +275,7 @@ namespace BataAppHR.Data
             modelBuilder.Entity<dbCategory>().Property(ug => ug.description).HasColumnType("varchar(100)");
             modelBuilder.Entity<dbCategory>().Property(ug => ug.FLAG_AKTIF).HasColumnType("varchar(1)").IsRequired(false);
             modelBuilder.Entity<dbCategory>().Property(ug => ug.ENTRY_USER).HasColumnType("varchar(50)").IsRequired(false);
-            modelBuilder.Entity<dbCategory>().Property(ug => ug.UPDATE_USER).HasColumnType("varchar(10)").IsRequired();
+            modelBuilder.Entity<dbCategory>().Property(ug => ug.UPDATE_USER).HasColumnType("varchar(60)").IsRequired();
             modelBuilder.Entity<dbCategory>().Property(ug => ug.ENTRY_DATE).HasColumnType("date");
             modelBuilder.Entity<dbCategory>().Property(ug => ug.UPDATE_DATE).HasColumnType("date");
 
@@ -286,7 +287,7 @@ namespace BataAppHR.Data
             modelBuilder.Entity<dbSubCategory>().Property(ug => ug.description).HasColumnType("varchar(100)");
             modelBuilder.Entity<dbSubCategory>().Property(ug => ug.FLAG_AKTIF).HasColumnType("varchar(1)").IsRequired(false);
             modelBuilder.Entity<dbSubCategory>().Property(ug => ug.ENTRY_USER).HasColumnType("varchar(50)").IsRequired(false);
-            modelBuilder.Entity<dbSubCategory>().Property(ug => ug.UPDATE_USER).HasColumnType("varchar(10)").IsRequired();
+            modelBuilder.Entity<dbSubCategory>().Property(ug => ug.UPDATE_USER).HasColumnType("varchar(60)").IsRequired();
             modelBuilder.Entity<dbSubCategory>().Property(ug => ug.ENTRY_DATE).HasColumnType("date");
             modelBuilder.Entity<dbSubCategory>().Property(ug => ug.UPDATE_DATE).HasColumnType("date");
 
@@ -299,7 +300,7 @@ namespace BataAppHR.Data
             modelBuilder.Entity<dbItemStore>().Property(ug => ug.itemid).HasColumnType("varchar(50)");
             modelBuilder.Entity<dbItemStore>().Property(ug => ug.FLAG_AKTIF).HasColumnType("varchar(1)").IsRequired(false);
             modelBuilder.Entity<dbItemStore>().Property(ug => ug.ENTRY_USER).HasColumnType("varchar(50)").IsRequired(false);
-            modelBuilder.Entity<dbItemStore>().Property(ug => ug.UPDATE_USER).HasColumnType("varchar(10)").IsRequired();
+            modelBuilder.Entity<dbItemStore>().Property(ug => ug.UPDATE_USER).HasColumnType("varchar(60)").IsRequired();
             modelBuilder.Entity<dbItemStore>().Property(ug => ug.ENTRY_DATE).HasColumnType("date");
             modelBuilder.Entity<dbItemStore>().Property(ug => ug.UPDATE_DATE).HasColumnType("date");
 

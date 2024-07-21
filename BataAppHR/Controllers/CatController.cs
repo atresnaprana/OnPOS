@@ -59,8 +59,9 @@ namespace OnPOS.Controllers
         [Authorize(Roles = "CustomerOnPos")]
         public IActionResult Create()
         {
+            dbCategory fld = new dbCategory();
 
-            return View();
+            return View(fld);
         }
         [Authorize]
         [HttpPost]
