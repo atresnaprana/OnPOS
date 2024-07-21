@@ -43,7 +43,7 @@ namespace OnPOS.Models
         public int scanqty { get; set; }
 
         [NotMapped]
-        public int confirmtotal { get; set; }
+        public string confirmtotal { get; set; }
 
 
         [NotMapped]
