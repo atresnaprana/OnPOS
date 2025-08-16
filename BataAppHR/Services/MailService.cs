@@ -23,7 +23,10 @@ namespace BataAppHR.Services
         {
             var email = new MimeMessage();
             email.Sender = MailboxAddress.Parse(_mailSettings.Mail);
+            email.From.Add(MailboxAddress.Parse(_mailSettings.Mail));  // This was missing before
+
             email.To.Add(MailboxAddress.Parse(mailRequest.ToEmail));
+
             email.Subject = mailRequest.Subject;
             var builder = new BodyBuilder();
             if (mailRequest.Attachments != null)
@@ -45,7 +48,11 @@ namespace BataAppHR.Services
             builder.HtmlBody = mailRequest.Body;
             email.Body = builder.ToMessageBody();
             using var smtp = new SmtpClient();
-            smtp.Connect(_mailSettings.Host, _mailSettings.Port, SecureSocketOptions.StartTls);
+            smtp.ServerCertificateValidationCallback = (s, c, h, e) => true;
+            SecureSocketOptions options = (_mailSettings.Port == 465) ? SecureSocketOptions.SslOnConnect : SecureSocketOptions.StartTls;
+
+            smtp.Connect(_mailSettings.Host, _mailSettings.Port, options);
+
             smtp.Authenticate(_mailSettings.Mail, _mailSettings.Password);
             await smtp.SendAsync(email);
             smtp.Disconnect(true);
@@ -59,6 +66,8 @@ namespace BataAppHR.Services
             MailText = MailText.Replace("[username]", request.UserName).Replace("[email]", request.ToEmail);
             var email = new MimeMessage();
             email.Sender = MailboxAddress.Parse(_mailSettings.Mail);
+            email.From.Add(MailboxAddress.Parse(_mailSettings.Mail));  // This was missing before
+
             email.To.Add(MailboxAddress.Parse(request.ToEmail));
             email.Subject = $"Welcome {request.UserName}";
             var builder = new BodyBuilder();
@@ -81,7 +90,10 @@ namespace BataAppHR.Services
             builder.HtmlBody = MailText;
             email.Body = builder.ToMessageBody();
             using var smtp = new SmtpClient();
-            smtp.Connect(_mailSettings.Host, _mailSettings.Port, SecureSocketOptions.StartTls);
+            smtp.ServerCertificateValidationCallback = (s, c, h, e) => true;
+            SecureSocketOptions options = (_mailSettings.Port == 465) ? SecureSocketOptions.SslOnConnect : SecureSocketOptions.StartTls;
+
+            smtp.Connect(_mailSettings.Host, _mailSettings.Port, options);
             smtp.Authenticate(_mailSettings.Mail, _mailSettings.Password);
             await smtp.SendAsync(email);
             smtp.Disconnect(true);
@@ -95,6 +107,8 @@ namespace BataAppHR.Services
             MailText = MailText.Replace("[username]", request.UserName).Replace("[token]", request.callbackurl);
             var email = new MimeMessage();
             email.Sender = MailboxAddress.Parse(_mailSettings.Mail);
+            email.From.Add(MailboxAddress.Parse(_mailSettings.Mail));  // This was missing before
+
             email.To.Add(MailboxAddress.Parse(request.ToEmail));
             email.Subject = $"Welcome {request.UserName}";
             var builder = new BodyBuilder();
@@ -102,7 +116,7 @@ namespace BataAppHR.Services
 
             //var fileUrl = Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot");
             //var files = Path.Combine(fileUrl, "FileCodeofConduct.pdf");
-         
+
             //builder.Attachments.Add(files);
 
             //using (var stream = new FileStream(files, FileMode.Create))
@@ -129,7 +143,10 @@ namespace BataAppHR.Services
             builder.HtmlBody = MailText;
             email.Body = builder.ToMessageBody();
             using var smtp = new SmtpClient();
-            smtp.Connect(_mailSettings.Host, _mailSettings.Port, SecureSocketOptions.StartTlsWhenAvailable);
+            smtp.ServerCertificateValidationCallback = (s, c, h, e) => true;
+            SecureSocketOptions options = (_mailSettings.Port == 465) ? SecureSocketOptions.SslOnConnect : SecureSocketOptions.StartTls;
+
+            smtp.Connect(_mailSettings.Host, _mailSettings.Port, options);
             smtp.Authenticate(_mailSettings.Mail, _mailSettings.Password);
             await smtp.SendAsync(email);
             smtp.Disconnect(true);
