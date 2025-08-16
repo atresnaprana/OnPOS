@@ -21,6 +21,7 @@ namespace OnPOS.Models
         public string category { get; set; }
         public string subcategory { get; set; }
         public string itemdescription { get; set; }
+        
 
         [DisplayFormat(DataFormatString = "{0:0}", ApplyFormatInEditMode = true)]
         public decimal price1 { get; set; }
@@ -39,8 +40,9 @@ namespace OnPOS.Models
         public int? CY_amount { get; set; }
         public int? LY_qty { get; set; }
         public int? LY_amount { get; set; }
+        public string gender { get; set; }
 
-        
+
         public string brand { get; set; }
 
         public DateTime ENTRY_DATE { get; set; }
@@ -48,7 +50,10 @@ namespace OnPOS.Models
         public string ENTRY_USER { get; set; }
         public string UPDATE_USER { get; set; }
         public string FLAG_AKTIF { get; set; }
+        public string codedivisi { get; set; }
 
+        [NotMapped]
+        public List<DropDownModel> ddgender { get; set; }
         [NotMapped]
         public int discperc { get; set; }
         [NotMapped]
@@ -68,6 +73,8 @@ namespace OnPOS.Models
         public List<dbStoreList> StoreList { get; set; }
         [NotMapped]
         public List<dbItemStore> itemSettings { get; set; }
+        [NotMapped]
+        public List<DropDownModel> ddDepartment { get; set; }
 
     }
 }

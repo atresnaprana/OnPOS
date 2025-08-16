@@ -3,6 +3,8 @@ using System.ComponentModel.DataAnnotations;
 using System;
 using OnPOS.Models;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Razor.Language.Extensions;
+using System.Diagnostics.Contracts;
 
 namespace OnPOS.Models
 {
@@ -10,7 +12,6 @@ namespace OnPOS.Models
     {
         public string invoice { get; set; }
         public int Store_id { get; set; }
-        public int staff_id { get; set; }
         public DateTime transdate { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:N2}")]
@@ -24,6 +25,12 @@ namespace OnPOS.Models
         [NotMapped]
         public string scanitem { get; set; }
         [NotMapped]
+        public string transtypehidden { get; set; }
+        [NotMapped]
+        public string cardnumhidden { get; set; }
+        [NotMapped]
+        public string approvalhidden { get; set; }
+        [NotMapped]
         public string username { get; set; }
         [NotMapped]
         public List<dbSalesDtl> salesDtl { get; set; }
@@ -36,7 +43,7 @@ namespace OnPOS.Models
         public int scanqty { get; set; }
 
         [NotMapped]
-        public int confirmtotal { get; set; }
+        public string confirmtotal { get; set; }
 
 
         [NotMapped]
@@ -45,6 +52,8 @@ namespace OnPOS.Models
         public decimal? scanprice { get; set; }
         [NotMapped]
         public decimal? scandiscount { get; set; }
+        [NotMapped]
+        public int scanpricefull { get; set; }
         [NotMapped]
         public int s33 { get; set; }
         [NotMapped]
@@ -61,6 +70,7 @@ namespace OnPOS.Models
         public int s39 { get; set; }
         [NotMapped]
         public int s40 { get; set; }
+        [NotMapped]
         public int s41 { get; set; }
         [NotMapped]
         public int s42 { get; set; }
@@ -82,6 +92,20 @@ namespace OnPOS.Models
         public List<DropDownModel> ddStaff { get; set; }
         [NotMapped]
         public dbStoreList storedata { get;set; }
+        [NotMapped]
+        public int lastinvoice { get; set; }
+        [NotMapped]
+        public string invshort { get; set; }
+        [NotMapped]
+        public string transamtstr { get; set; }
+        [NotMapped]
+        public string scanpricestr { get; set; }
+        [NotMapped]
+        public string scandiscountstr { get; set; }
+        [NotMapped]
+        public int storeidpass {  get; set; }
+        [NotMapped]
+        public string invoiceidpass { get; set; }
 
     }
 }

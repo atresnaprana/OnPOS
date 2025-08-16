@@ -4,14 +4,16 @@ using BataAppHR.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BataAppHR.Migrations.FormDB
 {
     [DbContext(typeof(FormDBContext))]
-    partial class FormDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240706070255_adddiscountstore")]
+    partial class adddiscountstore
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -54,7 +56,7 @@ namespace BataAppHR.Migrations.FormDB
 
                     b.Property<string>("UPDATE_USER")
                         .IsRequired()
-                        .HasColumnType("varchar(60)");
+                        .HasColumnType("varchar(10)");
 
                     b.HasKey("ID")
                         .HasName("PK_MENU_Seq");
@@ -92,7 +94,7 @@ namespace BataAppHR.Migrations.FormDB
 
                     b.Property<string>("UPDATE_USER")
                         .IsRequired()
-                        .HasColumnType("varchar(60)");
+                        .HasColumnType("varchar(10)");
 
                     b.HasKey("ID")
                         .HasName("PK_TAB_Seq");
@@ -309,7 +311,7 @@ namespace BataAppHR.Migrations.FormDB
 
                     b.Property<string>("UPDATE_USER")
                         .IsRequired()
-                        .HasColumnType("varchar(60)");
+                        .HasColumnType("varchar(10)");
 
                     b.HasKey("ID")
                         .HasName("PK_SliderImg");
@@ -344,7 +346,7 @@ namespace BataAppHR.Migrations.FormDB
 
                     b.Property<string>("UPDATE_USER")
                         .IsRequired()
-                        .HasColumnType("varchar(60)");
+                        .HasColumnType("varchar(10)");
 
                     b.Property<string>("description")
                         .HasColumnType("varchar(100)");
@@ -366,68 +368,6 @@ namespace BataAppHR.Migrations.FormDB
                         .HasName("PK_Company_Seq");
 
                     b.ToTable("dbCompany_seq");
-                });
-
-            modelBuilder.Entity("OnPOS.Models.dbDepartment", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("COMPANY_ID")
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<string>("CodeDivisi")
-                        .HasColumnType("varchar(2)");
-
-                    b.Property<string>("Color")
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<string>("DivisiName")
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<DateTime>("ENTRY_DATE")
-                        .HasColumnType("date");
-
-                    b.Property<string>("ENTRY_USER")
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<string>("FLAG_AKTIF")
-                        .HasColumnType("varchar(1)");
-
-                    b.Property<DateTime>("UPDATE_DATE")
-                        .HasColumnType("date");
-
-                    b.Property<string>("UPDATE_USER")
-                        .IsRequired()
-                        .HasColumnType("varchar(10)");
-
-                    b.Property<string>("codemaincat")
-                        .HasColumnType("varchar(2)");
-
-                    b.Property<string>("codesubcat")
-                        .HasColumnType("varchar(2)");
-
-                    b.Property<string>("colorcode")
-                        .HasColumnType("varchar(2)");
-
-                    b.Property<string>("gender")
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<string>("gendercode")
-                        .HasColumnType("varchar(2)");
-
-                    b.Property<string>("maincat")
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<string>("subcat")
-                        .HasColumnType("varchar(100)");
-
-                    b.HasKey("Id")
-                        .HasName("PK_Department");
-
-                    b.ToTable("dbDepartment");
                 });
 
             modelBuilder.Entity("OnPOS.Models.dbDiscount", b =>
@@ -459,9 +399,6 @@ namespace BataAppHR.Migrations.FormDB
                     b.Property<int>("percentage")
                         .HasColumnType("int");
 
-                    b.Property<string>("promo_name")
-                        .HasColumnType("varchar(255)");
-
                     b.Property<string>("status")
                         .HasColumnType("varchar(1)");
 
@@ -475,10 +412,10 @@ namespace BataAppHR.Migrations.FormDB
                         .HasColumnType("varchar(255)");
 
                     b.Property<DateTime>("validfrom")
-                        .HasColumnType("datetime");
+                        .HasColumnType("date");
 
                     b.Property<DateTime>("validto")
-                        .HasColumnType("datetime");
+                        .HasColumnType("date");
 
                     b.HasKey("id")
                         .HasName("PK_Discount");
@@ -544,14 +481,8 @@ namespace BataAppHR.Migrations.FormDB
                     b.Property<string>("category")
                         .HasColumnType("varchar(50)");
 
-                    b.Property<string>("codedivisi")
-                        .HasColumnType("varchar(2)");
-
                     b.Property<string>("color")
                         .HasColumnType("varchar(50)");
-
-                    b.Property<string>("gender")
-                        .HasColumnType("varchar(100)");
 
                     b.Property<string>("itemdescription")
                         .HasColumnType("varchar(255)");
@@ -619,7 +550,7 @@ namespace BataAppHR.Migrations.FormDB
 
                     b.Property<string>("UPDATE_USER")
                         .IsRequired()
-                        .HasColumnType("varchar(60)");
+                        .HasColumnType("varchar(10)");
 
                     b.Property<string>("itemid")
                         .HasColumnType("varchar(50)");
@@ -638,11 +569,6 @@ namespace BataAppHR.Migrations.FormDB
 
             modelBuilder.Entity("OnPOS.Models.dbSalesDtl", b =>
                 {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn);
-
                     b.Property<string>("article")
                         .IsRequired()
                         .HasColumnType("varchar(50)");
@@ -657,9 +583,6 @@ namespace BataAppHR.Migrations.FormDB
                         .HasColumnType("int");
 
                     b.Property<int>("discountcode")
-                        .HasColumnType("int");
-
-                    b.Property<int>("finalprice")
                         .HasColumnType("int");
 
                     b.Property<string>("invoice")
@@ -714,9 +637,6 @@ namespace BataAppHR.Migrations.FormDB
                     b.Property<int>("s46")
                         .HasColumnType("int");
 
-                    b.Property<int>("staff_id")
-                        .HasColumnType("int");
-
                     b.Property<int>("store_id")
                         .HasColumnType("int");
 
@@ -732,9 +652,6 @@ namespace BataAppHR.Migrations.FormDB
                     b.Property<string>("update_user")
                         .HasColumnType("varchar(255)");
 
-                    b.HasKey("id")
-                        .HasName("PK_Salesdtl");
-
                     b.ToTable("dbSalesDtl");
                 });
 
@@ -743,23 +660,30 @@ namespace BataAppHR.Migrations.FormDB
                     b.Property<int>("Store_id")
                         .HasColumnType("int");
 
-                    b.Property<string>("invoice")
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<DateTime>("transdate")
-                        .HasColumnType("datetime");
-
                     b.Property<string>("approval_code")
                         .HasColumnType("varchar(100)");
 
                     b.Property<string>("cardnum")
                         .HasColumnType("varchar(100)");
 
+                    b.Property<string>("invoice")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<int>("s41")
+                        .HasColumnType("int");
+
+                    b.Property<int>("staff_id")
+                        .HasColumnType("int");
+
                     b.Property<int>("trans_amount")
                         .HasColumnType("int");
 
                     b.Property<int>("trans_qty")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("transdate")
+                        .HasColumnType("datetime");
 
                     b.Property<string>("transtype")
                         .HasColumnType("varchar(100)");
@@ -769,9 +693,6 @@ namespace BataAppHR.Migrations.FormDB
 
                     b.Property<string>("update_user")
                         .HasColumnType("varchar(255)");
-
-                    b.HasKey("Store_id", "invoice", "transdate")
-                        .HasName("PKSaleshdr");
 
                     b.ToTable("dbSalesHdr");
                 });
@@ -1061,7 +982,7 @@ namespace BataAppHR.Migrations.FormDB
 
                     b.Property<string>("UPDATE_USER")
                         .IsRequired()
-                        .HasColumnType("varchar(60)");
+                        .HasColumnType("varchar(10)");
 
                     b.Property<string>("description")
                         .HasColumnType("varchar(100)");

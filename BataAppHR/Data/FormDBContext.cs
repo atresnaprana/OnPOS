@@ -6,6 +6,7 @@ using BataAppHR.Models;
 using OnPOS.Models;
 
 using Microsoft.EntityFrameworkCore;
+using System.Security.Policy;
 
 namespace BataAppHR.Data
 {
@@ -24,8 +25,11 @@ namespace BataAppHR.Data
         public DbSet<dbSalesStaff> SalesStaffTbl { get; set; }
         public DbSet<dbStoreStockModel> StockTbl { get; set; }
         public DbSet<dbDiscount> DiscTbl { get; set; }
+        public DbSet<dbDiscountStoreList> StoreDiscTbl { get; set; }
+
         public DbSet<dbSalesHdr> saleshdrtbl { get; set; }
         public DbSet<dbSalesDtl> salesdtltbl { get; set; }
+        public DbSet<dbDepartment> DepartmentTbl { get; set; }
 
 
         public FormDBContext(DbContextOptions<FormDBContext> options) : base(options)
@@ -54,8 +58,11 @@ namespace BataAppHR.Data
             modelBuilder.Entity<dbSalesStaff>().ToTable("dbSalesStaff");
             modelBuilder.Entity<dbStoreStockModel>().ToTable("dbStoreStock");
             modelBuilder.Entity<dbDiscount>().ToTable("dbDiscount");
-            modelBuilder.Entity<dbSalesHdr>().ToTable("dbSalesHdr").HasNoKey();
-            modelBuilder.Entity<dbSalesDtl>().ToTable("dbSalesDtl").HasNoKey();
+            modelBuilder.Entity<dbSalesHdr>().ToTable("dbSalesHdr");
+            modelBuilder.Entity<dbSalesDtl>().ToTable("dbSalesDtl");
+            modelBuilder.Entity<dbDepartment>().ToTable("dbDepartment");
+
+            modelBuilder.Entity<dbDiscountStoreList>().ToTable("dbDiscountStoreList").HasNoKey();
 
 
             modelBuilder.Entity<SystemTabModel>().HasKey(ug => ug.ID).HasName("PK_TAB_Seq");
@@ -72,6 +79,12 @@ namespace BataAppHR.Data
             modelBuilder.Entity<dbItemStore>().HasKey(ug => ug.id).HasName("PK_ItemStore");
             modelBuilder.Entity<dbSalesStaff>().HasKey(ug => ug.id).HasName("PK_SalesStaff");
             modelBuilder.Entity<dbDiscount>().HasKey(ug => ug.id).HasName("PK_Discount");
+            modelBuilder.Entity<dbDepartment>().HasKey(ug => ug.Id).HasName("PK_Department");
+            modelBuilder.Entity<dbSalesDtl>().HasKey(ug => ug.id).HasName("PK_Salesdtl");
+
+            modelBuilder.Entity<dbSalesHdr>().HasKey(ug => new { ug.Store_id, ug.invoice, ug.transdate }).HasName("PKSaleshdr");
+            //modelBuilder.Entity<dbSalesDtl>().HasKey(ug => new { ug.store_id, ug.invoice, ug.transdate, ug.article }).HasName("PKSalesdtl");
+
 
             // Configure indexes  
             //modelBuilder.Entity<UserGroup>().HasIndex(p => p.Name).IsUnique().HasDatabaseName("Idx_Name");  
@@ -91,7 +104,7 @@ namespace BataAppHR.Data
             modelBuilder.Entity<SystemTabModel>().Property(ug => ug.TAB_TXT).HasColumnType("varchar(255)").IsRequired(false);
             modelBuilder.Entity<SystemTabModel>().Property(ug => ug.FLAG_AKTIF).HasColumnType("varchar(1)").IsRequired(false);
             modelBuilder.Entity<SystemTabModel>().Property(ug => ug.ENTRY_USER).HasColumnType("varchar(50)").IsRequired(false);
-            modelBuilder.Entity<SystemTabModel>().Property(ug => ug.UPDATE_USER).HasColumnType("varchar(10)").IsRequired();
+            modelBuilder.Entity<SystemTabModel>().Property(ug => ug.UPDATE_USER).HasColumnType("varchar(60)").IsRequired();
             modelBuilder.Entity<SystemTabModel>().Property(ug => ug.ENTRY_DATE).HasColumnType("date");
             modelBuilder.Entity<SystemTabModel>().Property(ug => ug.UPDATE_DATE).HasColumnType("date");
 
@@ -103,7 +116,7 @@ namespace BataAppHR.Data
             modelBuilder.Entity<SystemMenuModel>().Property(ug => ug.MENU_TXT).HasColumnType("varchar(255)").IsRequired(false);
             modelBuilder.Entity<SystemMenuModel>().Property(ug => ug.FLAG_AKTIF).HasColumnType("varchar(1)").IsRequired(false);
             modelBuilder.Entity<SystemMenuModel>().Property(ug => ug.ENTRY_USER).HasColumnType("varchar(50)").IsRequired(false);
-            modelBuilder.Entity<SystemMenuModel>().Property(ug => ug.UPDATE_USER).HasColumnType("varchar(10)").IsRequired();
+            modelBuilder.Entity<SystemMenuModel>().Property(ug => ug.UPDATE_USER).HasColumnType("varchar(60)").IsRequired();
             modelBuilder.Entity<SystemMenuModel>().Property(ug => ug.ENTRY_DATE).HasColumnType("date");
             modelBuilder.Entity<SystemMenuModel>().Property(ug => ug.UPDATE_DATE).HasColumnType("date");
 
@@ -117,7 +130,7 @@ namespace BataAppHR.Data
             modelBuilder.Entity<dbSliderImg>().Property(ug => ug.IMG_DESC).HasColumnType("MediumBlob").IsRequired(false);
             modelBuilder.Entity<dbSliderImg>().Property(ug => ug.FLAG_AKTIF).HasColumnType("varchar(1)").IsRequired(false);
             modelBuilder.Entity<dbSliderImg>().Property(ug => ug.ENTRY_USER).HasColumnType("varchar(50)").IsRequired(false);
-            modelBuilder.Entity<dbSliderImg>().Property(ug => ug.UPDATE_USER).HasColumnType("varchar(10)").IsRequired();
+            modelBuilder.Entity<dbSliderImg>().Property(ug => ug.UPDATE_USER).HasColumnType("varchar(60)").IsRequired();
             modelBuilder.Entity<dbSliderImg>().Property(ug => ug.ENTRY_DATE).HasColumnType("date");
             modelBuilder.Entity<dbSliderImg>().Property(ug => ug.UPDATE_DATE).HasColumnType("date");
 
@@ -232,6 +245,8 @@ namespace BataAppHR.Data
             modelBuilder.Entity<dbItemMaster>().Property(ug => ug.size).HasColumnType("varchar(50)");
             modelBuilder.Entity<dbItemMaster>().Property(ug => ug.category).HasColumnType("varchar(50)");
             modelBuilder.Entity<dbItemMaster>().Property(ug => ug.subcategory).HasColumnType("varchar(50)");
+            modelBuilder.Entity<dbItemMaster>().Property(ug => ug.codedivisi).HasColumnType("varchar(2)");
+
             modelBuilder.Entity<dbItemMaster>().Property(ug => ug.itemdescription).HasColumnType("varchar(255)");
             modelBuilder.Entity<dbItemMaster>().Property(ug => ug.price1).HasColumnType("decimal(19,2)");
             modelBuilder.Entity<dbItemMaster>().Property(ug => ug.price2).HasColumnType("decimal(19,2)");
@@ -250,6 +265,7 @@ namespace BataAppHR.Data
             modelBuilder.Entity<dbItemMaster>().Property(ug => ug.month_amount).HasColumnType("int").IsRequired(false);
             modelBuilder.Entity<dbItemMaster>().Property(ug => ug.month_qty).HasColumnType("int").IsRequired(false);
             modelBuilder.Entity<dbItemMaster>().Property(ug => ug.year_age).HasColumnType("int").IsRequired(false);
+            modelBuilder.Entity<dbItemMaster>().Property(ug => ug.gender).HasColumnType("varchar(100)");
 
 
             //dbCategory
@@ -259,7 +275,7 @@ namespace BataAppHR.Data
             modelBuilder.Entity<dbCategory>().Property(ug => ug.description).HasColumnType("varchar(100)");
             modelBuilder.Entity<dbCategory>().Property(ug => ug.FLAG_AKTIF).HasColumnType("varchar(1)").IsRequired(false);
             modelBuilder.Entity<dbCategory>().Property(ug => ug.ENTRY_USER).HasColumnType("varchar(50)").IsRequired(false);
-            modelBuilder.Entity<dbCategory>().Property(ug => ug.UPDATE_USER).HasColumnType("varchar(10)").IsRequired();
+            modelBuilder.Entity<dbCategory>().Property(ug => ug.UPDATE_USER).HasColumnType("varchar(60)").IsRequired();
             modelBuilder.Entity<dbCategory>().Property(ug => ug.ENTRY_DATE).HasColumnType("date");
             modelBuilder.Entity<dbCategory>().Property(ug => ug.UPDATE_DATE).HasColumnType("date");
 
@@ -271,7 +287,7 @@ namespace BataAppHR.Data
             modelBuilder.Entity<dbSubCategory>().Property(ug => ug.description).HasColumnType("varchar(100)");
             modelBuilder.Entity<dbSubCategory>().Property(ug => ug.FLAG_AKTIF).HasColumnType("varchar(1)").IsRequired(false);
             modelBuilder.Entity<dbSubCategory>().Property(ug => ug.ENTRY_USER).HasColumnType("varchar(50)").IsRequired(false);
-            modelBuilder.Entity<dbSubCategory>().Property(ug => ug.UPDATE_USER).HasColumnType("varchar(10)").IsRequired();
+            modelBuilder.Entity<dbSubCategory>().Property(ug => ug.UPDATE_USER).HasColumnType("varchar(60)").IsRequired();
             modelBuilder.Entity<dbSubCategory>().Property(ug => ug.ENTRY_DATE).HasColumnType("date");
             modelBuilder.Entity<dbSubCategory>().Property(ug => ug.UPDATE_DATE).HasColumnType("date");
 
@@ -284,7 +300,7 @@ namespace BataAppHR.Data
             modelBuilder.Entity<dbItemStore>().Property(ug => ug.itemid).HasColumnType("varchar(50)");
             modelBuilder.Entity<dbItemStore>().Property(ug => ug.FLAG_AKTIF).HasColumnType("varchar(1)").IsRequired(false);
             modelBuilder.Entity<dbItemStore>().Property(ug => ug.ENTRY_USER).HasColumnType("varchar(50)").IsRequired(false);
-            modelBuilder.Entity<dbItemStore>().Property(ug => ug.UPDATE_USER).HasColumnType("varchar(10)").IsRequired();
+            modelBuilder.Entity<dbItemStore>().Property(ug => ug.UPDATE_USER).HasColumnType("varchar(60)").IsRequired();
             modelBuilder.Entity<dbItemStore>().Property(ug => ug.ENTRY_DATE).HasColumnType("date");
             modelBuilder.Entity<dbItemStore>().Property(ug => ug.UPDATE_DATE).HasColumnType("date");
 
@@ -329,20 +345,28 @@ namespace BataAppHR.Data
             modelBuilder.Entity<dbDiscount>().Property(ug => ug.id).HasColumnType("int").UseMySqlIdentityColumn().IsRequired();
             modelBuilder.Entity<dbDiscount>().Property(ug => ug.article).HasColumnType("varchar(50)").IsRequired();
             modelBuilder.Entity<dbDiscount>().Property(ug => ug.type).HasColumnType("varchar(255)");
+            modelBuilder.Entity<dbDiscount>().Property(ug => ug.isallstore).HasColumnType("varchar(1)");
+            modelBuilder.Entity<dbDiscount>().Property(ug => ug.COMPANY_ID).HasColumnType("varchar(100)");
+            modelBuilder.Entity<dbDiscount>().Property(ug => ug.promo_name).HasColumnType("varchar(255)");
+
             modelBuilder.Entity<dbDiscount>().Property(ug => ug.percentage).HasColumnType("int");
             modelBuilder.Entity<dbDiscount>().Property(ug => ug.amount).HasColumnType("int");
             modelBuilder.Entity<dbDiscount>().Property(ug => ug.entry_date).HasColumnType("datetime");
             modelBuilder.Entity<dbDiscount>().Property(ug => ug.update_date).HasColumnType("datetime");
-            modelBuilder.Entity<dbDiscount>().Property(ug => ug.validfrom).HasColumnType("date");
-            modelBuilder.Entity<dbDiscount>().Property(ug => ug.validto).HasColumnType("date");
+            modelBuilder.Entity<dbDiscount>().Property(ug => ug.validfrom).HasColumnType("datetime");
+            modelBuilder.Entity<dbDiscount>().Property(ug => ug.validto).HasColumnType("datetime");
             modelBuilder.Entity<dbDiscount>().Property(ug => ug.status).HasColumnType("varchar(1)");
             modelBuilder.Entity<dbDiscount>().Property(ug => ug.entry_user).HasColumnType("varchar(255)").IsRequired(false);
             modelBuilder.Entity<dbDiscount>().Property(ug => ug.update_user).HasColumnType("varchar(255)").IsRequired(false);
 
+            //Store Discount Tables
+            modelBuilder.Entity<dbDiscountStoreList>().Property(ug => ug.storeid).HasColumnType("int");
+            modelBuilder.Entity<dbDiscountStoreList>().Property(ug => ug.COMPANY_ID).HasColumnType("varchar(100)");
+            modelBuilder.Entity<dbDiscountStoreList>().Property(ug => ug.promoid).HasColumnType("int").IsRequired();
+
             //saleshdr
             modelBuilder.Entity<dbSalesHdr>().Property(ug => ug.invoice).HasColumnType("varchar(50)").IsRequired();
             modelBuilder.Entity<dbSalesHdr>().Property(ug => ug.Store_id).HasColumnType("int");
-            modelBuilder.Entity<dbSalesHdr>().Property(ug => ug.staff_id).HasColumnType("int");
             modelBuilder.Entity<dbSalesHdr>().Property(ug => ug.transdate).HasColumnType("datetime");
             modelBuilder.Entity<dbSalesHdr>().Property(ug => ug.trans_amount).HasColumnType("int");
             modelBuilder.Entity<dbSalesHdr>().Property(ug => ug.trans_qty).HasColumnType("int");
@@ -353,13 +377,19 @@ namespace BataAppHR.Data
             modelBuilder.Entity<dbSalesHdr>().Property(ug => ug.update_user).HasColumnType("varchar(255)");
 
             //salesdtl
+            modelBuilder.Entity<dbSalesDtl>().Property(ug => ug.id).HasColumnType("int").UseMySqlIdentityColumn().IsRequired();
+
             modelBuilder.Entity<dbSalesDtl>().Property(ug => ug.invoice).HasColumnType("varchar(50)").IsRequired();
+            modelBuilder.Entity<dbSalesDtl>().Property(ug => ug.staff_id).HasColumnType("int");
+
             modelBuilder.Entity<dbSalesDtl>().Property(ug => ug.store_id).HasColumnType("int");
             modelBuilder.Entity<dbSalesDtl>().Property(ug => ug.transdate).HasColumnType("datetime");
             modelBuilder.Entity<dbSalesDtl>().Property(ug => ug.article).HasColumnType("varchar(50)").IsRequired();
             modelBuilder.Entity<dbSalesDtl>().Property(ug => ug.cat).HasColumnType("varchar(50)");
             modelBuilder.Entity<dbSalesDtl>().Property(ug => ug.subcat).HasColumnType("varchar(50)");
             modelBuilder.Entity<dbSalesDtl>().Property(ug => ug.price).HasColumnType("int");
+            modelBuilder.Entity<dbSalesDtl>().Property(ug => ug.finalprice).HasColumnType("int");
+
             modelBuilder.Entity<dbSalesDtl>().Property(ug => ug.discountcode).HasColumnType("int");
             modelBuilder.Entity<dbSalesDtl>().Property(ug => ug.disc_amount).HasColumnType("int");
 
@@ -382,6 +412,26 @@ namespace BataAppHR.Data
             modelBuilder.Entity<dbSalesDtl>().Property(ug => ug.s46).HasColumnType("int");
             modelBuilder.Entity<dbSalesDtl>().Property(ug => ug.update_date).HasColumnType("datetime");
             modelBuilder.Entity<dbSalesDtl>().Property(ug => ug.update_user).HasColumnType("varchar(255)");
+
+            //db Department
+            modelBuilder.Entity<dbDepartment>().Property(ug => ug.Id).HasColumnType("int").UseMySqlIdentityColumn().IsRequired();
+            modelBuilder.Entity<dbDepartment>().Property(ug => ug.CodeDivisi).HasColumnType("varchar(2)");
+            modelBuilder.Entity<dbDepartment>().Property(ug => ug.DivisiName).HasColumnType("varchar(100)");
+            modelBuilder.Entity<dbDepartment>().Property(ug => ug.colorcode).HasColumnType("varchar(2)");
+            modelBuilder.Entity<dbDepartment>().Property(ug => ug.Color).HasColumnType("varchar(100)");
+            modelBuilder.Entity<dbDepartment>().Property(ug => ug.gendercode).HasColumnType("varchar(2)");
+            modelBuilder.Entity<dbDepartment>().Property(ug => ug.gender).HasColumnType("varchar(100)");
+            modelBuilder.Entity<dbDepartment>().Property(ug => ug.codemaincat).HasColumnType("varchar(2)");
+            modelBuilder.Entity<dbDepartment>().Property(ug => ug.maincat).HasColumnType("varchar(100)");
+            modelBuilder.Entity<dbDepartment>().Property(ug => ug.codesubcat).HasColumnType("varchar(2)");
+            modelBuilder.Entity<dbDepartment>().Property(ug => ug.subcat).HasColumnType("varchar(100)");
+            modelBuilder.Entity<dbDepartment>().Property(ug => ug.COMPANY_ID).HasColumnType("varchar(100)");
+
+            modelBuilder.Entity<dbDepartment>().Property(ug => ug.FLAG_AKTIF).HasColumnType("varchar(1)").IsRequired(false);
+            modelBuilder.Entity<dbDepartment>().Property(ug => ug.ENTRY_USER).HasColumnType("varchar(50)").IsRequired(false);
+            modelBuilder.Entity<dbDepartment>().Property(ug => ug.UPDATE_USER).HasColumnType("varchar(10)").IsRequired();
+            modelBuilder.Entity<dbDepartment>().Property(ug => ug.ENTRY_DATE).HasColumnType("date");
+            modelBuilder.Entity<dbDepartment>().Property(ug => ug.UPDATE_DATE).HasColumnType("date");
 
 
             //modelBuilder.Entity<dbStoreStockModel>().Property(ug => ug.ENTRY_USER).HasColumnType("varchar(50)").IsRequired(false);

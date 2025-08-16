@@ -34,11 +34,22 @@
     <Compile Remove="Migrations\FormDB\20240309093118_testmigrate.Designer.cs" />
     <Compile Remove="Migrations\FormDB\20240618145459_addstocktbl.cs" />
     <Compile Remove="Migrations\FormDB\20240618145459_addstocktbl.Designer.cs" />
+    <Compile Remove="Migrations\FormDB\20240712042536_addeddepartmenttbl.cs" />
+    <Compile Remove="Migrations\FormDB\20240712042536_addeddepartmenttbl.Designer.cs" />
+    <Compile Remove="Migrations\FormDB\20240712153341_addedsubtotal.cs" />
+    <Compile Remove="Migrations\FormDB\20240712153341_addedsubtotal.Designer.cs" />
+    <Compile Remove="Migrations\FormDB\20240712153450_addedsubtotal.cs" />
+    <Compile Remove="Migrations\FormDB\20240712153450_addedsubtotal.Designer.cs" />
+    <Compile Remove="Migrations\FormDB\20240712153830_addedsubtotal.cs" />
+    <Compile Remove="Migrations\FormDB\20240712153830_addedsubtotal.Designer.cs" />
+    <Compile Remove="Migrations\FormDB\20240712154105_addedsubtotal.cs" />
+    <Compile Remove="Migrations\FormDB\20240712154105_addedsubtotal.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="DinkToPdf" Version="1.0.8" />
     <PackageReference Include="EPPlus" Version="5.7.2" />
+    <PackageReference Include="itext7" Version="7.0.1" />
     <PackageReference Include="MailKit" Version="3.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.1.17" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.25" />

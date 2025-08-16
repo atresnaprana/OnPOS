@@ -4,14 +4,16 @@ using BataAppHR.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BataAppHR.Migrations.FormDB
 {
     [DbContext(typeof(FormDBContext))]
-    partial class FormDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240712161707_addprimarykeyslsdtl")]
+    partial class addprimarykeyslsdtl
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -54,7 +56,7 @@ namespace BataAppHR.Migrations.FormDB
 
                     b.Property<string>("UPDATE_USER")
                         .IsRequired()
-                        .HasColumnType("varchar(60)");
+                        .HasColumnType("varchar(10)");
 
                     b.HasKey("ID")
                         .HasName("PK_MENU_Seq");
@@ -92,7 +94,7 @@ namespace BataAppHR.Migrations.FormDB
 
                     b.Property<string>("UPDATE_USER")
                         .IsRequired()
-                        .HasColumnType("varchar(60)");
+                        .HasColumnType("varchar(10)");
 
                     b.HasKey("ID")
                         .HasName("PK_TAB_Seq");
@@ -309,7 +311,7 @@ namespace BataAppHR.Migrations.FormDB
 
                     b.Property<string>("UPDATE_USER")
                         .IsRequired()
-                        .HasColumnType("varchar(60)");
+                        .HasColumnType("varchar(10)");
 
                     b.HasKey("ID")
                         .HasName("PK_SliderImg");
@@ -344,7 +346,7 @@ namespace BataAppHR.Migrations.FormDB
 
                     b.Property<string>("UPDATE_USER")
                         .IsRequired()
-                        .HasColumnType("varchar(60)");
+                        .HasColumnType("varchar(10)");
 
                     b.Property<string>("description")
                         .HasColumnType("varchar(100)");
@@ -550,9 +552,6 @@ namespace BataAppHR.Migrations.FormDB
                     b.Property<string>("color")
                         .HasColumnType("varchar(50)");
 
-                    b.Property<string>("gender")
-                        .HasColumnType("varchar(100)");
-
                     b.Property<string>("itemdescription")
                         .HasColumnType("varchar(255)");
 
@@ -619,7 +618,7 @@ namespace BataAppHR.Migrations.FormDB
 
                     b.Property<string>("UPDATE_USER")
                         .IsRequired()
-                        .HasColumnType("varchar(60)");
+                        .HasColumnType("varchar(10)");
 
                     b.Property<string>("itemid")
                         .HasColumnType("varchar(50)");
@@ -1061,7 +1060,7 @@ namespace BataAppHR.Migrations.FormDB
 
                     b.Property<string>("UPDATE_USER")
                         .IsRequired()
-                        .HasColumnType("varchar(60)");
+                        .HasColumnType("varchar(10)");
 
                     b.Property<string>("description")
                         .HasColumnType("varchar(100)");

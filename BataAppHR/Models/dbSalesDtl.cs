@@ -6,7 +6,10 @@ namespace OnPOS.Models
 {
     public class dbSalesDtl
     {
-       
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int id { get; set; }
+        public int staff_id {  get; set; }
         public int store_id { get; set; }
         public string invoice { get; set; }
         public DateTime transdate { get; set; }
@@ -14,6 +17,8 @@ namespace OnPOS.Models
         public string cat { get; set; }
         public string subcat { get; set; }
         public int price { get; set; }
+        public int finalprice { get; set; }
+
         public int discountcode { get; set; }
         public int disc_amount { get; set; }
         public int disc_prc { get; set; }
@@ -35,6 +40,29 @@ namespace OnPOS.Models
         
         public string update_user { get;set; }
         public DateTime update_date { get; set; }
+        [NotMapped]
+        public string Crew { get; set; }
+        [NotMapped]
+        public string Article { get; set; }
+        [NotMapped]
+        public string size { get; set; }
+        [NotMapped]
+        public int pairs { get; set; }
+        [NotMapped]
+        public int disc {  get; set; }
+        [NotMapped]
+        public string disctype {  get; set; }
+        [NotMapped]
+        public int subtotal { get; set; }
+        [NotMapped]
+        public string datestr { get; set; }
+        [NotMapped]
+        public string codedivisi { get; set; }
+        [NotMapped]
+        public string divisiname { get; set; }
+
+
+
 
 
     }
