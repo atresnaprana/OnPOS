@@ -47,6 +47,29 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\lib\all.css" />
+    <Content Remove="wwwroot\lib\all.min.css" />
+    <Content Remove="wwwroot\lib\brands.css" />
+    <Content Remove="wwwroot\lib\brands.min.css" />
+    <Content Remove="wwwroot\lib\fontawesome.css" />
+    <Content Remove="wwwroot\lib\fontawesome.min.css" />
+    <Content Remove="wwwroot\lib\regular.css" />
+    <Content Remove="wwwroot\lib\regular.min.css" />
+    <Content Remove="wwwroot\lib\solid.css" />
+    <Content Remove="wwwroot\lib\solid.min.css" />
+    <Content Remove="wwwroot\lib\svg-with-js.css" />
+    <Content Remove="wwwroot\lib\svg-with-js.min.css" />
+    <Content Remove="wwwroot\lib\svg.css" />
+    <Content Remove="wwwroot\lib\svg.min.css" />
+    <Content Remove="wwwroot\lib\v4-font-face.css" />
+    <Content Remove="wwwroot\lib\v4-font-face.min.css" />
+    <Content Remove="wwwroot\lib\v4-shims.css" />
+    <Content Remove="wwwroot\lib\v4-shims.min.css" />
+    <Content Remove="wwwroot\lib\v5-font-face.css" />
+    <Content Remove="wwwroot\lib\v5-font-face.min.css" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="DinkToPdf" Version="1.0.8" />
     <PackageReference Include="EPPlus" Version="5.7.2" />
     <PackageReference Include="itext7" Version="7.0.1" />
@@ -76,6 +99,7 @@
 
   <ItemGroup>
     <Folder Include="bin\" />
+    <Folder Include="wwwroot\lib\fontawesome-svg\" />
   </ItemGroup>
 
 </Project>

@@ -1,101 +1,95 @@
 ﻿@model IEnumerable<BataAppHR.Models.dbSliderImg>
-
 @{
-    ViewData["Title"] = "Beranda";
-
-    @using System;
-    @using System.Globalization;
-    CultureInfo myCI = new CultureInfo("en-US");
-    Calendar myCal = myCI.Calendar;
-
-    // Gets the DTFI properties required by GetWeekOfYear.
-    CalendarWeekRule myCWR = myCI.DateTimeFormat.CalendarWeekRule;
-    DayOfWeek myFirstDOW = myCI.DateTimeFormat.FirstDayOfWeek;
-
-    var weekofyear = myCal.GetWeekOfYear(DateTime.Now, myCWR, myFirstDOW);
+    ViewData["Title"] = "Dashboard";
     var date = DateTime.Now;
     var datenowstr = date.ToString("dddd, dd MMMM yyyy");
 }
 
+<div class="hero-section">
+    <!-- Slideshow (Optional: only if you have images) -->
+    @if (Model != null && Model.Any())
+    {
+        <div class="slideshow-container">
+            @foreach (var dt in Model)
+            {
+                <div class="mySlides fade">
+                    <img src="@dt.imgUrl" style="width:100%; height:300px; object-fit:cover;">
+                </div>
+            }
+        </div>
+    }
 
+    <div class="hero-card">
+        <h1 class="welcome-title">Selamat datang di OnPos!</h1>
+        <p class="text-muted">Kelola transaksi dan inventaris Anda dengan lebih mudah hari ini.</p>
+        <div class="date-badge">
+            <i class="far fa-calendar-alt me-2"></i>
+            <span id="dateTxt">@datenowstr</span>
+            <span class="mx-2">|</span>
+            <i class="fas fa-hashtag me-1"></i> Week @ViewBag.WeekNumber
+        </div>
+    </div>
+    @if (User.Identity.IsAuthenticated)
+    {
+        <div class="action-grid">
+            <a href="/Transactions/Create" class="action-item">
+                <!-- Icon Updated -->
+                <i class="fa-solid fa-cash-register fa-2x mb-3 text-primary"></i>
+                <h5>Kasir</h5>
+                <p class="small text-muted mb-0">Input penjualan baru</p>
+            </a>
+            <a href="/Products" class="action-item">
+                <!-- Icon Updated to a more suitable one -->
+                <i class="fa-solid fa-box-archive fa-2x mb-3 text-success"></i>
+                <h5>Inventaris</h5>
+                <p class="small text-muted mb-0">Kelola stok barang</p>
+            </a>
+            <a href="/Reports" class="action-item">
+                <!-- Icon Updated to a more suitable one -->
+                <i class="fa-solid fa-chart-pie fa-2x mb-3 text-info"></i>
+                <h5>Laporan</h5>
+                <p class="small text-muted mb-0">Analisa pendapatan</p>
+            </a>
+            <a href="/Settings" class="action-item">
+                <!-- Icon Updated to the modern version of 'cog' -->
+                <i class="fa-solid fa-gear fa-2x mb-3 text-secondary"></i>
+                <h5>Pengaturan</h5>
+                <p class="small text-muted mb-0">Konfigurasi toko</p>
+            </a>
+        </div>
 
-<div class="text-title">
-    <div class="slideshow-container">
+    }
+    else
+    {
 
-        @foreach (var dt in Model)
-        {
-            <div class="mySlides fade">
-                <div class="numbertext"></div>
-                <img src="@dt.imgUrl" style="width:100%">
-                @*<div class="text">Caption Text</div>*@
+        <div class="call-to-action">
+            <h2>Mulai Kelola Bisnis Anda</h2>
+            <p class="text-muted">Silakan masuk untuk mengakses dashboard atau daftar jika Anda pengguna baru.</p>
+            <div>
+                <!-- ** Corrected Button Classes ** -->
+                <a href="/Identity/Account/Login" class="btn btn-outline-primary btn-lg">Login</a>
+                <a href="/Identity/Account/Register" class="btn btn-primary btn-lg">Daftar Sekarang</a>
             </div>
-        }
-        <!--<div class="mySlides fade">
-    <div class="numbertext"></div>
-    <img src="~/images/banner2.JPG" style="width:100%">-->
-        @*<div class="text">Caption Text</div>*@
-        <!--</div>
-
-    <div class="mySlides fade">
-        <div class="numbertext"></div>
-        <img src="~/images/banner1.JPG" style="width:100%">-->
-        @*<div class="text">Caption Two</div>*@
-        <!--</div>-->
-
-
-    </div>
-    <br>
-
-    <div style="text-align:center">
-        @foreach (var dt in Model)
-        {
-            <span class="dot"></span>
-        }
-        @*<span class="dot"></span>
-        <span class="dot"></span>*@
-        @*<span class="dot"></span>*@
-    </div>
-
-    <p></p><p></p>
-    <h1 class="display-4">Selamat datang di OnPos!</h1> <p></p>
-    <h1 class="display-5"><span><label id="dateTxt" class="text-blue"></label><label class="text-blue"> - Week</label> <label id="weekofyear" class="text-blue"></label></span></h1>
-    @*<img src="~/images/banner1.jpg" width="900" height="339" />*@
-
-
-
+        </div>
+    }
+    <!-- NEW: Quick Actions Grid -->
+    
 </div>
 
-@section Scripts{
-    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+@section Scripts {
     <script>
-        $(document).ready(function () {
-            $("#dateTxt").text('@datenowstr');
-        	$("#weekofyear").text('@weekofyear');
-
-        });
-    </script>
-
-    @*Slideshow*@
-    <script>
+        // Standard Slideshow Logic
         var slideIndex = 0;
         showSlides();
-
         function showSlides() {
             var i;
             var slides = document.getElementsByClassName("mySlides");
-            var dots = document.getElementsByClassName("dot");
-            for (i = 0; i < slides.length; i++) {
-                slides[i].style.display = "none";
-            }
+            if (slides.length == 0) return;
+            for (i = 0; i < slides.length; i++) { slides[i].style.display = "none"; }
             slideIndex++;
             if (slideIndex > slides.length) { slideIndex = 1 }
-            for (i = 0; i < dots.length; i++) {
-                dots[i].className = dots[i].className.replace(" active", "");
-            }
             slides[slideIndex - 1].style.display = "block";
-            dots[slideIndex - 1].className += " active";
-            setTimeout(showSlides, 5000); // Change image every 2 seconds
+            setTimeout(showSlides, 5000);
         }
     </script>
-
 }

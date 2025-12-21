@@ -17,14 +17,40 @@ namespace BataAppHR.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly FormDBContext db;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public HomeController(ILogger<HomeController> logger, FormDBContext db)
+        public HomeController(ILogger<HomeController> logger, FormDBContext db, UserManager<IdentityUser> userManager)
         {
             _logger = logger;
             this.db = db;
+            _userManager = userManager;
+
 
         }
+        public async Task<IActionResult> ResetTest()
+        {
+            var user = await _userManager.FindByEmailAsync("aditya.tresnaprana@bata.com");
 
+            if (user == null)
+            {
+                return NotFound("User not found");
+            }
+
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+            var result = await _userManager.ResetPasswordAsync(
+                user,
+                token,
+                "Welcome123.."
+            );
+
+            if (!result.Succeeded)
+            {
+                return BadRequest(string.Join(", ", result.Errors.Select(e => e.Description)));
+            }
+
+            return Ok("Password reset successful");
+        }
         public IActionResult Index()
         {
             var data = new List<dbSliderImg>();
