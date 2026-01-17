@@ -1,63 +1,63 @@
 ﻿@model BataAppHR.Models.SystemTabModel
 
 @{
-    ViewData["Title"] = "Ubah Data";
+    ViewData["Title"] = "Ubah Data Tab";
 }
-<style>
-    input.largerCheckbox {
-        width: 20px;
-        height: 20px;
-    }
-</style>
-<h1>Ubah Data</h1>
-<h3 class="display-5">Form Update</h3>
-<hr />
-<form asp-action="Edit" id="formcreate" enctype="multipart/form-data">
-    <div class="container">
-        <div class="row">
-            <div class="col-sm">
-                <div class="form-group">
-                    <label class="control-label">Tab Description:</label>
-                    <input asp-for="TAB_DESC" class="form-control" />
-                    <span asp-validation-for="TAB_DESC" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label class="control-label">Tab Display Text:</label>
-                    <input asp-for="TAB_TXT" class="form-control" />
-                    <span asp-validation-for="TAB_TXT" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <input type="button" value="Ubah Data" onclick="alertfirst()" class="btn btn-red" />
-                </div>
-            </div>
+
+<div class="auth-container">
+    <form asp-action="Edit" id="formcreate" method="post">
+        <div class="text-center">
+            <h1>@ViewData["Title"]</h1>
+            <p class="text-muted">Lakukan perubahan pada detail tab di bawah ini.</p>
         </div>
-    </div>
-</form>
 
+        <hr class="my-4" />
 
-<div>
-    <a asp-action="Index" class="btn btn-dark">Kembali ke List</a>
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3" role="alert"></div>
+
+        <!-- ** CRITICAL FIX: Hidden input for the ID is required for the Edit action to work ** -->
+        <input type="hidden" asp-for="ID" />
+
+        <div class="form-group">
+            <label asp-for="TAB_DESC">Tab Description</label>
+            <input asp-for="TAB_DESC" class="form-control" />
+            <span asp-validation-for="TAB_DESC" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="TAB_TXT">Tab Display Text</label>
+            <input asp-for="TAB_TXT" class="form-control" />
+            <span asp-validation-for="TAB_TXT" class="text-danger"></span>
+        </div>
+
+        <div class="d-flex flex-column gap-2 mt-4">
+            <!-- ** LOGIC PRESERVED: This button still calls your alertfirst() function ** -->
+            <input type="button" value="Ubah Data" onclick="alertfirst()" class="btn btn-primary" />
+            <a asp-action="Index" class="btn btn-secondary text-center">Kembali ke List</a>
+        </div>
+    </form>
 </div>
-@section Scripts{
-    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
-    <script>
 
-    function allowOnlyNumber(evt) {
-        var charCode = (evt.which) ? evt.which : event.keyCode
-        if (charCode > 31 && (charCode < 48 || charCode > 57))
-            return false;
-        return true;
-        }
-    function alertfirst() {
-
-        if (confirm("Are you sure saving data?")) {
-            $('#formcreate').submit();
-        } else {
-            return false;
-        }
-
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+
+    <!-- ** UNTOUCHED LOGIC: Your original script is preserved ** -->
+    <script>
+        function allowOnlyNumber(evt) {
+            var charCode = (evt.which) ? evt.which : event.keyCode
+            if (charCode > 31 && (charCode < 48 || charCode > 57))
+                return false;
+            return true;
+        }
+
+        function alertfirst() {
+            if (confirm("Are you sure you want to save these changes?")) {
+                $('#formcreate').submit();
+            } else {
+                return false;
+            }
+        }
     </script>
 }
-
-
