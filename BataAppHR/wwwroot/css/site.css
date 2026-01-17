@@ -266,6 +266,7 @@ header {
     padding: 12px 15px !important;
     border: 1px solid var(--border-color) !important;
     background-color: #f8fafc !important;
+    height: 48px !important; /* ** THIS IS THE FIX ** */
 }
 
     .form-control:focus {
@@ -414,4 +415,102 @@ table.dataTable {
     .btn-action:hover {
         background: #eef2ff;
         color: var(--primary);
+    }
+
+
+
+/*
+ * ===================================================================
+ *                         DANGER & CONFIRMATION
+ * ===================================================================
+*/
+.danger-card-header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.danger-icon {
+    font-size: 3rem;
+    color: #ef4444; /* Red color for warning */
+    margin-bottom: 1rem;
+}
+
+.item-details {
+    background-color: #f8fafc; /* Light grey background */
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1.25rem;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+    .item-details p {
+        margin-bottom: 0.5rem;
+        font-size: 1.1rem; /* Slightly larger font */
+        color: var(--text-muted);
+    }
+
+    .item-details strong {
+        font-weight: 600;
+        color: var(--text-main);
+    }
+
+    .item-details .item-value {
+        font-family: monospace; /* Helps distinguish IDs and technical names */
+        background-color: #eef2ff; /* Light blue background */
+        padding: 2px 6px;
+        border-radius: 4px;
+        color: var(--primary);
+    }
+
+/* Specific button style for Delete actions */
+.btn-danger {
+    background-color: #ef4444 !important;
+    border-color: #ef4444 !important;
+    color: white !important;
+}
+
+    .btn-danger:hover {
+        background-color: #dc2626 !important; /* Darker red on hover */
+        border-color: #dc2626 !important;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+/* A neutral secondary button for "cancel" actions */
+.btn-secondary {
+    background-color: #e2e8f0 !important;
+    border-color: #e2e8f0 !important;
+    color: var(--text-muted) !important;
+}
+
+    .btn-secondary:hover {
+        background-color: #cbd5e1 !important;
+        border-color: #cbd5e1 !important;
+        color: var(--text-main) !important;
+    }
+
+/* --- Checkbox List Styling for User Roles --- */
+.user-role-list {
+    max-height: 400px; /* Or any height you prefer */
+    overflow-y: auto;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1rem;
+    background-color: #f8fafc;
+}
+
+    .user-role-list .form-check {
+        padding: 0.75rem 1rem;
+        border-radius: 6px;
+        transition: background-color 0.2s;
+    }
+
+        .user-role-list .form-check:hover {
+            background-color: #eef2ff;
+        }
+
+    .user-role-list .form-check-label {
+        margin-left: 0.5rem;
+        font-weight: 500;
     }

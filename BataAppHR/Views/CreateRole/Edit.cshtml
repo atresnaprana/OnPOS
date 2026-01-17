@@ -1,34 +1,49 @@
 ﻿@model Microsoft.AspNetCore.Identity.IdentityRole
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Edit Role";
 }
-<h1>Update Role</h1>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Id" class="control-label"></label>
-                <input asp-for="Id" class="form-control" readonly="readonly"/>
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Update" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
+
+<div class="auth-container">
+    <form asp-action="Edit" method="post">
+        <div class="text-center">
+            <h1>Update Role</h1>
+            <p class="text-muted">You can update the name of this role.</p>
+        </div>
+
+        <hr class="my-4" />
+
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3" role="alert"></div>
+
+        <!-- Hidden input to ensure the ID is posted back to the controller -->
+        <input type="hidden" asp-for="Id" />
+
+        <!-- Displaying the ID as non-editable text for better UX -->
+        <div class="form-group">
+            <label>Role ID</label>
+            <p class="form-control-plaintext">@Model.Id</p>
+        </div>
+
+        <!-- Standard Bootstrap 4 form group for the editable field -->
+        <div class="form-group">
+            <label asp-for="Name">Role Name</label>
+            <input asp-for="Name" class="form-control" placeholder="Enter role name..." />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="w-100 btn btn-primary mt-4">Update Role</button>
+
+        <div class="auth-links">
+            <a asp-action="Index">
+                <i class="fa-solid fa-arrow-left me-1"></i>
+                Back to List
+            </a>
+        </div>
+    </form>
 </div>
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 }
