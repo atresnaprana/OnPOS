@@ -6,344 +6,141 @@
     var invoiceidpass = Model.invoiceidpass;
     var invoiceidori = Model.invoice;
     var stringemp = "";
-    // if (!string.IsNullOrEmpty(Model.syserr))
-    // {
-    //     errmsg = Model.syserr;
-    // }
 }
 
-@* <h1>POS</h1>
-<h3>Sales Entry</h3> *@
-<hr />
+<!-- The form tag and all hidden inputs are preserved at the top -->
+<form asp-action="SavePOS" id="formcreate" method="post">
+    <input asp-for="trans_amount" type="hidden" />
+    <input asp-for="Store_id" type="hidden" />
+    <input asp-for="transtypehidden" type="hidden" />
+    <input asp-for="cardnumhidden" type="hidden" />
+    <input asp-for="approvalhidden" type="hidden" />
+    <input asp-for="scanpricefull" type="hidden" />
+    <input asp-for="scanprice" type="hidden" />
+    <input asp-for="scandiscount" type="hidden" />
 
-<form asp-action="SavePOS" id="formcreate">
-    <div class="row">
-        <div class="col-sm">
-            <div class="row">
-                <div class="col-sm">
-                    <div class="form-group">
-                        <h3 class="control-label">TOTAL</h3>
-                    </div>
+    <!-- Start of New POS Layout -->
+    <div class="pos-container">
 
+        <!-- ========================== LEFT PANEL (Transaction & Item List) ========================== -->
+        <div class="pos-left-panel">
+
+            <!-- Item List -->
+            <div class="pos-item-list-wrapper">
+                <table class="table table-hover" id="POSTbl" style="width:100%;">
+                    <thead>
+                        <tr>
+                            <th>Crew</th>
+                            <th>Article</th>
+                            <th>Size</th>
+                            <th>Price</th>
+                            <th>Pairs</th>
+                            <th>Disc type</th>
+                            <th>Discount</th>
+                            <th>SubTotal</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodyid1">
+                        <!-- Your JS populates this -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Remove Button & Total Display -->
+            <div class="d-flex justify-content-between align-items-center mt-3">
+                <div>
+                    <input type="button" value="Remove Selected" id="removebtn" class="btn btn-danger" />
                 </div>
-                <div class="col-sm">
-                    <div class="form-group">
-                        <input asp-for="transamtstr" class="form-control" style="text-align:right;font-weight:bolder;font-size:x-large;" readonly/>
-                        <input asp-for="trans_amount" class="form-control" type="hidden" />
-
-                    </div>
-
-                </div>
-                <div class="col-sm">
-                    <div class="row">
-                        <div class="col-sm">
-                            <div class="form-group">
-                                <h3 class="control-label">User:</h3>
-                            </div>
-                        </div>
-                        <div class="col-sm">
-                            <div class="form-group">
-                                <input asp-for="username" class="form-control" readonly />
-                            </div>
-                        </div>
-                    </div>
-                  
+                <div class="pos-total-display">
+                    <h3>TOTAL</h3>
+                    <input asp-for="transamtstr" class="total-amount" style="border:none; background:transparent; color:white; width:100%; text-align:right;" readonly />
                 </div>
             </div>
-            <div class="row">
-                <div class="col-sm">
-                    <table class="table table-striped" id="sizetbl">
-                        <thead>
-                            <tr>
-                                <th>
-                                    33
-                                </th>
-                                <th>
-                                    34
-                                </th>
-                                <th>
-                                    35
-                                </th>
-                                <th>
-                                    36
-                                </th>
-                                <th>
-                                    37
-                                </th>
-                                <th>
-                                    38
-                                </th>
-                                <th>
-                                    39
-                                </th>
-                                <th>
-                                    40
-                                </th>
-                                <th>
-                                    41
-                                </th>
-                                <th>
-                                    42
-                                </th>
-                                <th>
-                                    43
-                                </th>
-                                <th>
-                                    44
-                                </th>
-                                <th>
-                                    45
-                                </th>
-                                <th>
-                                    46
-                                </th>
-                                <th>
-                                    stock
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody id="tbodyid1">
-                            <tr>
-                                <td>
-                                    <input asp-for="s33" class="form-control" style="width:60px;font-size:x-small;font-weight:bolder" readonly/>
-                                </td>
-                                <td>
-                                    <input asp-for="s34" class="form-control" style="width:60px;font-size:x-small;font-weight:bolder" readonly />
+        </div>
 
-                                </td>
-                                <td>
-                                    <input asp-for="s35" class="form-control" style="width:60px;font-size:x-small;font-weight:bolder" readonly />
+        <!-- ========================== RIGHT PANEL (Controls & Info) ========================== -->
+        <div class="pos-right-panel">
 
-                                </td>
-                                <td>
-                                    <input asp-for="s36" class="form-control" style="width:60px;font-size:x-small;font-weight:bolder" readonly />
-
-                                </td>
-                                <td>
-                                    <input asp-for="s37" class="form-control" style="width:60px;font-size:xx-small;font-weight:bolder" readonly />
-
-                                </td>
-                                <td>
-                                    <input asp-for="s38" class="form-control" style="width:60px;font-size:xx-small;font-weight:bolder" readonly />
-
-                                </td>
-                                <td>
-                                    <input asp-for="s39" class="form-control" style="width:60px;font-size:xx-small;font-weight:bolder" readonly />
-
-                                </td>
-                                <td>
-                                    <input asp-for="s40" class="form-control" style="width:60px;font-size:xx-small;font-weight:bolder" readonly />
-
-                                </td>
-                                <td>
-                                    <input asp-for="s41" class="form-control" style="width:60px;font-size:xx-small;font-weight:bolder" readonly />
-
-                                </td>
-                                <td>
-                                    <input asp-for="s42" class="form-control" style="width:60px;font-size:xx-small;font-weight:bolder" readonly />
-
-                                </td>
-                                <td>
-                                    <input asp-for="s43" class="form-control" style="width:60px;font-size:xx-small;font-weight:bolder" readonly />
-
-                                </td>
-                                <td>
-                                    <input asp-for="s44" class="form-control" style="width:60px;font-size:xx-small;font-weight:bolder" readonly />
-
-                                </td>
-                                <td>
-                                    <input asp-for="s45" class="form-control" style="width:60px;font-size:xx-small;font-weight:bolder" readonly />
-
-                                </td>
-                                <td>
-                                    <input asp-for="s46" class="form-control" style="width:60px;font-size:xx-small;font-weight:bolder" readonly />
-
-                                </td>
-                                <td>
-                                    <input asp-for="totalstock" class="form-control" style="width:60px;font-size:xx-small;font-weight:bolder" readonly />
-
-                                </td>
-                            </tr>
-                         
-                        </tbody>
-                    </table>
-
+            <!-- User & Invoice Info -->
+            <div class="pos-control-group d-flex justify-content-between align-items-center">
+                <div class="form-group mb-0">
+                    <label class="font-weight-bold">User:</label>
+                    <input asp-for="username" class="form-control-plaintext d-inline w-auto p-0" readonly />
                 </div>
-
-            </div>
-            <div class="row">
-                <div class="col-sm">
-                    <input type="button" value="remove" id="removebtn" class="btn btn-red" />
-
+                <div class="form-group mb-0">
+                    <label class="font-weight-bold">Invoice:</label>
+                    <input asp-for="invoice" class="form-control-plaintext d-inline w-auto p-0" readonly />
                 </div>
             </div>
-            <div class="row">
-                <div class="col-sm">
-                    <table class="table table-striped" id="POSTbl">
-                        <thead>
-                            <tr>
-                                <th>
-                                    Crew
-                                </th>
-                                <th>
-                                    Article
-                                </th>
-                                <th>
-                                    Size
-                                </th>
-                             
-                                <th>
-                                    Price
-                                </th>
-                                <th>
-                                    Pairs
 
-                                </th>
-                                <th>Disc type</th>
-                                <th>
-                                    Discount
-                                </th>
-                                <th>
-                                    SubTotal
-                                </th>
-                              
-                            </tr>
-                        </thead>
-                        <tbody id="tbodyid1">
+            <!-- Crew Selection -->
+            <div class="pos-control-group">
+                <label class="control-label">Crew:</label>
+                @Html.DropDownListFor(m => m.salesid, new SelectList(Model.ddStaff, "id", "name"), new { @class = "form-control" })
+            </div>
 
-                        </tbody>
-                    </table>
+            <!-- Article Input -->
+            <div class="pos-control-group">
+                <label class="control-label">Article</label>
+                <input asp-for="scanitem" class="form-control" maxlength="16" autofocus />
+            </div>
 
-                </div>
-                <div class="col-sm">
-                    
-                    <div class="row">
-                        <div class="col-sm">
-                            <div class="form-group">
-                                <label class="control-label">Invoice</label>
-                            </div>
-                        </div>
-                        <div class="col-sm">
-                            <div class="form-group">
-                                <input asp-for="invoice" class="form-control" readonly />
-                                <input asp-for="Store_id" class="form-control" type="hidden" />
-                                <input asp-for="transtypehidden" class="form-control" type="hidden" />
-                                <input asp-for="cardnumhidden" class="form-control" type="hidden" />
-                                <input asp-for="approvalhidden" class="form-control" type="hidden" />
-                                <input asp-for="scanpricefull" class="form-control" type="hidden" />
+            <!-- Stock Info (Replaces the old table) -->
+            <div class="pos-control-group">
+                <label class="control-label">Stock Information</label>
+                <table class="table table-sm table-bordered text-center" id="sizetbl">
+                    <thead><tr><th>33</th><th>34</th><th>35</th><th>36</th><th>37</th><th>38</th><th>39</th><th>40</th><th>41</th><th>42</th><th>43</th><th>44</th><th>45</th><th>46</th><th>Total</th></tr></thead>
+                    <tbody>
+                        <tr>
+                            <td><input asp-for="s33" class="form-control form-control-sm text-center" readonly /></td>
+                            <td><input asp-for="s34" class="form-control form-control-sm text-center" readonly /></td>
+                            <td><input asp-for="s35" class="form-control form-control-sm text-center" readonly /></td>
+                            <td><input asp-for="s36" class="form-control form-control-sm text-center" readonly /></td>
+                            <td><input asp-for="s37" class="form-control form-control-sm text-center" readonly /></td>
+                            <td><input asp-for="s38" class="form-control form-control-sm text-center" readonly /></td>
+                            <td><input asp-for="s39" class="form-control form-control-sm text-center" readonly /></td>
+                            <td><input asp-for="s40" class="form-control form-control-sm text-center" readonly /></td>
+                            <td><input asp-for="s41" class="form-control form-control-sm text-center" readonly /></td>
+                            <td><input asp-for="s42" class="form-control form-control-sm text-center" readonly /></td>
+                            <td><input asp-for="s43" class="form-control form-control-sm text-center" readonly /></td>
+                            <td><input asp-for="s44" class="form-control form-control-sm text-center" readonly /></td>
+                            <td><input asp-for="s45" class="form-control form-control-sm text-center" readonly /></td>
+                            <td><input asp-for="s46" class="form-control form-control-sm text-center" readonly /></td>
+                            <td><input asp-for="totalstock" class="form-control form-control-sm text-center" readonly /></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
 
-                            </div>
-                        </div>
-                    </div>
-                    <hr />
-                    <div class="row">
-                        <div class="col-sm">
-                            <div class="form-group">
-                                <label class="control-label">Crew:</label>
-                            </div>
-                        </div>
-                        <div class="col-sm">
-                            <div class="form-group">
+            <!-- Qty Input -->
+            <div class="pos-control-group">
+                <label class="control-label">Qty</label>
+                <input asp-for="scanqty" class="form-control" />
+            </div>
 
-                                @Html.DropDownListFor(m => m.salesid, new SelectList(Model.ddStaff, "id", "name"), new { @class = "form-control" })
-                            </div>
-                        </div>
-                    </div>
-                    <hr />
-                    <div class="row">
-                        <div class="col-sm">
-                            <div class="form-group">
-                                <label class="control-label">Article</label>
-                            </div>
-                        </div>
-                        <div class="col-sm">
-                            <div class="form-group">
-                                <input asp-for="scanitem" class="form-control" maxlength="16" />
-                            </div>
-                        </div>
-                    </div>
-                    <hr />
-                    <div class="row">
-                        <div class="col-sm">
-                            <div class="form-group">
-                                <label class="control-label">Qty</label>
-                            </div>
-                        </div>
-                        <div class="col-sm">
-                            <div class="form-group">
-                                <input asp-for="scanqty" class="form-control"/>
-                            </div>
-                        </div>
-                    </div>
-                    <hr />
-                    <div class="row">
-                        <div class="col-sm">
-                            <div class="form-group">
-                                <label class="control-label">Price</label>
-                            </div>
-                        </div>
-                        <div class="col-sm">
-                            <div class="form-group">
-                                <input asp-for="scanpricestr" class="form-control" readonly />
-                                <input asp-for="scanprice" class="form-control" type="hidden" />
-
-                            </div>
-                        </div>
-                    </div>
-                    <hr />
-                    <div class="row">
-                        <div class="col-sm">
-                            <div class="form-group">
-                                <label class="control-label">Discount</label>
-                            </div>
-                        </div>
-                        <div class="col-sm">
-                            <div class="form-group">
-                                <input asp-for="scandiscountstr" class="form-control" readonly/>
-                                <input asp-for="scandiscount" class="form-control" type="hidden" />
-
-                            </div>
-                        </div>
-                    </div>
-                    <hr />
-                   
+            <!-- Price and Discount Display -->
+            <div class="pos-control-group">
+                <div class="d-flex justify-content-between">
+                    <div>Price: <input asp-for="scanpricestr" class="form-control-plaintext d-inline w-50" readonly /></div>
+                    <div>Discount: <input asp-for="scandiscountstr" class="form-control-plaintext d-inline w-50" readonly /></div>
                 </div>
             </div>
+
+        </div>
+    </div> <!-- End of pos-container -->
+    <!-- ========================== FOOTER ACTIONS (Replaces the old row of buttons) ========================== -->
+    <div class="pos-actions-footer">
+        <div class="d-flex justify-content-center">
+            <a asp-action="Index" class="btn btn-secondary">Exit<span class="btn-key">Esc</span></a>
+            <input type="button" onclick="openrecap()" value="Recap" class="btn btn-outline-primary" /><span class="btn-key">F2</span>
+            <input type="button" value="BestS" class="btn btn-outline-primary" /><span class="btn-key">F4</span>
+            <input type="button" value="Detail Recap" onclick="openrecapdtl()" class="btn btn-outline-primary" /><span class="btn-key">F8</span>
+            <input type="button" value="Payment" onclick="openPayment()" class="btn btn-success" /><span class="btn-key">F9</span>
         </div>
     </div>
-    <div class="row">
-        <div class="col-sm">
-            <div class="form-group">
-                <a asp-action="Index" class="btn btn-dark">Exit - Esc</a>
 
-            </div>
-        </div>
-        <div class="col-sm">
-            <div class="form-group">
-                <input type="button" onclick="openrecap()" value="Recap - F2" class="btn btn-red" />
-
-            </div>
-        </div>
-        <div class="col-sm">
-            <div class="form-group">
-                <input type="button" value="BestS - F4" class="btn btn-red" />
-
-            </div>
-        </div>
-        <div class="col-sm">
-            <div class="form-group">
-                @* <input type="button" value="WorstS - F8" onclick="alertfirst()" class="btn btn-red" /> *@
-                <input type="button" value="Detail Recap - F8" onclick="openrecapdtl()" class="btn btn-red" />
-
-            </div>
-        </div>
-        <div class="col-sm">
-            <div class="form-group">
-                <input type="button" value="Payment - F9" onclick="openPayment()" class="btn btn-red" />
-
-            </div>
-        </div>
-    </div>
+    <!-- I AM NOT TOUCHING YOUR DIALOGS. YOUR ORIGINAL HTML GOES HERE -->
+    <!-- =================================================================== -->
     <div id="dialogpayment" title="Payment">
         <center>
             <div class="container">
@@ -355,16 +152,13 @@
                     </div>
                     <div class="col-sm">
                         <div class="form-group">
-                            @*                                 <input asp-for="transtype" class="form-control" tabindex="4" />
-                            *@
                             @Html.DropDownListFor(model => model.transtype, new List<SelectListItem>
                             {
-                            new SelectListItem{ Text="Tunai", Value = "T" },
-                            new SelectListItem{ Text="Debit Card", Value = "DC" },
-                            new SelectListItem{ Text="Credit Card", Value = "CC" },
-                            new SelectListItem{ Text="QRIS", Value = "QR" }
-
-                            }, new { @class = "form-control" })
+                                new SelectListItem { Text = "Tunai", Value = "T" },
+                                                        new SelectListItem { Text = "Debit Card", Value = "DC" },
+                                                        new SelectListItem { Text = "Credit Card", Value = "CC" },
+                                                        new SelectListItem { Text = "QRIS", Value = "QR" }
+                                                        }, new { @class = "form-control" })
                         </div>
                     </div>
                 </div>
@@ -378,7 +172,6 @@
                     <div class="col-sm">
                         <div class="form-group">
                             <input asp-for="cardnum" class="form-control" />
-
                         </div>
                     </div>
                 </div>
@@ -392,12 +185,10 @@
                     <div class="col-sm">
                         <div class="form-group">
                             <input asp-for="approval_code" class="form-control" />
-
                         </div>
                     </div>
                 </div>
                 <hr />
-
                 <div class="row">
                     <div class="col-sm">
                         <div class="form-group">
@@ -406,8 +197,7 @@
                     </div>
                     <div class="col-sm">
                         <div class="form-group">
-                            <input asp-for="confirmtotal" class="form-control" readonly/>
-
+                            <input asp-for="confirmtotal" class="form-control" readonly />
                         </div>
                     </div>
                 </div>
@@ -416,13 +206,11 @@
                     <div class="col-sm">
                         <div class="form-group">
                             <input type="button" value="Cancel" onclick="closePayment()" class="btn btn-red" />
-
                         </div>
                     </div>
                     <div class="col-sm">
                         <div class="form-group">
                             <input type="button" value="Payment" onclick="alertfirst()" class="btn btn-red" />
-
                         </div>
                     </div>
                 </div>
@@ -430,10 +218,8 @@
             </div>
         </center>
     </div>
-
-    
-</form>
-
+</form> <!-- This is the original closing form tag -->
+<!-- The other dialogs are outside the form tag, just as in your original -->
 <div id="dialog" title="Recap">
     <center>
         <div class="container">
@@ -474,23 +260,12 @@
                     <table class="table table-striped" id="tblRecap">
                         <thead>
                             <tr>
-
-                                <th>
-                                    Category
-                                </th>
-                                <th>
-                                    Quantity
-                                </th>
-
-                                <th>
-                                    Amount
-                                </th>
-                               
-
+                                <th>Category</th>
+                                <th>Quantity</th>
+                                <th>Amount</th>
                             </tr>
                         </thead>
                         <tbody id="tbodyrecap">
-                           
                         </tbody>
                     </table>
                 </div>
@@ -538,38 +313,16 @@
                     <table class="table table-striped" id="tblRecDtl">
                         <thead>
                             <tr>
-
-                               
-                                <th>
-                                    Invoice
-                                </th>
-
-                                <th>
-                                    article
-                                </th>
+                                <th>Invoice</th>
+                                <th>article</th>
                                 <th>size</th>
-                                <th>
-                                    article name
-                                </th>
-                                <th>
-                                    article price
-                                </th>
-                                <th>
-                                    cat
-                                </th>
-                                <th>
-                                    Discount Type
-                                </th>
-                                <th>
-                                    Discount 
-                                </th>
-                                <th>
-                                    qty
-                                </th>
-
-                                <th>
-                                    Amount
-                                </th>
+                                <th>article name</th>
+                                <th>article price</th>
+                                <th>cat</th>
+                                <th>Discount Type</th>
+                                <th>Discount</th>
+                                <th>qty</th>
+                                <th>Amount</th>
                             </tr>
                         </thead>
                         <tbody id="tbodyrecdtl">
@@ -577,12 +330,11 @@
                     </table>
                 </div>
             </div>
-
         </div>
     </center>
 </div>
 
-@section Scripts{
+@section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
@@ -622,7 +374,7 @@
             var x = e.keyCode;
              console.log("x:" + x);
             if (x == 27) {
-          
+
                 window.location.href = '/Home/index';
             }
             if (x == 113) {
@@ -720,8 +472,8 @@
             //     valpress = 0;
 
             // }
-          
-            
+
+
             console.log("prs:" + valpress);
             valpress = valpress + 1;
 
@@ -800,7 +552,7 @@
             });
             $("#transtype").val(null);
             $("#transtype").trigger('change');
-            
+
             $("#dialog").dialog({
                 width: 1080,
                 height: 720,
@@ -924,9 +676,9 @@
                                 alert("invalid stock");
                                 $("#scanitem").val(null);
                             }
-                            
 
-                           
+
+
                         },
                         error: function () {
 
@@ -960,10 +712,11 @@
                         $(this).val(1);
                     }
                 }
-                
+
             });
             $("#scanqty").keypress(function (e) {
                 var code = e.keyCode || e.which;
+                debugger;
                 if (code == 13) {
                     if (confirm("Are you sure adding item?")){
                         var skucheck = $("#scanitem").val().trim();
@@ -1141,7 +894,7 @@
                             alert("invalid article")
                         }
                     }
-                    
+
                 }
 
 
@@ -1155,7 +908,7 @@
             });
             $('#removebtn').click(function () {
                 debugger;
-                var itemid = POSTbl.row('.selected').data()[1] + POSTbl.row('.selected').data()[2];               
+                var itemid = POSTbl.row('.selected').data()[1] + POSTbl.row('.selected').data()[2];
                 var totalinv = parseInt($("#trans_amount").val());
                 var totalinvnew = (totalinv - parseInt(POSTbl.row('.selected').data()[7].split('.').join("")));
                 $("#trans_amount").val(totalinvnew);
@@ -1168,7 +921,7 @@
                     //startDate: mFromDate, endDate: mToDate1
                     dataType: 'json',
                     success: function (data) {
-                      
+
 
 
                     },
@@ -1237,7 +990,7 @@
             });
 
         });
-       
+
         function allowOnlyNumber(evt) {
             var charCode = (evt.which) ? evt.which : event.keyCode
             if (charCode > 31 && (charCode < 48 || charCode > 57))
@@ -1251,7 +1004,7 @@
                 return false;
             }
         }
-     
-       
+
+
     </script>
 }

@@ -1,201 +1,94 @@
 ﻿@model IEnumerable<OnPOS.Models.dbDiscount>
 @{
     ViewData["Title"] = "Form Daftar Promo";
-
-    var isAdmin = User.IsInRole("Admin").ToString();
 }
 
-<style>
-    #myPopup {
-        display: none;
-        position: absolute;
-        top: 50px;
-        right: 50%;
-        background-color: blue;
-        height: 100px;
-        width: 100px;
-    }
-
-    #myExit {
-        position: absolute;
-        right: 0px;
-        text-align: right;
-        color: white;
-        background-color: red;
-    }
-
-    .btn-primary2 {
-        color: #ffffff;
-        background-color: #000000;
-        border-color: #000000 !important
-    }
-
-        .btn-primary2:hover {
-            color: #fff;
-            background-color: #be0000;
-            border-color: #be0000 !important
-        }
-
-    input.largerCheckbox {
-        width: 20px;
-        height: 20px;
-    }
-</style>
-<p>
-</p>
-<div class="container" id="bootstrap-overrides">
-    <div class="row">
-        <div class="col-sm align-self-end">
-            <a asp-action="Create" class="btn btn-dark">Input Data Baru</a>
-        </div>
-
+<div class="content-card">
+    <div class="card-header-flex">
+        <h1>@ViewData["Title"]</h1>
+        <a asp-action="Create" class="btn btn-primary">
+            <i class="fa-solid fa-plus me-2"></i>Input Data Baru
+        </a>
     </div>
-</div>
-<br />
-<table class="table table-striped" id="IndexTbl">
-    <thead>
-        <tr>
-            <th>Num.</th>
 
-            <th>
-                Article
-            </th>
-            <th>
-                Promo Type
-            </th>
-            <th>
-                promo name
-            </th>
-            <th>
-                valid from
-            </th>
-            <th>
-                valid to
-            </th>
-            <th>
-                Update Date
-            </th>
-            <th>
-                Update User
-            </th>
-            <th>
-                isActive
-            </th>
-            <th>
-                isAllStore
-            </th>
-            <th>
-                <label>Actions</label>
-            </th>
-        </tr>
-    </thead>
-    <tbody id="tbodyid">
-        @{
-            var i = 1;
-        }
-        @foreach (var dt in Model)
-        {
+    <table class="table table-hover" id="IndexTbl">
+        <thead>
             <tr>
-                <td>
-                    @i
-                </td>
-
-                <td>
-                    @Html.DisplayFor(modelItem => dt.article)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => dt.type)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => dt.promo_name)
-                </td>
-                <td>
-
-                    @Html.DisplayFor(modelItem => dt.validfrom)
-
-                </td>
-                <td>
-
-                    @Html.DisplayFor(modelItem => dt.validto)
-
-                </td>
-                <td>
-
-                    @Html.DisplayFor(modelItem => dt.update_date)
-
-                </td>
-                <td>
-
-                    @Html.DisplayFor(modelItem => dt.update_user)
-
-                </td>
-                <td align="center">
-                    @if (dt.status == "1")
-                    {
-
-
-                        <input type="checkbox" class="largerCheckbox" checked="checked" disabled="disabled" />
-
-                    }
-                    else
-                    {
-                        <input type="checkbox" class="largerCheckbox" disabled="disabled" />
-
-                    }
-
-                </td>
-                <td align="center">
-                    @if (dt.isallstore == "Y")
-                    {
-
-
-                        <input type="checkbox" class="largerCheckbox" checked="checked" disabled="disabled" />
-
-                    }
-                    else
-                    {
-                        <input type="checkbox" class="largerCheckbox" disabled="disabled" />
-
-                    }
-
-                </td>
-
-                <td>
-                    <div>
-                        <a asp-action="Edit" asp-route-id="@dt.id" class="btn btn-sm btn-dark">Edit</a>
-                        &nbsp;
-                        @if (User.IsInRole("CustomerOnPos"))
-                        {
-                            @if (dt.status == "1")
-                            {
-
-
-                                <a asp-action="Delete" asp-route-id="@dt.id" class="btn btn-sm btn-dark">Deactivate</a>
-                            }
-                            else
-                            {
-                                <a asp-action="Reactivate" asp-route-id="@dt.id" class="btn btn-sm btn-dark">Reactivate</a>
-
-                            }
-
-
-                        }
-                    </div>
-                </td>
+                <th>#</th>
+                <th>Promo Name</th>
+                <th>Type</th>
+                <th>Article</th>
+                <th>Validity Period</th>
+                <th class="text-center">Status</th>
+                <th class="text-center">Actions</th>
             </tr>
-            i++;
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @{
+                // ** LOGIC PRESERVED: Your row counter is untouched **
+                var i = 1;
+            }
+            @foreach (var dt in Model)
+            {
+                <tr>
+                    <td>@i</td>
+                    <td>@Html.DisplayFor(modelItem => dt.promo_name)</td>
+                    <td>@Html.DisplayFor(modelItem => dt.type)</td>
+                    <td>@Html.DisplayFor(modelItem => dt.article)</td>
+                    <td>
+                        <!-- UI IMPROVEMENT: Combining date fields for clarity -->
+                        @Html.DisplayFor(modelItem => dt.validfrom) - @Html.DisplayFor(modelItem => dt.validto)
+                    </td>
+                    <td class="text-center">
+                        @if (dt.status == "1")
+                        {
+                            // UI IMPROVEMENT: Using a clear status badge
+                            <span class="status-badge status-approved">Active</span>
+                        }
+                        else
+                        {
+                            <span class="status-badge status-pending">Inactive</span>
+                        }
+                    </td>
+                    <td class="text-center">
+                        <div class="dropdown">
+                            <button class="btn btn-sm btn-action dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fa-solid fa-ellipsis-vertical"></i>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <a class="dropdown-item" asp-action="Edit" asp-route-id="@dt.id">Edit Details</a>
+                                @if (User.IsInRole("CustomerOnPos"))
+                                {
+                                    // ** LOGIC PRESERVED: Your conditional logic is untouched **
+                                    <div class="dropdown-divider"></div>
+                                    @if (dt.status == "1")
+                                    {
+                                        <a class="dropdown-item dropdown-item-danger" asp-action="Delete" asp-route-id="@dt.id">Deactivate</a>
+                                    }
+                                    else
+                                    {
+                                        <a class="dropdown-item dropdown-item-success" asp-action="Reactivate" asp-route-id="@dt.id">Reactivate</a>
+                                    }
+                                }
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                i++;
+            }
+        </tbody>
+    </table>
+</div>
 
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+
+    <!-- ** UNTOUCHED LOGIC: Your original DataTables script is preserved ** -->
     <script>
         $(document).ready(function () {
             $('#IndexTbl').DataTable();
         });
     </script>
 }
-

@@ -600,6 +600,7 @@ table.dataTable {
     .file-drop-zone .file-upload-text {
         color: var(--text-muted);
         font-weight: 500;
+        word-break: break-all; /* ** ADD THIS LINE ** */
     }
 
         .file-drop-zone .file-upload-text i {
@@ -687,4 +688,194 @@ input:disabled + .slider {
     .file-download-link:hover {
         text-decoration: underline;
         color: var(--primary-hover);
+    }
+/* --- Table Image Preview --- */
+.table-img-preview {
+    width: 100px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+}
+
+/* --- Form Image Preview --- */
+.form-image-preview {
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+    .form-image-preview img {
+        max-width: 100%;
+        height: auto;
+        max-height: 200px; /* Controls max height of the preview */
+        border-radius: 8px;
+        border: 1px solid var(--border-color);
+    }
+
+    .form-image-preview .preview-text {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        margin-top: 0.5rem;
+        font-weight: 500;
+    }
+
+/* --- Dropdown Item Variants --- */
+.dropdown-item-danger {
+    color: #ef4444 !important; /* Red */
+    font-weight: 500;
+}
+
+    .dropdown-item-danger:hover {
+        background-color: #fee2e2 !important;
+        color: #dc2626 !important;
+    }
+
+.dropdown-item-success {
+    color: #16a34a !important; /* Green */
+    font-weight: 500;
+}
+
+    .dropdown-item-success:hover {
+        background-color: #dcfce7 !important;
+        color: #15803d !important;
+    }
+
+/* --- Success Icon for Confirmation Cards --- */
+.success-icon {
+    font-size: 3rem;
+    color: #16a34a; /* Green color for success */
+    margin-bottom: 1rem;
+}
+
+/* --- Specific button style for Success/Confirm actions --- */
+.btn-success {
+    background-color: #16a34a !important;
+    border-color: #16a34a !important;
+    color: white !important;
+}
+
+    .btn-success:hover {
+        background-color: #15803d !important; /* Darker green on hover */
+        border-color: #15803d !important;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+/*
+ * ===================================================================
+ *                         POINT OF SALE (POS) UI
+ * ===================================================================
+*/
+
+/* Main POS Layout */
+.pos-container {
+    display: flex;
+    gap: 1.5rem;
+    height: calc(100vh - 200px); /* Adjust height as needed */
+}
+
+/* Left Panel: Item List & Totals */
+.pos-left-panel {
+    flex: 2; /* Takes up 2/3 of the space */
+    display: flex;
+    flex-direction: column;
+}
+
+.pos-item-list-wrapper {
+    flex-grow: 1;
+    overflow-y: auto;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    padding: 1rem;
+    background: white;
+}
+
+.pos-total-display {
+    background: var(--primary);
+    color: white;
+    padding: 1.5rem;
+    border-radius: var(--radius);
+    text-align: right;
+    margin-top: 1.5rem;
+}
+
+    .pos-total-display h3 {
+        margin: 0;
+        font-weight: 300;
+        text-transform: uppercase;
+    }
+
+    .pos-total-display .total-amount {
+        font-size: 2.5rem;
+        font-weight: 700;
+    }
+
+/* Right Panel: Input Controls */
+.pos-right-panel {
+    flex: 1; /* Takes up 1/3 of the space */
+    background: white;
+    padding: 1.5rem;
+    border-radius: var(--radius);
+    border: 1px solid var(--border-color);
+}
+
+.pos-control-group {
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+    .pos-control-group:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+    }
+
+    .pos-control-group label {
+        font-weight: 600;
+        color: var(--text-muted);
+        margin-bottom: 0.5rem;
+    }
+
+/* Stock Info Display */
+.stock-info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+    gap: 0.5rem;
+    text-align: center;
+}
+
+    .stock-info-grid .size-label {
+        font-size: 0.8rem;
+        font-weight: 600;
+    }
+
+    .stock-info-grid .size-value {
+        font-weight: 700;
+        font-size: 1rem;
+    }
+
+/* POS Action Buttons */
+.pos-actions-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: white;
+    padding: 1rem;
+    border-top: 1px solid var(--border-color);
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+    z-index: 1000;
+}
+
+    .pos-actions-footer .btn {
+        margin: 0 5px;
+    }
+
+    .pos-actions-footer .btn-key {
+        background: #eef2ff;
+        color: var(--primary);
+        font-weight: 700;
+        padding: 2px 6px;
+        border-radius: 4px;
+        margin-left: 8px;
     }

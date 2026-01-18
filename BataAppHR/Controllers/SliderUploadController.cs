@@ -1,17 +1,18 @@
-﻿using System;
+﻿using BataAppHR.Data;
+using BataAppHR.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using BataAppHR.Data;
-using BataAppHR.Models;
-using System.IO;
-using Newtonsoft.Json;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.FileProviders;
-using Microsoft.AspNetCore.Authorization;
 
 namespace BataAppHR.Controllers
 {
@@ -20,12 +21,15 @@ namespace BataAppHR.Controllers
         private readonly FormDBContext db;
         private IHostingEnvironment Environment;
         private readonly ILogger<SliderUploadController> _logger;
+        private readonly IWebHostEnvironment _webHostEnvironment; // Add this line
 
-        public SliderUploadController(FormDBContext db, ILogger<SliderUploadController> logger, IHostingEnvironment _environment)
+        public SliderUploadController(FormDBContext db, ILogger<SliderUploadController> logger, IHostingEnvironment _environment, IWebHostEnvironment webHostEnvironment)
         {
             logger = logger;
             Environment = _environment;
             this.db = db;
+            _webHostEnvironment = webHostEnvironment; // Add this line
+
         }
         [Authorize(Roles = "ContentAdmin")]
         public IActionResult Index()
@@ -198,6 +202,29 @@ namespace BataAppHR.Controllers
                 }
             }
             return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public IActionResult GetImage(int id)
+        {
+            // Find the image record by its ID in the database
+            // The AsNoTracking() is a performance optimization for read-only queries.
+            var slideImage = db.SlideTbl.AsNoTracking().FirstOrDefault(s => s.ID == id);
+
+            // Check if the record exists and if the BLOB column actually has data
+            if (slideImage == null || slideImage.SLIDE_IMG_BLOB == null || slideImage.SLIDE_IMG_BLOB.Length == 0)
+            {
+                return NotFound(); // Return 404 if no image data is found
+            }
+
+            // =========================================================================
+            // == THE DEFINITIVE FIX FOR BLOB DATA ==
+            // =========================================================================
+            // Directly return the byte array from the database.
+            // The controller will automatically handle streaming this data to the browser.
+            // We assume the stored format is JPEG. If you also store PNG, you'll need a
+            // column to store the content type (e.g., "image/jpeg", "image/png").
+            return File(slideImage.SLIDE_IMG_BLOB, "image/jpeg");
         }
     }
 }

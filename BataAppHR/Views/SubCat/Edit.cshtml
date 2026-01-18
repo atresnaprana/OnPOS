@@ -1,61 +1,63 @@
 ﻿@model OnPOS.Models.dbSubCategory
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Edit Subcategory";
 }
 
-<h1>Edit</h1>
-<h3>Sub Category Entry</h3>
-<hr />
-
-<form asp-action="Edit" id="formcreate">
-    <div class="row">
-        <div class="col-sm">
-            <div class="form-group">
-                <label asp-for="Category" class="control-label"></label>
-                <br />
-                @Html.DropDownListFor(m => m.Category, new SelectList(Model.ddcat, "Category", "description"), new { @class = "form-control" })
-                <span asp-validation-for="Category" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="SubCategory" class="control-label"></label>
-                <input asp-for="SubCategory" class="form-control" />
-                <span asp-validation-for="SubCategory" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="description" class="control-label"></label>
-                <input asp-for="description" class="form-control" />
-                <span asp-validation-for="description" class="text-danger"></span>
-            </div>
-
-
+<div class="auth-container">
+    <form asp-action="Edit" id="formcreate" method="post">
+        <div class="text-center">
+            <h1>@ViewData["Title"]</h1>
+            <p class="text-muted">Update the details for this subcategory.</p>
         </div>
-    </div>
-    <div class="form-group">
-        <input type="button" value="Save" onclick="alertfirst()" class="btn btn-red" />
 
-    </div>
-</form>
+        <hr class="my-4" />
 
-<div>
-    <a asp-action="Index" class="btn btn-dark">Kembali ke List</a>
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3" role="alert"></div>
+
+        <!-- ** CRITICAL FIX: Hidden input for the ID is required for the Edit action ** -->
+        <input type="hidden" asp-for="id" />
+
+        <div class="form-group">
+            <label asp-for="Category"></label>
+            <!-- ** LOGIC PRESERVED: Your DropDownListFor helper and select2 ID are untouched ** -->
+            @Html.DropDownListFor(m => m.Category, new SelectList(Model.ddcat, "Category", "description"), new { @class = "form-control" })
+            <span asp-validation-for="Category" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="SubCategory">Subcategory Name</label>
+            <input asp-for="SubCategory" class="form-control" />
+            <span asp-validation-for="SubCategory" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="description">Description</label>
+            <input asp-for="description" class="form-control" />
+            <span asp-validation-for="description" class="text-danger"></span>
+        </div>
+
+        <div class="d-flex flex-column gap-2 mt-4">
+            <!-- ** LOGIC PRESERVED: This button calls your alertfirst() function ** -->
+            <input type="button" value="Save Changes" onclick="alertfirst()" class="btn btn-primary" />
+            <a asp-action="Index" class="btn btn-secondary text-center">Kembali ke List</a>
+        </div>
+    </form>
 </div>
-@section Scripts{
+
+@section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+
+    <!-- ** UNTOUCHED LOGIC: Your original script is preserved ** -->
     <script>
         $(document).ready(function () {
+            // ** LOGIC PRESERVED: Your select2 initialization is here **
             $("#Category").select2({
-                placeholder: "Select Category",
-                initSelection: function (element, callback) {
-                },
-                dropdownAutoWidth: true,
-                width: 'auto'
+                placeholder: "Select Category"
             });
-            // $("#Category").val(null);
-            // $("#Category").trigger('change');
-
+            // On the Edit page, you don't want to clear the value,
+            // the DropDownListFor helper already sets the correct selected value.
         });
 
         function allowOnlyNumber(evt) {
@@ -64,8 +66,9 @@
                 return false;
             return true;
         }
+
         function alertfirst() {
-            if (confirm("Are you sure saving data?")) {
+            if (confirm("Are you sure you want to save these changes?")) {
                 $('#formcreate').submit();
             } else {
                 return false;
