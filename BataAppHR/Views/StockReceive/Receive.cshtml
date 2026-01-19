@@ -1,0 +1,95 @@
+﻿<!-- Views/StockReceive/Receive.cshtml -->
+<div class="content-card">
+    <!-- ** ADD THIS SECTION AT THE TOP OF THE CARD ** -->
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success auto-hide-alert" role="alert">
+            <i class="fa-solid fa-check-circle me-2"></i> @TempData["SuccessMessage"]
+        </div>
+    }
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger auto-hide-alert" role="alert">
+            <i class="fa-solid fa-triangle-exclamation me-2"></i> @TempData["ErrorMessage"]
+        </div>
+    }
+
+    <!-- ** END OF NEW SECTION ** -->
+    <h1>Manual Stock Receiving</h1>
+    <hr />
+    <!-- Form for adding items to the list -->
+    <div class="row align-items-end">
+        <div class="col-md-6"><div class="form-group"><label>Scan/Enter SKU (16 digits)</label><input type="text" id="sku-input" class="form-control" /></div></div>
+        <div class="col-md-3"><div class="form-group"><label>Quantity</label><input type="number" id="qty-input" class="form-control" value="1" /></div></div>
+        <div class="col-md-3"><button type="button" id="add-item-btn" class="btn btn-primary w-100">Add to List</button></div>
+    </div>
+
+    <hr />
+
+    <!-- Form that will be submitted -->
+    <form asp-action="Receive" method="post">
+        <h5>Items to Receive</h5>
+        <table class="table">
+            <thead><tr><th>SKU</th><th>Quantity</th><th></th></tr></thead>
+            <tbody id="item-list-body">
+                <!-- Items will be added here by JavaScript -->
+            </tbody>
+        </table>
+
+        <div class="d-flex justify-content-end gap-2 mt-4">
+            <a asp-action="Index" asp-controller="Home" class="btn btn-secondary">Cancel</a>
+            <button type="submit" class="btn btn-success">Confirm & Receive Stock</button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+
+             $('.auto-hide-alert')
+                // Wait for 5 seconds (5000 milliseconds)
+                .delay(5000)
+                // Smoothly slide it up (fade out effect) over half a second
+                .slideUp(500, function() {
+                    // After the animation is complete, remove the element from the page
+                    $(this).remove();
+                });
+            let itemIndex = 0;
+            $('#add-item-btn').on('click', function() {
+                let sku = $('#sku-input').val();
+                let qty = $('#qty-input').val();
+
+                if (sku.length === 16 && qty > 0) {
+                    // Add a new row to the table
+                    let newRow = `<tr>
+                                    <td>${sku}</td>
+                                    <td>${qty}</td>
+                                    <td><button type="button" class="btn btn-sm btn-danger remove-item">Remove</button></td>
+                                  </tr>`;
+                    $('#item-list-body').append(newRow);
+
+                    // Add hidden inputs to the form for submission
+                    $('form').prepend(`<input type="hidden" name="scannedItems[${itemIndex}].ItemIdSku" value="${sku}" />`);
+                    $('form').prepend(`<input type="hidden" name="scannedItems[${itemIndex}].Quantity" value="${qty}" />`);
+                    itemIndex++;
+
+                    // Clear inputs
+                    $('#sku-input').val('').focus();
+                    $('#qty-input').val('1');
+                } else {
+                    alert('Please enter a valid 16-digit SKU and quantity.');
+                }
+            });
+
+            // Handle removing items
+            $('#item-list-body').on('click', '.remove-item', function() {
+                let skuToRemove = $(this).closest('tr').find('td:first').text();
+                // Find and remove the corresponding hidden inputs
+                $(`input[value="${skuToRemove}"]`).remove();
+                // Remove the table row
+                $(this).closest('tr').remove();
+            });
+        });
+    </script>
+}

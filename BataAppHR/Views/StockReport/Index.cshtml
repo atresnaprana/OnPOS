@@ -1,0 +1,75 @@
+﻿@model IEnumerable<OnPOS.Models.dbStoreStockModel>
+@{
+    ViewData["Title"] = "Stock Monitoring Report";
+}
+
+<div class="content-card">
+    <div class="card-header-flex">
+        <h1>@ViewData["Title"]</h1>
+        <!-- Export buttons will be rendered here by DataTables -->
+    </div>
+
+    <table class="table table-hover" id="stockReportTable" style="width:100%">
+        <thead>
+            <tr>
+                <th>Store ID</th>
+                <th>Item ID</th>
+                <th>Item Name</th>
+                <th>Category</th>
+                <th class="text-center">Current Stock</th>
+                <th>Last Received</th>
+                <th>Last Sold</th>
+                <th class="text-center">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.storeid</td>
+                    <td>@item.itemid</td>
+                    <td>@item.itmname</td>
+                    <td>@item.cat</td>
+                    <td class="text-center font-weight-bold">@item.Current_stock</td>
+                    <td>@item.lastrcvdate?.ToString("dd MMM yyyy")</td>
+                    <td>@item.lastoutdate?.ToString("dd MMM yyyy")</td>
+                    <td class="text-center">
+                        <a asp-action="Details" asp-route-id="@item.stock_id" class="btn btn-sm btn-outline-primary">View Details</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#stockReportTable').DataTable({
+                stateSave: true,
+                // ** THIS IS THE CORRECTED CONFIGURATION **
+                // 'dom' defines the layout. 'B' is where the buttons will be placed.
+                dom:  "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
+                      "<'row'<'col-sm-12'tr>>" +
+                      "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>" +
+                      "<'row'<'col-sm-12'B>>", // B for Buttons at the bottom
+
+                // 'buttons' defines which export options are available.
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        text: '<i class="fa-solid fa-file-excel"></i> Export to Excel',
+                        className: 'btn btn-outline-success',
+                        title: 'StockReport'
+                    },
+                    {
+                        extend: 'pdfHtml5',
+                        text: '<i class="fa-solid fa-file-pdf"></i> Export to PDF',
+                        className: 'btn btn-outline-danger',
+                        title: 'StockReport'
+                    }
+                ]
+            });
+        });
+    </script>
+}
